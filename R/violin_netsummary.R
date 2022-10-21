@@ -26,7 +26,7 @@
 ##' }
 ##' @export
 violin_netsummary <- function(A, 
-                              Ns = 1, subsample_sizes = NA, 
+                              Ns = 11, subsample_sizes = NA, 
                               max_cycle_order = 4, 
                               R=NA, alpha = 0.05,
                               y.max=NA, save.plot = FALSE, 
@@ -34,6 +34,10 @@ violin_netsummary <- function(A,
   cl <- match.call()
   if(!is.matrix(A)){
     stop(paste("A must be a (dense) matrix. Use as.matrix() to convert the object:", class(A)))
+  }
+  if(any((A!=0)&(A!=1))){
+    message("There are entries neither 0 nor 1. Convert A into a binary matrix.")
+    A <- (A!=0)
   }
   if(FALSE){
     
@@ -46,7 +50,7 @@ violin_netsummary <- function(A,
     max_cycle_order <- 7
   }
   if(is.na(R)){
-    R <- ceiling((1/(2*alpha)*qnorm(1-alpha/(2*(max_cycle_order-1))))^2)
+    R <- ceiling((1/(2*alpha)*stats::qnorm(1-alpha/(2*(max_cycle_order-1))))^2)
     message(paste("R=",R))
   }
   if(is.na(subsample_sizes)){
@@ -71,6 +75,7 @@ violin_netsummary <- function(A,
   }else{
     print(p)
   }
+  return(result)
 }
 
 net_summary_subsample_adj <- function(A, subsample_sizes, max_cycle_order, R){
@@ -83,26 +88,20 @@ net_summary_subsample_adj <- function(A, subsample_sizes, max_cycle_order, R){
   colnames(result) <- colname_summary[1:(max_cycle_order-1)]
   
   ind_cycles <- 2:(max_cycle_order-1)
-  powers <- 1/(3:max_cycle_order)
+  powers <- 1/seq(3,max_cycle_order,1)
 
   for(r in 1:R){
     subsample_size <- subsample_sizes[ceiling(Ns*r/R)]
-    denoms <- sapply(3:max_cycle_order, function(k) ffct(subsample_size,k)/(2*k))
-    
+    denoms <- sapply(3:max_cycle_order, function(k, n) .ffct(subsample_size,k)/(2*k), n=subsample_size)
     sample_ind <- sample.int(n, subsample_size)
     deg_A <- colSums(A[sample_ind, sample_ind])
     result[r,1] <- (1/2*sum(deg_A*(deg_A-1))) / ((subsample_size-2)/2*sum(deg_A))# (S.57) in Maugis et al. (2017)
     # Compute k-cycle ratio defined in (S.58)
-    result[r,ind_cycles] <- (count_k_cycle(A[sample_ind, sample_ind], max_cycle_order)/denoms)^powers
+    numers <- count_k_cycle(A[sample_ind, sample_ind], max_cycle_order)
+    result[r,ind_cycles] <- (numers/denoms)^powers
   }
   return(result)
 }
-
-ffct <- function(x, k) {
-  sapply(x, function(y) {
-    prod(y:(y - k + 1))
-  })
-} # Falling factorial
 
 #Counting k-cycles
 count_k_cycle<- function(A, max_cycle_order){
@@ -215,7 +214,6 @@ count_k_cycle<- function(A, max_cycle_order){
   }
   return(count)
 }
-  
 
 auto_select_subsample_sizes <- function(A, Ns, k_max, R, alpha=0.05, delta){
   n <- dim(A)[1]
@@ -230,10 +228,12 @@ auto_select_subsample_sizes <- function(A, Ns, k_max, R, alpha=0.05, delta){
     t_k <- net_summary_subsample_adj(A = A, subsample_sizes = s_star, 
                               max_cycle_order = k_max, R = R)
     #Check summary separated from 0
+    R_cols <- apply(t_k,2,function(x) sum(!is.na(x)))
     colSums_t_k <- colSums(t_k, na.rm=TRUE)
     colSums_t_k_square <- colSums(t_k^2, na.rm=TRUE)
     p_k_numer <- 1/R*colSums_t_k
-    p_k_denom <- sqrt(1/(R-1)*colSums_t_k_square - 1/(R*(R-1))*(colSums_t_k)^2)
+    p_k_denom <- sqrt(1/(R_cols-1)*colSums_t_k_square - 1/(R_cols*(R_cols-1))*(colSums_t_k)^2)
+    p_k_denom[which(p_k_denom==0)] <- 1 #denominator is 0 iff all t_k are zero.
     p_k <- pnorm(p_k_numer/p_k_denom, lower.tail = FALSE)
     p <- max(p_k[K_set-1]) #quantify least-separated summary
     

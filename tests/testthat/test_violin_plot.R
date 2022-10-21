@@ -1,5 +1,5 @@
-G<-graph_from_edgelist(as.matrix(polblog),directed = FALSE)
-G<-delete.vertices(G, degree(G)==0)
+G<-igraph::graph_from_edgelist(as.matrix(polblog),directed = FALSE)
+G<-igraph::delete.vertices(G, igraph::degree(G)==0)
 
 #Network summary plot
 test_that("violin plots with pre-specified subsample size",

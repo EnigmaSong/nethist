@@ -4,13 +4,15 @@
 ##'
 ##' @param A An adjacency matrix. It must have binary entries (0 or 1).
 ##' @param h A bandwidth parameter. If NA, select bandwidth by Olhede and Wolfe (2014). If specified, use the user input value.
-##' @param outfile A filename for outputs. If it is missing, the results are not saved.
+##' @param outfile A filename for saving cluster indices. If it is missing, the results are not saved.
 ##' @param verbose logical value indicating whether verbose output is generated.
 ##' @returns 
 ##' An object of class "nethist" which has a `plot` method
 ##' 
-##' * `cluster` A vector of partition indices. 
-##' * `p_mat` A probability matrix from network histogram ordered by cluster. 
+##' * `cluster` A vector of partition indices.
+##' 
+##' * `p_mat` A probability matrix from network histogram ordered by cluster labels. 
+##' 
 ##' @references Olhede, S. C., & Wolfe, P. J. (2014). Network histograms and universality of blockmodel approximation. Proceedings of the National Academy of Sciences, 111(41), 14722-14727.
 ##' @references Wolfe, P. J., & Olhede, S. C. (2013). Nonparametric graphon estimation. arXiv preprint arXiv:1309.5936.
 ##' @examples
@@ -21,7 +23,8 @@
 ##' A <- igraph::as_adj(A)
 ##' idx = nethist(A) #Save the result in idx, do not save it in a csv file.
 ##' }
-##' @importFrom stats .lm.fit dist
+##' @importFrom stats .lm.fit dist pnorm
+##' @importFrom graphics par
 ##' @importFrom utils write.table
 ##' @importFrom RSpectra eigs
 ##' @export
@@ -133,9 +136,13 @@ nethist <- function(A, h = NA, outfile, verbose = F){
   MISEfhatBnd <- estMSqrd*((2/sqrt(estMSqrd))*(sampleSize*rhoHat)^(-1/2) + 1/n)
   message(paste("M^2_hat =", round(estMSqrd,3), ", MISE bound_hat=", round(MISEfhatBnd,3)))
   
-  #Diagnostic plot (Not implemented)
-  if(FALSE){
-    
+  #Diagnostic plot (if the code is runned on interactive)
+  if(interactive()){
+    par(mfrow=c(1,2))
+    plot(u, main = "Graphon projection for 
+bandwidth estimation", type = 'l')
+    plot(uMid, main = "Chosen patch of projection component 
+    (adjust using c)",type = 'l')
   }
   
   return(list(h=h, estMSqrd=estMSqrd))
