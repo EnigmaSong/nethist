@@ -19,7 +19,8 @@ Imports:
     utils,
     RSpectra,
     ggplot2,
-    reshape2
+    reshape2,
+    igraph
 LinkingTo: Rcpp, RcppArmadillo
 Depends: 
     R (>= 2.10)
