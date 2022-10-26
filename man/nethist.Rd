@@ -18,9 +18,10 @@ nethist(A, h = NA, outfile, verbose = F)
 \value{
 An object of class "nethist" which has a `plot` method
 
-* `cluster` A vector of partition indices.
-
-* `p_mat` A probability matrix from network histogram ordered by cluster labels.
+\itemize{
+\item \emph{cluster} A vector of partition indices.
+\item \emph{p_mat} A probability matrix from network histogram ordered by cluster labels. 
+}
 }
 \description{
 Estimating network histogram and returning the indices of partitions.
@@ -30,7 +31,7 @@ Estimating network histogram and returning the indices of partitions.
 set.seed(2022)
 #Generating Erdos-Renyi graph
 A <- igraph::sample_gnp(100, 0.05)
-A <- igraph::as_adj(A)
+A <- igraph::as_adj(A, sparse = FALSE)
 idx = nethist(A) #Save the result in idx, do not save it in a csv file.
 }
 }
