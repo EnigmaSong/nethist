@@ -9,10 +9,10 @@
 ##' @returns 
 ##' An object of class "nethist" which has a `plot` method
 ##' 
-##' * `cluster` A vector of partition indices.
-##' 
-##' * `p_mat` A probability matrix from network histogram ordered by cluster labels. 
-##' 
+##' \itemize{
+##' \item \emph{cluster} A vector of partition indices.
+##' \item \emph{p_mat} A probability matrix from network histogram ordered by cluster labels. 
+##' }
 ##' @references Olhede, S. C., & Wolfe, P. J. (2014). Network histograms and universality of blockmodel approximation. Proceedings of the National Academy of Sciences, 111(41), 14722-14727.
 ##' @references Wolfe, P. J., & Olhede, S. C. (2013). Nonparametric graphon estimation. arXiv preprint arXiv:1309.5936.
 ##' @examples
@@ -20,8 +20,8 @@
 ##' set.seed(2022)
 ##' #Generating Erdos-Renyi graph
 ##' A <- igraph::sample_gnp(100, 0.05)
-##' A <- igraph::as_adj(A)
-##' idx = nethist(A) #Save the result in idx, do not save it in a csv file.
+##' A <- igraph::as_adj(A, sparse = FALSE)
+##' hist_A = nethist(A) #Save the result in idx, do not save it in a csv file.
 ##' }
 ##' @importFrom stats .lm.fit dist pnorm
 ##' @importFrom graphics par

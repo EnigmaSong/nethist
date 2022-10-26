@@ -7,7 +7,8 @@ Political blog
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of the dataset. ~~
-Political blog data set from Adamic and Glance (2005).
+Political blog data set from Olhede and Wolfe (2014), which is part of the original data set from Adamic and Glance (2005). 
+
 }
 \usage{data("polblog")}
 \format{
@@ -19,7 +20,7 @@ Political blog data set from Adamic and Glance (2005).
 }
 \details{
 %%  ~~ If necessary, more details than the __description__ above ~~
-The adjancey matrix is sparse and assymetric, so it needs to be symmetrized if a method requires a symmetric matrix.
+The adjancency matrix is sparse, assymetric, so it needs to be symmetrized if a method requires a symmetric matrix.
 First 586 blogs are liberal; remaining 638 are conservative. Nodes with zero degree need to be removed.
 }
 \source{
@@ -34,6 +35,10 @@ Adamic, L. A., & Glance, N. (2005). The political blogosphere and the 2004 US el
 }
 \examples{
 data(polblog)
+
+G<- igraph::graph_from_edgelist(polblog, directed = FALSE)
+G<- igraph::simplify(G)
+G<- 
 ## maybe str(polblog) ; plot(polblog) ...
 }
 \keyword{datasets}
