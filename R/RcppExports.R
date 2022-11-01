@@ -5,15 +5,15 @@
     .Call(`_nethist_count_k_cycle`, A, max_cycle_order)
 }
 
-.count_k_cycle_new <- function(A, max_cycle_order) {
-    .Call(`_nethist_count_k_cycle_new`, A, max_cycle_order)
-}
-
 .graphest_fastgreedy <- function(A, hbar, inputLabelVec, verbose) {
     .Call(`_nethist_graphest_fastgreedy`, A, hbar, inputLabelVec, verbose)
 }
 
 .net_summary_subsample_adj <- function(A, subsample_sizes, max_cycle_order, R) {
     .Call(`_nethist_net_summary_subsample_adj`, A, subsample_sizes, max_cycle_order, R)
+}
+
+.ffct_2 <- function(n, k) {
+    .Call(`_nethist_ffct`, n, k)
 }
 

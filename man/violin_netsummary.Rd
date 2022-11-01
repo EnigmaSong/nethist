@@ -6,18 +6,18 @@
 \usage{
 violin_netsummary(
   A,
-  Ns = 11,
-  subsample_sizes = NA,
-  max_cycle_order = 4,
-  R = NA,
-  alpha = 0.05,
-  y.max = NA,
-  save.plot = FALSE,
-  filename = "myplot.pdf"
+  Ns,
+  subsample_sizes,
+  max_cycle_order,
+  R,
+  alpha,
+  y.max,
+  save.plot,
+  filename
 )
 }
 \arguments{
-\item{A}{an adjacency matrix to draw a network summary plot.}
+\item{A}{an adjacency matrix or igraph object to draw a network summary plot. It must be an undirected and simple graph.}
 
 \item{Ns}{number of different subsample size}
 
@@ -43,6 +43,8 @@ Draw a network summary plot proposed by Maugis et al. (2017). Counting k-cycles 
 }
 \details{
 Vertex sampling is done by simple random sampling without replacement.
+
+Following matrix classes are supported: base::matrix, Matrix::dgCMatrix
 }
 \examples{
 \dontrun{

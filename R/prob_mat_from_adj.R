@@ -20,7 +20,7 @@
 ##' }
 ##' @keywords internal
 ##' @export
-prob_mat_from_adj<-function(A, idx){
+.prob_mat_from_adj<-function(A, idx){
   K <- max(idx)  
   p_mat <- matrix(0,K,K)
   
@@ -30,7 +30,7 @@ prob_mat_from_adj<-function(A, idx){
   denom <- outer(bin_size,bin_size)
   diag(denom) <- diag(denom) - bin_size
   p_mat<- numer/denom
-  dimnames(p_mat)<-NULL
+  dimnames(p_mat)<- list(1:K, 1:K)
   return(p_mat)
 }
 

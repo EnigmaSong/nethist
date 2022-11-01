@@ -1,6 +1,6 @@
 #include <RcppArmadillo.h>
+#include "nethist_utils.h"
 #include <Rcpp/Benchmark/Timer.h>
-#include <RcppArmadilloExtensions/sample.h>
 using namespace Rcpp;
 const double eps = arma::datum::eps;
 const arma::uword IMPOSSIBLE_INDEX = 10000000;
@@ -172,9 +172,9 @@ arma::vec graphest_fastgreedy(arma::mat A, int hbar, arma::vec inputLabelVec, bo
   
   for(int mm=0; mm< maxNumRestarts; mm++){
     oneTwoVec = arma::ones<arma::vec>(numGreedySteps) + (arma::randu<arma::vec>(numGreedySteps) >= 1.0/3.0);
-    iVec = RcppArmadillo::sample(integerVec_nminusone, numGreedySteps, true);
-    jVec = RcppArmadillo::sample(integerVec_nminusone, numGreedySteps, true);
-    kVec = RcppArmadillo::sample(integerVec_nminusone, numGreedySteps, true);
+    iVec = sample(integerVec_nminusone, numGreedySteps, true);
+    jVec = sample(integerVec_nminusone, numGreedySteps, true);
+    kVec = sample(integerVec_nminusone, numGreedySteps, true);
     
     // Update Partition information
     currentACounts = bestACounts;

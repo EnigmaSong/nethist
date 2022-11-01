@@ -2,7 +2,7 @@
 ##'
 ##' Estimating network histogram and returning the indices of partitions.
 ##'
-##' @param A An adjacency matrix. It must have binary entries (0 or 1).
+##' @param A An adjacency matrix or igraph object. It must be an undirected and simple graph.
 ##' @param h A bandwidth parameter. If NA, select bandwidth by Olhede and Wolfe (2014). If specified, use the user input value.
 ##' @param outfile A filename for saving cluster indices. If it is missing, the results are not saved.
 ##' @param verbose logical value indicating whether verbose output is generated.
@@ -12,6 +12,7 @@
 ##' \itemize{
 ##' \item \emph{cluster} A vector of partition indices.
 ##' \item \emph{p_mat} A probability matrix from network histogram ordered by cluster labels. 
+##' \item \emph{rho_hat} estimated sparsity parameter. 
 ##' }
 ##' @references Olhede, S. C., & Wolfe, P. J. (2014). Network histograms and universality of blockmodel approximation. Proceedings of the National Academy of Sciences, 111(41), 14722-14727.
 ##' @references Wolfe, P. J., & Olhede, S. C. (2013). Nonparametric graphon estimation. arXiv preprint arXiv:1309.5936.
@@ -28,7 +29,30 @@
 ##' @importFrom utils write.table
 ##' @importFrom RSpectra eigs
 ##' @export
-nethist <- function(A, h = NA, outfile, verbose = F){
+nethist<-function(A, h, outfile, verbose){
+  UseMethod("nethist")
+}
+##' @exportS3Method 
+nethist.igraph<-function(A, h, outfile, verbose){
+  args <- as.list(environment())
+  args$A <- igraph::as_adj(args$A, sparse = FALSE)
+  do.call("nethist.default", args)
+}
+##' @exportS3Method 
+nethist.matrix<-function(A, h, outfile, verbose){
+  args <- as.list(environment())
+  do.call("nethist.default", args)
+}
+##' @exportS3Method 
+nethist.dgCMatrix<-function(A, h, outfile, verbose){
+  args <- as.list(environment())
+  args$A <- as.matrix(args$A)
+  do.call("nethist.default", args)
+}
+##' 
+nethist.default <- function(A, h = NA, outfile, verbose = F){
+  if(!.is_undirected_simple(A)) stop("Network A must be an undirected simple network.")
+  
   # Compute necessary summaries from A
   n <- dim(A)[1]
   rhoHat <- sum(A)/(n*(n-1))
@@ -88,12 +112,13 @@ nethist <- function(A, h = NA, outfile, verbose = F){
     write.table(file=outfile, x = idx, row.names = FALSE, col.names = FALSE)
   }
   
-  p_mat <- prob_mat_from_adj(A,idx)
+  p_mat <- .prob_mat_from_adj(A,idx)
   
-  return(list(cluster = as.vector(idx), 
-              p_mat = p_mat
-          )
-  )
+  result <- list(cluster = as.vector(idx), 
+                 p_mat = p_mat,
+                 rho_hat = rhoHat)
+  result <- structure(result, class="nethist")
+  return(result)
 }
 
 .oracbwplugin <- function(A,c,type, alpha){
