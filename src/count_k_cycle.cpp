@@ -5,7 +5,7 @@ using namespace Rcpp;
 //
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.count_k_cycle)]]
-arma::vec count_k_cycle(arma::mat &A, int max_cycle_order) {
+arma::vec count_k_cycle(arma::mat A, int max_cycle_order) {
   arma::vec count(max_cycle_order-2);
   arma::vec deg_A = sum(A,1);
   
@@ -77,5 +77,3 @@ arma::vec count_k_cycle(arma::mat &A, int max_cycle_order) {
   
   return count;
 }
-/*** R
-*/

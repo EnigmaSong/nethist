@@ -4,10 +4,10 @@
 \alias{nethist}
 \title{Network histogram estimation}
 \usage{
-nethist(A, h = NA, outfile, verbose = F)
+nethist(A, h, outfile, verbose)
 }
 \arguments{
-\item{A}{An adjacency matrix. It must have binary entries (0 or 1).}
+\item{A}{An adjacency matrix or igraph object. It must be an undirected and simple graph.}
 
 \item{h}{A bandwidth parameter. If NA, select bandwidth by Olhede and Wolfe (2014). If specified, use the user input value.}
 
@@ -16,11 +16,12 @@ nethist(A, h = NA, outfile, verbose = F)
 \item{verbose}{logical value indicating whether verbose output is generated.}
 }
 \value{
-An object of class "nethist" which has a `plot` method
+An object of class "nethist" which has a \code{plot} method
 
 \itemize{
 \item \emph{cluster} A vector of partition indices.
-\item \emph{p_mat} A probability matrix from network histogram ordered by cluster labels. 
+\item \emph{p_mat} A probability matrix from network histogram ordered by cluster labels.
+\item \emph{rho_hat} estimated sparsity parameter.
 }
 }
 \description{
@@ -32,7 +33,7 @@ set.seed(2022)
 #Generating Erdos-Renyi graph
 A <- igraph::sample_gnp(100, 0.05)
 A <- igraph::as_adj(A, sparse = FALSE)
-idx = nethist(A) #Save the result in idx, do not save it in a csv file.
+hist_A = nethist(A) #Save the result in idx, do not save it in a csv file.
 }
 }
 \references{
