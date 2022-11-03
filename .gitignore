@@ -1,5 +1,5 @@
-.Rproj.user
+docs
+.RData
 .Rhistory
-.Rdata
-.httr-oauth
-.DS_Store
+.Rproj.user
+.github

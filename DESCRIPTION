@@ -26,11 +26,5 @@ Depends:
     R (>= 2.10)
 LazyData: true
 Config/testthat/edition: 3
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 URL: https://enigmasong.github.io/nethist/
-=======
 Roxygen: list(markdown = TRUE)
->>>>>>> f1a53a0d773a0afac6d1a514eb639e74b20ea748
->>>>>>> 26dc8d3fb67627bd1e6042dbfe78ee6e20b80482
