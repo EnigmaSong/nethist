@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 url: https://enigmasong.github.io/nethist/
+=======
+url: ~
+>>>>>>> f1a53a0d773a0afac6d1a514eb639e74b20ea748
 template:
   bootstrap: 5
 

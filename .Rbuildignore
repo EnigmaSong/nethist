@@ -3,4 +3,8 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+<<<<<<< HEAD
 ^\.github$
+=======
+^README\.Rmd$
+>>>>>>> f1a53a0d773a0afac6d1a514eb639e74b20ea748
