@@ -11,6 +11,18 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// count_k_cycle
+arma::vec count_k_cycle(arma::mat A, int max_cycle_order);
+RcppExport SEXP _nethist_count_k_cycle(SEXP ASEXP, SEXP max_cycle_orderSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
+    Rcpp::traits::input_parameter< int >::type max_cycle_order(max_cycle_orderSEXP);
+    rcpp_result_gen = Rcpp::wrap(count_k_cycle(A, max_cycle_order));
+    return rcpp_result_gen;
+END_RCPP
+}
 // graphest_fastgreedy
 arma::vec graphest_fastgreedy(arma::mat A, int hbar, arma::vec inputLabelVec, bool verbose);
 RcppExport SEXP _nethist_graphest_fastgreedy(SEXP ASEXP, SEXP hbarSEXP, SEXP inputLabelVecSEXP, SEXP verboseSEXP) {
@@ -25,9 +37,38 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// net_summary_subsample_adj
+arma::mat net_summary_subsample_adj(arma::mat A, arma::vec subsample_sizes, int max_cycle_order, int R);
+RcppExport SEXP _nethist_net_summary_subsample_adj(SEXP ASEXP, SEXP subsample_sizesSEXP, SEXP max_cycle_orderSEXP, SEXP RSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type subsample_sizes(subsample_sizesSEXP);
+    Rcpp::traits::input_parameter< int >::type max_cycle_order(max_cycle_orderSEXP);
+    Rcpp::traits::input_parameter< int >::type R(RSEXP);
+    rcpp_result_gen = Rcpp::wrap(net_summary_subsample_adj(A, subsample_sizes, max_cycle_order, R));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ffct
+double ffct(int n, int k);
+RcppExport SEXP _nethist_ffct(SEXP nSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(ffct(n, k));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_nethist_count_k_cycle", (DL_FUNC) &_nethist_count_k_cycle, 2},
     {"_nethist_graphest_fastgreedy", (DL_FUNC) &_nethist_graphest_fastgreedy, 4},
+    {"_nethist_net_summary_subsample_adj", (DL_FUNC) &_nethist_net_summary_subsample_adj, 4},
+    {"_nethist_ffct", (DL_FUNC) &_nethist_ffct, 2},
     {NULL, NULL, 0}
 };
 

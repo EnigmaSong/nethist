@@ -1,11 +1,11 @@
-##' Probability matrix computation from cluster indices
+##' Probability matrix computation from network histogram cluster indices 
 ##'
-##' From an adjancency matrix and a cluster index vector, it returns probability matrix
+##' From an adjacency matrix and a cluster index vector, it returns a probability matrix
 ##'
 ##' @param A A symmetric adjacency matrix. It must have binary entries (0 or 1).
 ##' @param idx an index vector consists of integers from 1 to K
 ##' @returns 
-##' A matrix whose entires in between 0 and 1.
+##' A matrix whose entries are in between 0 and 1.
 ##' 
 ##' @examples
 ##' \dontrun{
@@ -13,26 +13,25 @@
 ##' #Generating Erdos-Renyi graph
 ##' A <- igraph::sample_gnp(100, 0.05)
 ##' A <- igraph::as_adj(A)
-##' res <- nethist(A) #Save the result in idx, do not save it in a csv file.
+##' res <- nethist(A) 
 ##' 
-##' prob_mat_from_adj(A, res$idx)
-##' all.equal(prob_mat_from_adj(A, res$idx), res$p_mat)
+##' prob_mat_from_adj(A, res$cluster)
+##' all.equal(prob_mat_from_adj(A, res$cluster), res$p_mat)
 ##' }
+##' @keywords internal
 ##' @export
-prob_mat_from_adj<-function(A, idx){
+.prob_mat_from_adj<-function(A, idx){
   K <- max(idx)  
   p_mat <- matrix(0,K,K)
-  for(i in 1:K){
-    for(j in i:K){
-      adj.mat.block = A[idx==i,idx==j]
-      if(i != j){
-        p_mat[i,j] = sum(adj.mat.block)/prod(dim(adj.mat.block))
-        p_mat[j,i] = p_mat[i,j]
-      }else{
-        dim_block = dim(adj.mat.block)[1]
-        p_mat[i,j] = sum(adj.mat.block)/max(1,dim_block*(dim_block-1))
-      }
-    }
-  }
+  
+  numer <- rowsum(t(rowsum(A, idx)), idx)
+  
+  bin_size <- table(idx)
+  denom <- outer(bin_size,bin_size)
+  diag(denom) <- diag(denom) - bin_size
+  p_mat<- numer/denom
+  dimnames(p_mat)<- list(1:K, 1:K)
   return(p_mat)
 }
+
+

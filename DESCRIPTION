@@ -6,7 +6,7 @@ Date: 2022-10-21
 Authors@R: c(person("Youngseok","Song", email="youngseok.song@epfl.ch", role =c("aut", "cre")), 
             person("Sofia C.","Olhede", email = "sofia.olhede@epfl.ch", role = "aut"))
 Maintainer: Youngseok Song <youngseok.song@epfl.ch>
-Description: R package for network histogram estimation and tools. See the `nethist` website for more information.
+Description: R package for network histogram estimation and additional tools. The package is an RcppArmadillo implementation of the original MATLAB code in Olhede and Wolfe (2014). To install the package from source, you need C++ and Fortran (due to RSpectra) compilers. We suggest you to use undirected and simple graphs (either igraph or matrix) as inputs for the functions in this package.
 License: MIT + file LICENSE
 Suggests: 
     testthat (>= 3.0.0),
@@ -19,9 +19,18 @@ Imports:
     utils,
     RSpectra,
     ggplot2,
-    reshape2
+    reshape2,
+    igraph
 LinkingTo: Rcpp, RcppArmadillo
 Depends: 
     R (>= 2.10)
 LazyData: true
 Config/testthat/edition: 3
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+URL: https://enigmasong.github.io/nethist/
+=======
+Roxygen: list(markdown = TRUE)
+>>>>>>> f1a53a0d773a0afac6d1a514eb639e74b20ea748
+>>>>>>> 26dc8d3fb67627bd1e6042dbfe78ee6e20b80482
