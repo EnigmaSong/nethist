@@ -4,7 +4,7 @@
 \alias{nethist}
 \title{Network histogram estimation}
 \usage{
-nethist(A, h, outfile, verbose)
+nethist(A, h = NA, outfile, verbose = FALSE)
 }
 \arguments{
 \item{A}{An adjacency matrix or igraph object. It must be an undirected and simple graph.}
@@ -16,7 +16,7 @@ nethist(A, h, outfile, verbose)
 \item{verbose}{logical value indicating whether verbose output is generated.}
 }
 \value{
-An object of class "nethist" which has a \code{plot} method
+An object of class \code{nethist}:
 
 \itemize{
 \item \emph{cluster} A vector of partition indices.
@@ -40,4 +40,7 @@ hist_A = nethist(A) #Save the result in idx, do not save it in a csv file.
 Olhede, S. C., & Wolfe, P. J. (2014). Network histograms and universality of blockmodel approximation. Proceedings of the National Academy of Sciences, 111(41), 14722-14727.
 
 Wolfe, P. J., & Olhede, S. C. (2013). Nonparametric graphon estimation. arXiv preprint arXiv:1309.5936.
+}
+\seealso{
+\code{\link[=plot.nethist]{plot.nethist()}}
 }

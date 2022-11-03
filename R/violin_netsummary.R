@@ -6,9 +6,9 @@
 ##' @param Ns number of different subsample size
 ##' @param subsample_sizes a numeric vector of node subsample sizes. 
 ##' @param max_cycle_order an integer value of the maximum cycle size. Must be >=3 and <=7.
-##' @param R an integer value of subsampling replication. If NA, automatically selected using normal CDF.
-##' @param alpha level used 
-##' @param y.max maximum value of y. Must be 0 < y.max <= 1
+##' @param R an integer value of subsampling replication. If NA, R is automatically selected by alpha.
+##' @param alpha a pre-specified level used in determining R and subsample_sizes when they are not specified. It must be in (0,1). Default is 0.05. Smaller alpha gives larger R and subsample_sizes.
+##' @param y.max Upper limit of y-axis of the plot. Must be 0 < y.max <= 1. If NA, the upper limit is automatically selected.
 ##' @param save.plot logical variable whether save the generated figure or not. If TRUE, save the generated plot in the specified file name. Otherwise, display the generated plot.
 ##' @param filename file name to save the generated figure
 ##' @return 
@@ -35,11 +35,11 @@
 ##' @export
 ##' 
 violin_netsummary <- function(A,
-                              Ns, subsample_sizes, 
-                              max_cycle_order, 
-                              R, alpha,
-                              y.max, save.plot, 
-                              filename){
+                              Ns = 11, subsample_sizes = NA, 
+                              max_cycle_order = 4, 
+                              R=NA, alpha = 0.05,
+                              y.max=NA, save.plot = FALSE, 
+                              filename = "myplot.pdf"){
   UseMethod("violin_netsummary")
 }
 ##' @exportS3Method
@@ -79,11 +79,11 @@ violin_netsummary.dgCMatrix<- function(A,
 }
 
 violin_netsummary.default<- function(A, 
-                                     Ns = 11, subsample_sizes = NA, 
-                                     max_cycle_order = 4, 
-                                     R=NA, alpha = 0.05,
-                                     y.max=NA, save.plot = FALSE, 
-                                     filename = "myplot.pdf"){
+                                     Ns, subsample_sizes, 
+                                     max_cycle_order, 
+                                     R, alpha,
+                                     y.max, save.plot, 
+                                     filename){
   if(!.is_undirected_simple(A)) stop("Network A must be an undirected simple network.")
   
   if((max_cycle_order < 3)|(max_cycle_order%%1 != 0)){

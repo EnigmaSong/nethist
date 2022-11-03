@@ -9,15 +9,15 @@
 \arguments{
 \item{x}{a nethist object from \code{\link[=nethist]{nethist()}}.}
 
-\item{idx_order}{index label order specifies}
+\item{idx_order}{A numeric vector for index label order, which must be a permutation of x$cluster.}
 
-\item{...}{other arguements to pass to \code{\link[stats:heatmap]{stats::heatmap()}}.}
+\item{...}{other arguments to pass to \code{\link[stats:heatmap]{stats::heatmap()}}.}
 }
 \value{
 a heatmap
 }
 \description{
-Estimating network histogram and returning the indices of partitions.
+Drawing \code{\link[=heatmap]{heatmap()}} using an \code{nethist} object with an user-specified order.
 }
 \examples{
 \dontrun{
