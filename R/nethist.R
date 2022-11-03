@@ -2,15 +2,19 @@
 ##'
 ##' Estimating network histogram and returning the indices of partitions.
 ##'
-##' @param A An adjacency matrix. It must have binary entries (0 or 1).
+##' @param A An adjacency matrix or igraph object. It must be an undirected and simple graph.
 ##' @param h A bandwidth parameter. If NA, select bandwidth by Olhede and Wolfe (2014). If specified, use the user input value.
-##' @param outfile A filename for outputs. If it is missing, the results are not saved.
+##' @param outfile A filename for saving cluster indices. If it is missing, the results are not saved.
 ##' @param verbose logical value indicating whether verbose output is generated.
 ##' @returns 
-##' An object of class "nethist" which has a `plot` method
+##' An object of class ``nethist``:
 ##' 
-##' * `cluster` A vector of partition indices. 
-##' * `p_mat` A probability matrix from network histogram ordered by cluster. 
+##' \itemize{
+##' \item \emph{cluster} A vector of partition indices.
+##' \item \emph{p_mat} A probability matrix from network histogram ordered by cluster labels. 
+##' \item \emph{rho_hat} estimated sparsity parameter. 
+##' }
+##' @seealso [plot.nethist()]
 ##' @references Olhede, S. C., & Wolfe, P. J. (2014). Network histograms and universality of blockmodel approximation. Proceedings of the National Academy of Sciences, 111(41), 14722-14727.
 ##' @references Wolfe, P. J., & Olhede, S. C. (2013). Nonparametric graphon estimation. arXiv preprint arXiv:1309.5936.
 ##' @examples
@@ -18,14 +22,38 @@
 ##' set.seed(2022)
 ##' #Generating Erdos-Renyi graph
 ##' A <- igraph::sample_gnp(100, 0.05)
-##' A <- igraph::as_adj(A)
-##' idx = nethist(A) #Save the result in idx, do not save it in a csv file.
+##' A <- igraph::as_adj(A, sparse = FALSE)
+##' hist_A = nethist(A) #Save the result in idx, do not save it in a csv file.
 ##' }
-##' @importFrom stats .lm.fit dist
+##' @importFrom stats .lm.fit dist pnorm
+##' @importFrom graphics par
 ##' @importFrom utils write.table
 ##' @importFrom RSpectra eigs
 ##' @export
-nethist <- function(A, h = NA, outfile, verbose = F){
+nethist<-function(A, h = NA, outfile, verbose = FALSE){
+  UseMethod("nethist")
+}
+##' @exportS3Method 
+nethist.igraph<-function(A, h, outfile, verbose){
+  args <- as.list(environment())
+  args$A <- igraph::as_adj(args$A, sparse = FALSE)
+  do.call("nethist.default", args)
+}
+##' @exportS3Method 
+nethist.matrix<-function(A, h, outfile, verbose){
+  args <- as.list(environment())
+  do.call("nethist.default", args)
+}
+##' @exportS3Method 
+nethist.dgCMatrix<-function(A, h, outfile, verbose){
+  args <- as.list(environment())
+  args$A <- as.matrix(args$A)
+  do.call("nethist.default", args)
+}
+##' 
+nethist.default <- function(A, h = NA, outfile, verbose = F){
+  if(!.is_undirected_simple(A)) stop("Network A must be an undirected simple network.")
+  
   # Compute necessary summaries from A
   n <- dim(A)[1]
   rhoHat <- sum(A)/(n*(n-1))
@@ -85,12 +113,13 @@ nethist <- function(A, h = NA, outfile, verbose = F){
     write.table(file=outfile, x = idx, row.names = FALSE, col.names = FALSE)
   }
   
-  p_mat <- prob_mat_from_adj(A,idx)
+  p_mat <- .prob_mat_from_adj(A,idx)
   
-  return(list(cluster = as.vector(idx), 
-              p_mat = p_mat
-          )
-  )
+  result <- list(cluster = as.vector(idx), 
+                 p_mat = p_mat,
+                 rho_hat = rhoHat)
+  result <- structure(result, class="nethist")
+  return(result)
 }
 
 .oracbwplugin <- function(A,c,type, alpha){
@@ -133,9 +162,14 @@ nethist <- function(A, h = NA, outfile, verbose = F){
   MISEfhatBnd <- estMSqrd*((2/sqrt(estMSqrd))*(sampleSize*rhoHat)^(-1/2) + 1/n)
   message(paste("M^2_hat =", round(estMSqrd,3), ", MISE bound_hat=", round(MISEfhatBnd,3)))
   
-  #Diagnostic plot (Not implemented)
-  if(FALSE){
-    
+  #Diagnostic plot (if the code is runned on interactive)
+  if(interactive()){
+    par(mfrow=c(1,2))
+    plot(u, main = "Graphon projection for 
+bandwidth estimation", type = 'l')
+    plot(uMid, main = "Chosen patch of projection component 
+    (adjust using c)",type = 'l')
+    par(mfrow=c(1,1))#Reset
   }
   
   return(list(h=h, estMSqrd=estMSqrd))
