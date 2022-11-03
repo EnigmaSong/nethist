@@ -6,14 +6,14 @@
 \usage{
 violin_netsummary(
   A,
-  Ns,
-  subsample_sizes,
-  max_cycle_order,
-  R,
-  alpha,
-  y.max,
-  save.plot,
-  filename
+  Ns = 11,
+  subsample_sizes = NA,
+  max_cycle_order = 4,
+  R = NA,
+  alpha = 0.05,
+  y.max = NA,
+  save.plot = FALSE,
+  filename = "myplot.pdf"
 )
 }
 \arguments{
@@ -21,22 +21,22 @@ violin_netsummary(
 
 \item{Ns}{number of different subsample size}
 
-\item{subsample_sizes}{an integer value of node subsample size.}
+\item{subsample_sizes}{a numeric vector of node subsample sizes.}
 
 \item{max_cycle_order}{an integer value of the maximum cycle size. Must be >=3 and <=7.}
 
-\item{R}{an integer value of subsampling replication. If NA, automatically selected using normal CDF}
+\item{R}{an integer value of subsampling replication. If NA, R is automatically selected by alpha.}
 
-\item{alpha}{level used}
+\item{alpha}{a pre-specified level used in determining R and subsample_sizes when they are not specified. It must be in (0,1). Default is 0.05. Smaller alpha gives larger R and subsample_sizes.}
 
-\item{y.max}{maximum value of y. Must be 0 < y.max <= 1}
+\item{y.max}{Upper limit of y-axis of the plot. Must be 0 < y.max <= 1. If NA, the upper limit is automatically selected.}
 
 \item{save.plot}{logical variable whether save the generated figure or not. If TRUE, save the generated plot in the specified file name. Otherwise, display the generated plot.}
 
 \item{filename}{file name to save the generated figure}
 }
 \value{
-A network summary plot as a violin plot
+A network summary plot, and a data.frame about the networks summaries.
 }
 \description{
 Draw a network summary plot proposed by Maugis et al. (2017). Counting k-cycles by Alon et al. (1997).
@@ -51,7 +51,11 @@ Following matrix classes are supported: base::matrix, Matrix::dgCMatrix
 set.seed(2022)
 #Generating Erdos-Renyi graph
 n <- 400
+#Using igraph object
 A <- igraph::sample_gnp(n, 0.05)
+violin_netsummary(A, save.plot = FALSE)
+
+#Using sparse adjacency matrix
 A <- igraph::as_adj(A)
 violin_netsummary(A, save.plot = FALSE)
 }

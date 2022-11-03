@@ -1,10 +1,10 @@
 ##' Network histogram plot
 ##'
-##' Estimating network histogram and returning the indices of partitions.
+##' Drawing [heatmap()] using an `nethist` object with an user-specified order.
 ##'
 ##' @param x a nethist object from [nethist()].
-##' @param idx_order index label order specifies 
-##' @param ... other arguements to pass to [stats::heatmap()].
+##' @param idx_order A numeric vector for index label order, which must be a permutation of x$cluster.
+##' @param ... other arguments to pass to [stats::heatmap()].
 ##' @returns 
 ##' a heatmap 
 ##' @examples
@@ -19,6 +19,9 @@
 ##' @exportS3Method 
 ##' @export
 plot.nethist <- function(x, idx_order = 1:max(x$cluster), ...){
-  if(!is_valid_order(idx_order)) 
+  if(!.is_valid_order(idx_order, 1:max(x$cluster))){
+    warning(paste0("idx_order is invalid. Set idx_order = 1:",max(x$cluster)))
+    idx_order <- 1:max(x$cluster)
+  }
   heatmap(x$p_mat[idx_order, idx_order], Rowv = NA, symm = TRUE, ...)
 }

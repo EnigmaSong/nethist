@@ -7,13 +7,14 @@
 ##' @param outfile A filename for saving cluster indices. If it is missing, the results are not saved.
 ##' @param verbose logical value indicating whether verbose output is generated.
 ##' @returns 
-##' An object of class "nethist" which has a `plot` method
+##' An object of class ``nethist``:
 ##' 
 ##' \itemize{
 ##' \item \emph{cluster} A vector of partition indices.
 ##' \item \emph{p_mat} A probability matrix from network histogram ordered by cluster labels. 
 ##' \item \emph{rho_hat} estimated sparsity parameter. 
 ##' }
+##' @seealso [plot.nethist()]
 ##' @references Olhede, S. C., & Wolfe, P. J. (2014). Network histograms and universality of blockmodel approximation. Proceedings of the National Academy of Sciences, 111(41), 14722-14727.
 ##' @references Wolfe, P. J., & Olhede, S. C. (2013). Nonparametric graphon estimation. arXiv preprint arXiv:1309.5936.
 ##' @examples
@@ -29,7 +30,7 @@
 ##' @importFrom utils write.table
 ##' @importFrom RSpectra eigs
 ##' @export
-nethist<-function(A, h, outfile, verbose){
+nethist<-function(A, h = NA, outfile, verbose = FALSE){
   UseMethod("nethist")
 }
 ##' @exportS3Method 
@@ -168,6 +169,7 @@ nethist.default <- function(A, h = NA, outfile, verbose = F){
 bandwidth estimation", type = 'l')
     plot(uMid, main = "Chosen patch of projection component 
     (adjust using c)",type = 'l')
+    par(mfrow=c(1,1))#Reset
   }
   
   return(list(h=h, estMSqrd=estMSqrd))

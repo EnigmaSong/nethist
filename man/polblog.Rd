@@ -15,8 +15,9 @@ data(polblog)
 data(polblog_edgelist)
 }
 \format{
-  polblog is an igraph object of 
-  polblog_edgelist is a list of edges.
+- polblog is an igraph object of the political blog dataset, which is pre-processed data symmetrize and simplified without self-loops.
+
+-  polblog_edgelist is a matrix for the edge list from https://github.com/p-wolfe/network-histogram-code.
   \describe{
     \item{\code{V1}}{a numeric vector of tail vertices.}
     \item{\code{V2}}{a numeric vector of head vertices.}
@@ -24,7 +25,7 @@ data(polblog_edgelist)
 }
 \details{
 %%  ~~ If necessary, more details than the __description__ above ~~
-The adjancency matrix is sparse, assymetric, so it needs to be symmetrized if a method requires a symmetric matrix.
+The adjancency matrix from polblog_edgelist is sparse, assymetric, so it needs to be symmetrized if a method requires a symmetric matrix.
 First 586 blogs are liberal; remaining 638 are conservative. Nodes with zero degree need to be removed.
 }
 \source{
