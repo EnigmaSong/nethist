@@ -79,11 +79,11 @@ violin_netsummary.dgCMatrix<- function(A,
 }
 
 violin_netsummary.default<- function(A, 
-                                     Ns, subsample_sizes, 
-                                     max_cycle_order, 
-                                     R, alpha,
-                                     y.max, save.plot, 
-                                     filename){
+                                     Ns = 11, subsample_sizes = NA, 
+                                     max_cycle_order = 4, 
+                                     R=NA, alpha = 0.05,
+                                     y.max=NA, save.plot = FALSE, 
+                                     filename = "myplot.pdf"){
   if(!.is_undirected_simple(A)) stop("Network A must be an undirected simple network.")
   
   if((max_cycle_order < 3)|(max_cycle_order%%1 != 0)){
