@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="index.html">nethist</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,17 +83,17 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Users can specify the index order of heatmap</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hist_polblog</span>, idx_order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">17</span>,<span class="fl">16</span>,<span class="fl">14</span>,<span class="fl">12</span>,<span class="fl">10</span>,<span class="fl">7</span>,<span class="fl">5</span>,<span class="fl">3</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">4</span>,<span class="fl">6</span>,<span class="fl">8</span>,<span class="fl">9</span>,<span class="fl">11</span>,<span class="fl">13</span>,<span class="fl">15</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-example%202-1.png" width="100%"></p>
+<p><img src="reference/figures/README-example_2-1.png" width="100%"></p>
 <p>If you want to check network summary violin plot of the data set:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/violin_netsummary.html">violin_netsummary</a></span><span class="op">(</span><span class="va">polblog</span>, max_cycle_order <span class="op">=</span> <span class="fl">7</span>, subsample_sizes <span class="op">=</span> <span class="fl">250</span><span class="op">)</span> <span class="co">#User-specified subsample size.</span></span>
 <span><span class="co">#&gt; Use R= 697</span></span></code></pre></div>
-<p><img src="reference/figures/README-examle%203-1.png" width="100%"></p>
+<p><img src="reference/figures/README-example_3-1.png" width="100%"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="reference/violin_netsummary.html">violin_netsummary</a></span><span class="op">(</span><span class="va">polblog</span>, max_cycle_order <span class="op">=</span> <span class="fl">7</span><span class="op">)</span> <span class="co">#Auto-selected subsample size.</span></span>
 <span><span class="co">#&gt; Use R= 697</span></span></code></pre></div>
-<p><img src="reference/figures/README-examle%203-2.png" width="100%"></p>
+<p><img src="reference/figures/README-example_3-2.png" width="100%"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
