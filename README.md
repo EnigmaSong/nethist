@@ -45,7 +45,7 @@ example:
 plot(hist_polblog, idx_order = c(17,16,14,12,10,7,5,3,1,2,4,6,8,9,11,13,15))
 ```
 
-<img src="man/figures/README-example_2-1.png" width="100%" />
+<img src="man/figures/README-example2-1.png" width="100%" />
 
 If you want to check network summary violin plot of the data set:
 
@@ -54,7 +54,7 @@ violin_netsummary(polblog, max_cycle_order = 7, subsample_sizes = 250) #User-spe
 #> Use R= 697
 ```
 
-<img src="man/figures/README-example_3-1.png" width="100%" />
+<img src="man/figures/README-example3-1.png" width="100%" />
 
 ``` r
 
@@ -62,4 +62,4 @@ violin_netsummary(polblog, max_cycle_order = 7) #Auto-selected subsample size.
 #> Use R= 697
 ```
 
-<img src="man/figures/README-example_3-2.png" width="100%" />
+<img src="man/figures/README-example3-2.png" width="100%" />
