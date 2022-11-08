@@ -1,12 +1,5 @@
 #' @noRd
 
-# Falling factorial
-.ffct <- function(x, k) {
-  sapply(x, function(y,k) {
-    prod(y:(y - k + 1))
-  }, k= k)
-}
-
 # Generalized inverse of rho_hat
 .ginv <- function(x){
   non_zero_ind <- (x!=0)

@@ -3,7 +3,7 @@
 using namespace Rcpp;
 
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(.ffct_2)]]
+// [[Rcpp::export(.ffct)]]
 double ffct(int n, int k){
   double result = 1;
   for(int i=n; i > n-k; i--){

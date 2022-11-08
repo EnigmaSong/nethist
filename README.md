@@ -4,11 +4,20 @@
 # nethist
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of *nethist* is to estimate scaled graphons via *network
-histogram*. It also provides extra tools for summary violon plot for
-networks and visualizing network histogram.
+histogram* (Wolfe and Olhede 2013; Olhede and Wolfe 2014). It also
+provides extra tools for summary violin plot for networks (Maugis,
+Olhede, and Wolfe 2017) and visualizing network histogram.
+
+*nethist()* is an *RcppArmadillo* (Eddelbuettel and Sanderson 2014)
+implementation of the original MATLAB code in Olhede and Wolfe (2014).
+To install the package from source, you need C++ and Fortran compilers.
+Use undirected and simple graphs with no self-loops (either igraph or
+matrix) as inputs for the functions in this package.
 
 ## Installation
 
@@ -22,21 +31,90 @@ devtools::install_github("EnigmaSong/nethist")
 
 ## Example
 
-This is a basic example using political blog data set in the package:
+Here are basic examples using political blog data set in the package:
+
+### Network histogram
+
+First, we estimate a network histogram from the political blog data and
+plot it.
 
 ``` r
 library(nethist)
 ## Example code using polblog data set
 set.seed(42)
-hist_polblog <- nethist(polblog, h = 72)
+hist_polblog <- nethist(polblog, h = 72) #using user-specified bin size.
 plot(hist_polblog)
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
+
+You can use a user-specified indices order for plots. Here is an
+example:
 
 ``` r
 ## Users can specify the index order of heatmap
 plot(hist_polblog, idx_order = c(17,16,14,12,10,7,5,3,1,2,4,6,8,9,11,13,15))
 ```
 
-<img src="man/figures/README-example 2-1.png" width="100%" />
+<img src="man/figures/README-example2-1.png" width="100%" />
+
+### Summary violin plot
+
+If you want to check network summary violin plot of the data set:
+
+``` r
+#User-specified subsample size.
+violin_netsummary(polblog, max_cycle_order = 7, subsample_sizes = 250) 
+#> Use R= 697
+```
+
+<img src="man/figures/README-example3-1.png" width="100%" />
+
+``` r
+#Auto-selected subsample size.
+violin_netsummary(polblog, max_cycle_order = 7) 
+#> Use R= 697
+```
+
+<img src="man/figures/README-example3-2.png" width="100%" />
+
+## Reference
+
+<div id="refs" class="references csl-bib-body hanging-indent">
+
+<div id="ref-RcppArmadillo" class="csl-entry">
+
+Eddelbuettel, Dirk, and Conrad Sanderson. 2014. “RcppArmadillo:
+Accelerating r with High-Performance c++ Linear Algebra.” *Computational
+Statistics and Data Analysis* 71: 1054–63.
+<http://dx.doi.org/10.1016/j.csda.2013.02.005>.
+
+</div>
+
+<div id="ref-maugis2017Topology" class="csl-entry">
+
+Maugis, Pierre-André G., Sofia C. Olhede, and Patrick J. Wolfe. 2017.
+“Topology Reveals Universal Features for Network Comparison.”
+*arXiv:1705.05677 \[Cs, Math, Stat\]*, May.
+<http://arxiv.org/abs/1705.05677>.
+
+</div>
+
+<div id="ref-olhede2014Network" class="csl-entry">
+
+Olhede, S. C., and P. J. Wolfe. 2014. “Network Histograms and
+Universality of Blockmodel Approximation.” *Proceedings of the National
+Academy of Sciences* 111 (41): 14722–27.
+<https://doi.org/10.1073/pnas.1400374111>.
+
+</div>
+
+<div id="ref-wolfe2013Nonparametric" class="csl-entry">
+
+Wolfe, Patrick J., and Sofia C. Olhede. 2013. “Nonparametric Graphon
+Estimation.” *arXiv:1309.5936 \[Math, Stat\]*, September.
+<http://arxiv.org/abs/1309.5936>.
+
+</div>
+
+</div>

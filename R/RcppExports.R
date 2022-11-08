@@ -13,7 +13,7 @@
     .Call(`_nethist_net_summary_subsample_adj`, A, subsample_sizes, max_cycle_order, R)
 }
 
-.ffct_2 <- function(n, k) {
+.ffct <- function(n, k) {
     .Call(`_nethist_ffct`, n, k)
 }
 

@@ -6,10 +6,10 @@
 \usage{
 violin_netsummary(
   A,
-  Ns = 11,
   subsample_sizes = NA,
   max_cycle_order = 4,
   R = NA,
+  Ns = 11,
   alpha = 0.05,
   y.max = NA,
   save.plot = FALSE,
@@ -19,45 +19,58 @@ violin_netsummary(
 \arguments{
 \item{A}{an adjacency matrix or igraph object to draw a network summary plot. It must be an undirected and simple graph.}
 
-\item{Ns}{number of different subsample size}
+\item{subsample_sizes}{a numeric vector of node subsample sizes. If \code{NA}, a length \code{Ns} vector is obtained from the automatic subsample size selection.}
 
-\item{subsample_sizes}{a numeric vector of node subsample sizes.}
+\item{max_cycle_order}{an integer value of the maximum cycle size. Must be \verb{>=3} and \verb{<=7}.}
 
-\item{max_cycle_order}{an integer value of the maximum cycle size. Must be >=3 and <=7.}
+\item{R}{an integer value of subsampling replication. If \code{NA}, \code{R} is automatically selected by \code{alpha}.}
 
-\item{R}{an integer value of subsampling replication. If NA, R is automatically selected by alpha.}
+\item{Ns}{number of different subsample sizes. It is only used when \code{subsample_sizes = NA}, that is, when automatic subsample size selection is used.}
 
-\item{alpha}{a pre-specified level used in determining R and subsample_sizes when they are not specified. It must be in (0,1). Default is 0.05. Smaller alpha gives larger R and subsample_sizes.}
+\item{alpha}{a pre-specified level used in determining \code{R} and \code{subsample_sizes} when they are not specified. It must be in (0,1). Default is 0.05. Smaller \code{alpha} gives larger \code{R} and \code{subsample_sizes}.}
 
-\item{y.max}{Upper limit of y-axis of the plot. Must be 0 < y.max <= 1. If NA, the upper limit is automatically selected.}
+\item{y.max}{Upper limit of y-axis of the plot. Must be 0 < \code{y.max} <= 1. If \code{NA}, the upper limit is automatically selected.}
 
-\item{save.plot}{logical variable whether save the generated figure or not. If TRUE, save the generated plot in the specified file name. Otherwise, display the generated plot.}
+\item{save.plot}{logical variable whether save the generated figure or not. If \code{TRUE}, the plot is saved by \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} in the specified file name. Otherwise, display the generated plot.}
 
-\item{filename}{file name to save the generated figure}
+\item{filename}{file name to save the generated figure.}
 }
 \value{
 A network summary plot, and a data.frame about the networks summaries.
 }
 \description{
-Draw a network summary plot proposed by Maugis et al. (2017). Counting k-cycles by Alon et al. (1997).
+Draw a network summary plot proposed by Maugis et al. (2017). To count k-cycles, Alon et al. (1997) is used.
 }
 \details{
 Vertex sampling is done by simple random sampling without replacement.
 
-Following matrix classes are supported: base::matrix, Matrix::dgCMatrix
+Following matrix classes are supported: \link[base:matrix]{base::matrix}, \link[Matrix:dgCMatrix-class]{Matrix::dgCMatrix}
 }
 \examples{
 \dontrun{
 set.seed(2022)
 #Generating Erdos-Renyi graph
 n <- 400
-#Using igraph object
+#igraph object
 A <- igraph::sample_gnp(n, 0.05)
-violin_netsummary(A, save.plot = FALSE)
+violin_netsummary(A)
 
-#Using sparse adjacency matrix
-A <- igraph::as_adj(A)
-violin_netsummary(A, save.plot = FALSE)
+#sparse adjacency matrix
+A2 <- igraph::as_adj(A)
+violin_netsummary(A2)
+
+#dense adjacency matrix
+A2 <- igraph::as_adj(A, sparse = FALSE)
+violin_netsummary(A2)
+
+#user-specified R and subsample_sizes
+violin_netsummary(A, R = 500, subsample_sizes = 150)
+
+#user-specified alpha
+violin_netsummary(A, alpha = 0.1)
+
+#saving the plot with user-specified file name
+violin_netsummary(A, save.plot = TRUE, filename = "myfig.pdf")
 }
 }
 \references{
