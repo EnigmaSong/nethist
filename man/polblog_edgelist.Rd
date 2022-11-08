@@ -1,25 +1,24 @@
-\name{polblog}
-\alias{polblog}
+\name{polblog_edgelist}
+\alias{polblog_edgelist}
 \docType{data}
 \title{
 %%   ~~ data name/kind ... ~~
-Political blog 
+Political blog (edgelist)
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of the dataset. ~~
-Political blog data set from Olhede and Wolfe (2014), which is part of the original data set from Adamic and Glance (2005). The provided igraph object is the zero-degree removed and simplified graph from the edgelist \code{polblog_edgelist}.
-
+Political blog data set from Olhede and Wolfe (2014), which is part of the original data set from Adamic and Glance (2005). The provided edgelist is from GitHub repository of Prof. Patrick Wolfe. 
 }
-\usage{
-data(polblog)
-data(polblog_edgelist)
-}
+\usage{data("polblog_edgelist")}
 \format{
-\code{polblog} is an igraph object, which is pre-processed data symmetrize and simplified without self-loops.
+polblog_edgelist is a matrix for the edge list from https://github.com/p-wolfe/network-histogram-code.
+  \describe{
+    \item{\code{V1}}{a numeric vector of tail vertices.}
+    \item{\code{V2}}{a numeric vector of head vertices.}
+  }
 }
 \details{
 %%  ~~ If necessary, more details than the __description__ above ~~
-The adjancency matrix from \code{polblog_edgelist} is sparse, assymetric, so it needs to be symmetrized if a method requires a symmetric matrix.
 First 586 blogs are liberal; remaining 638 are conservative. Nodes with zero degree need to be removed.
 }
 \source{
