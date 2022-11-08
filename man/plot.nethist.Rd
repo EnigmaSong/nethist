@@ -9,12 +9,12 @@
 \arguments{
 \item{x}{a nethist object from \code{\link[=nethist]{nethist()}}.}
 
-\item{idx_order}{A numeric vector for index label order, which must be a permutation of x$cluster.}
+\item{idx_order}{A numeric vector for index label order, which must be a permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$clsuter)}.}
 
 \item{...}{other arguments to pass to \code{\link[stats:heatmap]{stats::heatmap()}}.}
 }
 \value{
-a heatmap
+a heatmap of \code{p_mat} orderd by \code{idx_order} in \code{nethist} object
 }
 \description{
 Drawing \code{\link[=heatmap]{heatmap()}} using an \code{nethist} object with an user-specified order.
@@ -26,5 +26,9 @@ set.seed(2022)
 A <- igraph::sample_gnp(200, 0.05)
 hist_A <- nethist(A)
 plot(hist_A)
+
+#with user-specified order
+idx<- unique(hist_A$cluster) 
+plot(hist_A, idx_order = idx)
 }
 }

@@ -1,9 +1,27 @@
-G<-polblog
-h_used <- 72
+G<-igraph::sample_gnp(100, p = 0.1)
+h_used <- 10
 
 hist_G <- nethist(G, h = h_used)
 bin_size <- table(hist_G$cluster)
 num_bins <- length(bin_size)
+
+test_that("Check any error when the input is igraph",
+          {
+            expect_no_error(nethist(G, h = h_used))
+          }
+)
+
+test_that("Check any error when the input is sparse matrix",
+          {
+            expect_no_error(nethist(igraph::as_adj(G), h = h_used))
+          }
+)
+
+test_that("Check any error when the input is dense matrix",
+          {
+            expect_no_error(nethist(igraph::as_adj(G, sparse = FALSE), h = h_used))
+          }
+)
 
 test_that("Check the estimated probablity matrix is symmetric",
           {
