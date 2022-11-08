@@ -1,4 +1,8 @@
-.RData
-.Rhistory
 .Rproj.user
-.github
+.Rhistory
+.Rdata
+.httr-oauth
+.DS_Store
+docs
+src/*.o
+src/*.so

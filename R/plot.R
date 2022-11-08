@@ -3,10 +3,10 @@
 ##' Drawing [heatmap()] using an `nethist` object with an user-specified order.
 ##'
 ##' @param x a nethist object from [nethist()].
-##' @param idx_order A numeric vector for index label order, which must be a permutation of x$cluster.
+##' @param idx_order A numeric vector for index label order, which must be a permutation of `x$cluster`. If `NA`, it uses `1:max(x$clsuter)`. 
 ##' @param ... other arguments to pass to [stats::heatmap()].
 ##' @returns 
-##' a heatmap 
+##' a heatmap of `p_mat` orderd by `idx_order` in ``nethist`` object
 ##' @examples
 ##' \dontrun{
 ##' set.seed(2022)
@@ -14,6 +14,10 @@
 ##' A <- igraph::sample_gnp(200, 0.05)
 ##' hist_A <- nethist(A)
 ##' plot(hist_A)
+##' 
+##' #with user-specified order
+##' idx<- unique(hist_A$cluster) 
+##' plot(hist_A, idx_order = idx)
 ##' }
 ##' @importFrom stats heatmap
 ##' @exportS3Method 

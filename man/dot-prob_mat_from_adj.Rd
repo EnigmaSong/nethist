@@ -18,15 +18,13 @@ A matrix whose entries are in between 0 and 1.
 From an adjacency matrix and a cluster index vector, it returns a probability matrix
 }
 \examples{
-\dontrun{
 set.seed(2022)
 #Generating Erdos-Renyi graph
 A <- igraph::sample_gnp(100, 0.05)
 A <- igraph::as_adj(A)
 res <- nethist(A) 
 
-prob_mat_from_adj(A, res$cluster)
-all.equal(prob_mat_from_adj(A, res$cluster), res$p_mat)
-}
+.prob_mat_from_adj(A, res$cluster)
+all.equal(.prob_mat_from_adj(A, res$cluster), res$p_mat)
 }
 \keyword{internal}

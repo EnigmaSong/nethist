@@ -1,13 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-<<<<<<< HEAD
-=======
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
-<<<<<<< HEAD
-^\.github$
-=======
 ^README\.Rmd$
->>>>>>> f1a53a0d773a0afac6d1a514eb639e74b20ea748
->>>>>>> 26dc8d3fb67627bd1e6042dbfe78ee6e20b80482
+^reference\.bib$
+^\.github$
