@@ -13,8 +13,7 @@
 ##' A <- igraph::sample_gnp(100, 0.05)
 ##' hist_A <- nethist(A) 
 ##' 
-##' .prob_mat_from_adj(igraph::as_adj(A, sparse= FALSE), hist_A$cluster)
-##' all.equal(.prob_mat_from_adj(igraph::as_adj(A, sparse= FALSE), hist_A$cluster), res$p_mat)
+##' all.equal(.prob_mat_from_adj(igraph::as_adj(A, sparse= FALSE), hist_A$cluster), hist_A$p_mat)
 ##' @keywords internal
 ##' @export
 .prob_mat_from_adj<-function(A, idx){

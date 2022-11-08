@@ -6,3 +6,4 @@
 ^README\.Rmd$
 ^reference\.bib$
 ^\.github$
+^LICENSE\.md$
