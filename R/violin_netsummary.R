@@ -1,22 +1,22 @@
 ##' Network summary plots
 ##'
-##' Draw a network summary plot proposed by Maugis et al. (2017). Counting k-cycles by Alon et al. (1997).
+##' Draw a network summary plot proposed by Maugis et al. (2017). To count k-cycles, Alon et al. (1997) is used.
 ##'
 ##' @param A an adjacency matrix or igraph object to draw a network summary plot. It must be an undirected and simple graph.
-##' @param Ns number of different subsample size
-##' @param subsample_sizes a numeric vector of node subsample sizes. 
-##' @param max_cycle_order an integer value of the maximum cycle size. Must be >=3 and <=7.
-##' @param R an integer value of subsampling replication. If NA, R is automatically selected by alpha.
-##' @param alpha a pre-specified level used in determining R and subsample_sizes when they are not specified. It must be in (0,1). Default is 0.05. Smaller alpha gives larger R and subsample_sizes.
-##' @param y.max Upper limit of y-axis of the plot. Must be 0 < y.max <= 1. If NA, the upper limit is automatically selected.
-##' @param save.plot logical variable whether save the generated figure or not. If TRUE, save the generated plot in the specified file name. Otherwise, display the generated plot.
-##' @param filename file name to save the generated figure
+##' @param subsample_sizes a numeric vector of node subsample sizes. If `NA`, a length `Ns` vector is obtained from the automatic subsample size selection.
+##' @param max_cycle_order an integer value of the maximum cycle size. Must be `>=3` and `<=7`.
+##' @param R an integer value of subsampling replication. If `NA`, `R` is automatically selected by `alpha`.
+##' @param Ns number of different subsample sizes. It is only used when `subsample_sizes = NA`, that is, when automatic subsample size selection is used.
+##' @param alpha a pre-specified level used in determining `R` and `subsample_sizes` when they are not specified. It must be in (0,1). Default is 0.05. Smaller `alpha` gives larger `R` and `subsample_sizes`.
+##' @param y.max Upper limit of y-axis of the plot. Must be 0 < `y.max` <= 1. If `NA`, the upper limit is automatically selected.
+##' @param save.plot logical variable whether save the generated figure or not. If `TRUE`, the plot is saved by [ggplot2::ggsave()] in the specified file name. Otherwise, display the generated plot.
+##' @param filename file name to save the generated figure. 
 ##' @return 
 ##' A network summary plot, and a data.frame about the networks summaries.
 ##' @details 
 ##' Vertex sampling is done by simple random sampling without replacement.
 ##' 
-##' Following matrix classes are supported: base::matrix, Matrix::dgCMatrix
+##' Following matrix classes are supported: [base::matrix], [Matrix::dgCMatrix-class]
 ##' @references Maugis et al. (2017). Topology reveals universal features for network comparison. arXiv: 1705.05677 
 ##' @references Alon et al. (1997). Finding and counting given length cycles. Algorithmica 17, 209–223 (1997). https://doi.org/10.1007/BF02523189
 ##' @examples
@@ -24,29 +24,43 @@
 ##' set.seed(2022)
 ##' #Generating Erdos-Renyi graph
 ##' n <- 400
-##' #Using igraph object
+##' #igraph object
 ##' A <- igraph::sample_gnp(n, 0.05)
-##' violin_netsummary(A, save.plot = FALSE)
+##' violin_netsummary(A)
 ##' 
-##' #Using sparse adjacency matrix
-##' A <- igraph::as_adj(A)
-##' violin_netsummary(A, save.plot = FALSE)
+##' #sparse adjacency matrix
+##' A2 <- igraph::as_adj(A)
+##' violin_netsummary(A2)
+##' 
+##' #dense adjacency matrix
+##' A2 <- igraph::as_adj(A, sparse = FALSE)
+##' violin_netsummary(A2)
+##' 
+##' #user-specified R and subsample_sizes
+##' violin_netsummary(A, R = 500, subsample_sizes = 150)
+##'
+##' #user-specified alpha
+##' violin_netsummary(A, alpha = 0.1)
+##'
+##' #saving the plot with user-specified file name
+##' violin_netsummary(A, save.plot = TRUE, filename = "myfig.pdf")
 ##' }
 ##' @export
 ##' 
 violin_netsummary <- function(A,
-                              Ns = 11, subsample_sizes = NA, 
+                              subsample_sizes = NA, 
                               max_cycle_order = 4, 
-                              R=NA, alpha = 0.05,
+                              R=NA, 
+                              Ns = 11, alpha = 0.05,
                               y.max=NA, save.plot = FALSE, 
                               filename = "myplot.pdf"){
   UseMethod("violin_netsummary")
 }
 ##' @exportS3Method
 violin_netsummary.igraph<- function(A, 
-                                     Ns, subsample_sizes, 
+                                     subsample_sizes, 
                                      max_cycle_order, 
-                                     R, alpha,
+                                     R, Ns, alpha,
                                      y.max, save.plot, 
                                      filename){
   args <- as.list(environment())
@@ -57,9 +71,9 @@ violin_netsummary.igraph<- function(A,
 
 ##' @exportS3Method
 violin_netsummary.matrix<- function(A, 
-                                    Ns, subsample_sizes, 
+                                    subsample_sizes, 
                                     max_cycle_order, 
-                                    R, alpha,
+                                    R, Ns, alpha,
                                     y.max, save.plot, 
                                     filename){
   args <- as.list(environment())
@@ -68,9 +82,9 @@ violin_netsummary.matrix<- function(A,
 
 ##' @exportS3Method
 violin_netsummary.dgCMatrix<- function(A, 
-                                    Ns, subsample_sizes, 
+                                    subsample_sizes, 
                                     max_cycle_order, 
-                                    R, alpha,
+                                    R, Ns, alpha,
                                     y.max, save.plot, 
                                     filename){
   args <- as.list(environment())
@@ -79,9 +93,9 @@ violin_netsummary.dgCMatrix<- function(A,
 }
 
 violin_netsummary.default<- function(A, 
-                                     Ns = 11, subsample_sizes = NA, 
+                                     subsample_sizes = NA, 
                                      max_cycle_order = 4, 
-                                     R=NA, alpha = 0.05,
+                                     R=NA, Ns = 11, alpha = 0.05,
                                      y.max=NA, save.plot = FALSE, 
                                      filename = "myplot.pdf"){
   if(!.is_undirected_simple(A)) stop("Network A must be an undirected simple network.")

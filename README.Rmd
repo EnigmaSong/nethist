@@ -1,5 +1,6 @@
 ---
 output: github_document
+bibliography: reference.bib 
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -16,9 +17,12 @@ knitr::opts_chunk$set(
 # nethist
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of *nethist* is to estimate scaled graphons via *network histogram*. It also provides extra tools for summary violon plot for networks and visualizing network histogram.
+The goal of *nethist* is to estimate scaled graphons via *network histogram* [@wolfe2013Nonparametric; @olhede2014Network]. It also provides extra tools for summary violin plot for networks [@maugis2017Topology] and visualizing network histogram.
+
+*nethist()* is an *RcppArmadillo* [@RcppArmadillo] implementation of the original MATLAB code in @olhede2014Network. To install the package from source, you need C++ and Fortran compilers. Use undirected and simple graphs with no self-loops (either igraph or matrix) as inputs for the functions in this package.
 
 ## Installation
 
@@ -31,18 +35,34 @@ devtools::install_github("EnigmaSong/nethist")
 
 ## Example
 
-This is a basic example using political blog data set in the package:
+Here are basic examples using political blog data set in the package:
 
+### Network histogram 
+
+First, we estimate a network histogram from the political blog data and plot it.
 ```{r example}
 library(nethist)
 ## Example code using polblog data set
 set.seed(42)
-hist_polblog <- nethist(polblog, h = 72)
+hist_polblog <- nethist(polblog, h = 72) #using user-specified bin size.
 plot(hist_polblog)
 ```
 
-```{r example 2}
+You can use a user-specified indices order for plots. Here is an example:
+```{r example2}
 ## Users can specify the index order of heatmap
 plot(hist_polblog, idx_order = c(17,16,14,12,10,7,5,3,1,2,4,6,8,9,11,13,15))
 ```
+
+### Summary violin plot
+
+If you want to check network summary violin plot of the data set:
+```{r example3}
+#User-specified subsample size.
+violin_netsummary(polblog, max_cycle_order = 7, subsample_sizes = 250) 
+#Auto-selected subsample size.
+violin_netsummary(polblog, max_cycle_order = 7) 
+```
+
+## Reference
 
