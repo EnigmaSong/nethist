@@ -9,6 +9,10 @@
     .Call(`_nethist_graphest_fastgreedy`, A, hbar, inputLabelVec, verbose)
 }
 
+.graphest_fastgreedy_test <- function(A, hbar, inputLabelVec, verbose) {
+    .Call(`_nethist_graphest_fastgreedy_test`, A, hbar, inputLabelVec, verbose)
+}
+
 .net_summary_subsample_adj <- function(A, subsample_sizes, max_cycle_order, R) {
     .Call(`_nethist_net_summary_subsample_adj`, A, subsample_sizes, max_cycle_order, R)
 }
