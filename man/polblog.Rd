@@ -12,7 +12,6 @@ Political blog data set from Olhede and Wolfe (2014), which is part of the origi
 }
 \usage{
 data(polblog)
-data(polblog_edgelist)
 }
 \format{
 \code{polblog} is an igraph object, which is pre-processed data symmetrize and simplified without self-loops.
