@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="index.html">nethist</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,10 +83,12 @@
 <span><span class="va">hist_polblog</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nethist.html">nethist</a></span><span class="op">(</span><span class="va">polblog</span>, h <span class="op">=</span> <span class="fl">72</span><span class="op">)</span> <span class="co">#using user-specified bin size.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hist_polblog</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-1.png" width="100%"></p>
-<p>You can use a user-specified indices order for plots. Here is an example:</p>
+<p>You can use a user-specified indices for plots. Here is an example:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## Users can specify the index order of heatmap</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hist_polblog</span>, idx_order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">17</span>,<span class="fl">16</span>,<span class="fl">14</span>,<span class="fl">12</span>,<span class="fl">10</span>,<span class="fl">7</span>,<span class="fl">5</span>,<span class="fl">3</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">4</span>,<span class="fl">6</span>,<span class="fl">8</span>,<span class="fl">9</span>,<span class="fl">11</span>,<span class="fl">13</span>,<span class="fl">15</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ind</span><span class="op">)</span> </span>
+<span><span class="co">#&gt;  [1] 17 10 13  7 12  4  8  5  1  2  6  3  9 15 11 14 16</span></span>
+<span><span class="co">## Users can specify the index order of heatmap</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hist_polblog</span>, idx_order <span class="op">=</span> <span class="va">ind</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example2-1.png" width="100%"></p>
 </div>
 <div class="section level3">
