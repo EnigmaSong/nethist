@@ -88,25 +88,19 @@ nethist.default <- function(A, h = NA, outfile, verbose = F){
   if(verbose) message(paste("Final bandwidth:", h))
   
   lastGroupSize <- n %% h
-  
   # step down h, to avoid singleton final group
   while((lastGroupSize==1) & (h>2)){
     h <- h-1
     lastGroupSize <- n %% h
-    
     if(verbose) message('NB: Bandwidth reduced to avoid singleton group')
   }
   if(verbose) message(paste0('Adjacency matrix has ', n, ' rows/cols'))
   
   # Initialize using regularized spectral clustering based on row similarity
   tstart <- Sys.time()
-  regParam <- rhoHat/4
   
-  distMat <- as.matrix(dist(A, method = "manhattan", diag = T, upper = F)/n)
   # exponential Taylor approximation to L_ij = exp(-||A_i. - A_j.||^2 / 2) = 1 -||A_i. - A_j.||^2 for small ||.||
-  # Original code was distMat. But distMat^2 is correct.
-  L <- 1 - distMat^2 
-  rm(distMat)
+  L <- 1 - (.hamming_dist_adj_mat(A)/n)^2 
   d <- rowSums(L)
   L <- outer(d^(-1/2), d^(-1/2))*L - sqrt(d)%o%sqrt(d)/sqrt(sum(d^2))
   eigen_res <- RSpectra::eigs_sym(L, 1) # 2nd eigenvector of normalized Laplacian
