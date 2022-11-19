@@ -63,12 +63,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// hamming_dist_adj_mat
+arma::mat hamming_dist_adj_mat(const arma::mat& A);
+RcppExport SEXP _nethist_hamming_dist_adj_mat(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(hamming_dist_adj_mat(A));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_nethist_count_k_cycle", (DL_FUNC) &_nethist_count_k_cycle, 2},
     {"_nethist_graphest_fastgreedy", (DL_FUNC) &_nethist_graphest_fastgreedy, 4},
     {"_nethist_net_summary_subsample_adj", (DL_FUNC) &_nethist_net_summary_subsample_adj, 4},
     {"_nethist_ffct", (DL_FUNC) &_nethist_ffct, 2},
+    {"_nethist_hamming_dist_adj_mat", (DL_FUNC) &_nethist_hamming_dist_adj_mat, 1},
     {NULL, NULL, 0}
 };
 

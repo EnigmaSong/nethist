@@ -17,3 +17,7 @@
     .Call(`_nethist_ffct`, n, k)
 }
 
+.hamming_dist_adj_mat <- function(A) {
+    .Call(`_nethist_hamming_dist_adj_mat`, A)
+}
+
