@@ -48,12 +48,13 @@ plot(hist_polblog)
 
 <img src="man/figures/README-example-1.png" width="100%" />
 
-You can use a user-specified indices order for plots. Here is an
-example:
+You can use a user-specified indices for plots. Here is an example:
 
 ``` r
+print(ind) 
+#>  [1] 17 10 13  7 12  4  8  5  1  2  6  3  9 15 11 14 16
 ## Users can specify the index order of heatmap
-plot(hist_polblog, idx_order = c(17,16,14,12,10,7,5,3,1,2,4,6,8,9,11,13,15))
+plot(hist_polblog, idx_order = ind)
 ```
 
 <img src="man/figures/README-example2-1.png" width="100%" />

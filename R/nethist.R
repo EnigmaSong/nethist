@@ -109,7 +109,7 @@ nethist.default <- function(A, h = NA, outfile, verbose = F){
   rm(distMat)
   d <- rowSums(L)
   L <- outer(d^(-1/2), d^(-1/2))*L - sqrt(d)%o%sqrt(d)/sqrt(sum(d^2))
-  eigen_res <- RSpectra::eigs(L, 1)
+  eigen_res <- RSpectra::eigs_sym(L, 1) # 2nd eigenvector of normalized Laplacian
   rm(L)
   u <- eigen_res$vectors[,1] * sign(eigen_res$vectors[1,1])
   ind <- order(u) #Index vectors from smallest to largest.
