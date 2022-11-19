@@ -48,10 +48,27 @@ hist_polblog <- nethist(polblog, h = 72) #using user-specified bin size.
 plot(hist_polblog)
 ```
 
-You can use a user-specified indices order for plots. Here is an example:
+```{r get_reorder, echo = FALSE}
+#Get ratio for liberal
+ratio_liberal <- table(hist_polblog$cluster, c(rep(1,586),rep(0,638)))
+ratio_liberal <- ratio_liberal[,1]/rowSums(ratio_liberal)
+liberal_ind <- which(ratio_liberal>=0.5)
+conserv_ind <- which(ratio_liberal<0.5)
+
+#Order by cross-party connection
+liberal_cp_con <- rowSums(hist_polblog$p_mat[liberal_ind,conserv_ind])
+conserv_cp_con <- colSums(hist_polblog$p_mat[liberal_ind,conserv_ind])
+
+ind <- c(rev(liberal_ind[order(liberal_cp_con,decreasing=TRUE)]),
+         conserv_ind[order(conserv_cp_con,decreasing=TRUE)],use.names=FALSE);
+```
+
+
+You can use a user-specified indices for plots. Here is an example:
 ```{r example2}
+print(ind) 
 ## Users can specify the index order of heatmap
-plot(hist_polblog, idx_order = c(17,16,14,12,10,7,5,3,1,2,4,6,8,9,11,13,15))
+plot(hist_polblog, idx_order = ind)
 ```
 
 ### Summary violin plot
