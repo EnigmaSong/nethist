@@ -37,20 +37,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// graphest_fastgreedy_test
-arma::vec graphest_fastgreedy_test(const arma::mat& A, const int& hbar, const arma::vec& inputLabelVec, const bool& verbose);
-RcppExport SEXP _nethist_graphest_fastgreedy_test(SEXP ASEXP, SEXP hbarSEXP, SEXP inputLabelVecSEXP, SEXP verboseSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
-    Rcpp::traits::input_parameter< const int& >::type hbar(hbarSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type inputLabelVec(inputLabelVecSEXP);
-    Rcpp::traits::input_parameter< const bool& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(graphest_fastgreedy_test(A, hbar, inputLabelVec, verbose));
-    return rcpp_result_gen;
-END_RCPP
-}
 // net_summary_subsample_adj
 arma::mat net_summary_subsample_adj(arma::mat A, arma::vec subsample_sizes, int max_cycle_order, int R);
 RcppExport SEXP _nethist_net_summary_subsample_adj(SEXP ASEXP, SEXP subsample_sizesSEXP, SEXP max_cycle_orderSEXP, SEXP RSEXP) {
@@ -81,7 +67,6 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_nethist_count_k_cycle", (DL_FUNC) &_nethist_count_k_cycle, 2},
     {"_nethist_graphest_fastgreedy", (DL_FUNC) &_nethist_graphest_fastgreedy, 4},
-    {"_nethist_graphest_fastgreedy_test", (DL_FUNC) &_nethist_graphest_fastgreedy_test, 4},
     {"_nethist_net_summary_subsample_adj", (DL_FUNC) &_nethist_net_summary_subsample_adj, 4},
     {"_nethist_ffct", (DL_FUNC) &_nethist_ffct, 2},
     {NULL, NULL, 0}
