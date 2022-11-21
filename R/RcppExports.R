@@ -21,3 +21,7 @@
     .Call(`_nethist_hamming_dist_adj_mat`, A)
 }
 
+.is_undirected_simple <- function(A) {
+    .Call(`_nethist_is_undirected_simple`, A)
+}
+

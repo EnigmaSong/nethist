@@ -32,6 +32,27 @@ arma::mat hamming_dist_adj_mat(const arma::mat &A){
   return result;
 }
 
+// [[Rcpp::export(.is_undirected_simple)]]
+bool is_undirected_simple(const arma::mat& A){
+  // Checking simple & undirected graph
+  int n = A.n_cols;
+  
+  if(n != A.n_rows){
+    Rcout<< "A is not a square matrix.\n"; 
+    return false;
+  } 
+  
+  for(int i = 0; i < n; i++){
+    for(int j = i+1; j <n; j++){
+      if(((A(i,j)!=0)&&(A(i,j)!=1))||(A(i,j)!=A(j,i))){
+        Rcout<< "A is not simple or symmetric.\n";
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 arma::vec sample(const arma::vec& x, const int& size, const bool& replace){
   return Rcpp::RcppArmadillo::sample(x, size, replace);
 }
