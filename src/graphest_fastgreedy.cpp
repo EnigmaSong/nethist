@@ -23,17 +23,14 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
   const bool smallerLastGroup = !(n%hbar == 0);
   const int k = (n%hbar == 0 ? n/hbar : n/hbar + 1);
   const int numEqualSizeGroup = k-smallerLastGroup;
-  const int tol_ZeroImprovements = (allInds ? 2 :ceil((double)(k*n*(n-1))/(2.0*(double)numGreedySteps)));
-  
-  arma::vec h(k);
-  arma::mat habSqrd(k,k);
+  const int tol_ZeroImprovements = (allInds ? 2 :ceil((double)(k*n*(n-1))/(2.0*(double)numGreedySteps)));;
   
   //Variables used in greedy search algorithms
   //log-likelihood, label vectors, cluster index, ...
-  double bestLL;
   arma::mat bestACounts(k,k);
-  arma::vec bestLabelVec(n);
   arma::umat bestClusterInds(hbar, k);
+  arma::vec bestLabelVec(n);
+  double bestLL,oldbestLL;
   const arma::uvec aLeqb = trimatu_ind(size(bestACounts));
   
   double oldNormalizedBestLL;
@@ -41,16 +38,10 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
   int consecZeroImprovements = 0;
   int tolCounter = 0;
   
-  arma::mat currentACounts(k,k);
-  arma::umat currentClusterInds(hbar, k);
-  arma::vec currentLabelVec(n);
-  double currentLL;
-  
   arma::mat trialACounts(k,k);
   arma::umat trialClusterInds(hbar, k);
   arma::vec trialLabelVec(n);
   double trialLL;
-  
   
   Timer timer; 
   
@@ -60,8 +51,11 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
   
   int i,j,a,b;
   
+  arma::vec h(k);
+  arma::mat habSqrd(k,k);
   arma::vec habSqrdCola(k), habSqrdColb(k);
   double habSqrdEntryab;
+  
   arma::vec oldThetaCola(k), oldThetaColb(k);
   double oldThetaEntryab;
   arma::vec thetaCola(k), thetaColb(k);
@@ -116,25 +110,20 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
   
   timer.step("start");
   
+  //initialization
+  oldbestLL = bestLL;
+  
   for(int mm=0; mm< maxNumRestarts; mm++){
     oneTwoVec = rand_oneTwovVec(numGreedySteps, 1.0/3.0); 
     iVec = sample(integerVec_nminusone, numGreedySteps, true);
     jVec = sample(integerVec_nminusone, numGreedySteps, true);
     kVec = sample(integerVec_nminusone, numGreedySteps, true);
     
-    // Update Partition information
-    currentACounts = bestACounts;
-    currentClusterInds = bestClusterInds;
-    currentLabelVec = bestLabelVec;
-    currentLL = bestLL;
-    
     for(int m = 0; m < numGreedySteps; m++){
-      // Prepare to update quantities for trial clustering
-      trialACounts = currentACounts;
-      trialClusterInds = currentClusterInds;
-      trialLabelVec = currentLabelVec;
-      trialLL = currentLL;
-      
+      trialACounts = bestACounts;
+      trialClusterInds = bestClusterInds;
+      trialLabelVec = bestLabelVec;
+      trialLL = bestLL;
       for(int swapNum=1; swapNum <= oneTwoVec(m); swapNum++){
         if(swapNum==1){
           // Step 1 of 2
@@ -172,10 +161,9 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
           for(int kk = 0; kk< numEqualSizeGroup; kk++){
             sumAijc(kk) = sum(AColiMinusColj(trialClusterInds.col(kk)));
           }
-          // sumAijc = sum(AColiMinusColj(trialClusterInds.each_col(arma::span(0,numEqualSizeGroup-1))));
-          
           trialACounts(arma::span(0,numEqualSizeGroup-1), a-1) -= sumAijc;
           trialACounts(arma::span(0,numEqualSizeGroup-1), b-1) += sumAijc;
+          
           if(smallerLastGroup){
             sumAijEnd = sum(AColiMinusColj(trialClusterInds(arma::span(0, h(k-1)-1),k-1)));
             trialACounts(k-1, a-1) -= sumAijEnd;
@@ -193,6 +181,7 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
           // Normalize and respect symmetry of trialAbar matrix
           trialACounts.row(b-1) = trialACounts.col(b-1).t();
           trialACounts.row(a-1) = trialACounts.col(a-1).t();
+          
           // Now calculate changed likelihood directly
           thetaCola = trialACounts.col(a-1)/habSqrdCola;
           thetaColb = trialACounts.col(b-1)/habSqrdColb;
@@ -212,19 +201,16 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
         }
       }
       // Metroplis or greedy step; if trial clustering accepted, then update current <-- trial
-      if(trialLL > currentLL){
-        currentACounts = trialACounts;
-        currentClusterInds = trialClusterInds;
-        currentLabelVec = trialLabelVec;
-        currentLL = trialLL;
+      if(trialLL > bestLL){
+        bestACounts = trialACounts;
+        bestClusterInds = trialClusterInds;
+        bestLabelVec = trialLabelVec;
+        bestLL = trialLL;
       }
     }
     // Keep track of best clustering overall
-    if (currentLL > bestLL){// replace and save if trialLL is an improvement
-      bestLL = currentLL; // update globally best visited likelihood
-      bestACounts = currentACounts;
-      bestClusterInds = currentClusterInds;
-      bestLabelVec = currentLabelVec;
+    if (bestLL > oldbestLL){// replace and save if trialLL is an improvement
+      oldbestLL = bestLL;
       bestCount++;
     }
     // Keep track of best clustering overall

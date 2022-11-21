@@ -77,8 +77,7 @@ nethist.default <- function(A, h = NA, outfile, verbose = F){
   # Pick an analysis bandwidth and initialize via regularized spectral clustering
   ##########################################################################
   if(is.na(h)){
-    c <- min(4, sqrt(n)/8)
-    h <- .oracbwplugin(A, c, 'degs', 1)$h
+    h <- .oracbwplugin(A, min(4, sqrt(n)/8), 'degs', 1, rhoHat)$h
     if(verbose) message(paste("Determining bandwidth from data:", round(h)))
   }else{
     if(verbose) message(paste("Determining bandwidth from user input:", round(h)))
@@ -103,7 +102,7 @@ nethist.default <- function(A, h = NA, outfile, verbose = F){
   L <- 1 - (.hamming_dist_adj_mat(A)/n)^2 
   d <- rowSums(L)
   L <- outer(d^(-1/2), d^(-1/2))*L - sqrt(d)%o%sqrt(d)/sqrt(sum(d^2))
-  eigen_res <- RSpectra::eigs_sym(L, 1) # 2nd eigenvector of normalized Laplacian
+  eigen_res <- RSpectra::eigs_sym(L, 1) 
   rm(L)
   u <- eigen_res$vectors[,1] * sign(eigen_res$vectors[1,1])
   ind <- order(u) #Index vectors from smallest to largest.
@@ -122,30 +121,23 @@ nethist.default <- function(A, h = NA, outfile, verbose = F){
     write.table(file=outfile, x = idx, row.names = FALSE, col.names = FALSE)
   }
   
-  p_mat <- .prob_mat_from_adj(A,idx)
-  
   result <- list(cluster = as.vector(idx), 
-                 p_mat = p_mat,
+                 p_mat = .prob_mat_from_adj(A,idx),
                  rho_hat = rhoHat)
   result <- structure(result, class="nethist")
   return(result)
 }
 
-.oracbwplugin <- function(A,c,type, alpha){
+.oracbwplugin <- function(A,c,type, alpha,
+                          rhoHat){
+  #Assume A is symmetric, simple, and no self-loop
   if(missing(type)) type <- 'degs'
   if(missing(alpha)) alpha <- 1
   
   n <- dim(A)[1]
   midPt <- seq(round(n/2-c*sqrt(n),0), round(n/2+c*sqrt(n),0))
-  selfLoops <- any(diag(A)!=0)
-  sampleSize <- choose(n + selfLoops, 2)
-  rhoHat <- sum(A[upper.tri(A, diag = selfLoops)])/sampleSize
-  
-  if(rhoHat == 0){
-    rhoHat_inv <- 0
-  }else{
-    rhoHat_inv <- 1/rhoHat
-  }
+  rhoHat_inv <- .ginv(rhoHat)
+  sampleSize <- n*(n-1)/2
   
   #Rank-1 graphon estimate via fhat(x,y) = mult*u(x)*u(y)*pinv(rhoHat);
   if(type=="eigs"){
@@ -174,12 +166,11 @@ nethist.default <- function(A, h = NA, outfile, verbose = F){
   #Diagnostic plot (if the code is runned on interactive)
   if(interactive()){
     par(mfrow=c(1,2))
-    plot(u, main = "Graphon projection for 
-bandwidth estimation", type = 'l')
-    plot(uMid, main = "Chosen patch of projection component 
-    (adjust using c)",type = 'l')
+    plot(u, main = "Graphon projection for bandwidth estimation", type = 'l')
+    plot(uMid, main = "Chosen patch of projection component (adjust using c)",type = 'l')
     par(mfrow=c(1,1))#Reset
   }
   
   return(list(h=h, estMSqrd=estMSqrd))
 }
+ 
