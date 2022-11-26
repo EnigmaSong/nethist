@@ -98,7 +98,7 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
   if(smallerLastGroup){
     bestClusterInds(arma::span(0, h(k-1)-1), k-1) = find(bestLabelVec==k);
   }
-  if(bestClusterInds(integerVec_nminusone).max() != n-1){
+  if(bestClusterInds(integerVec_nminusone).max() != (unsigned int)(n-1)){
     stop("All nodes must be assigned to a cluster.");
   }
   
@@ -288,6 +288,7 @@ double Delta_NegEnt(const arma::vec &habSqrdCola,
                     const arma::vec &thetaCola,
                     const arma::vec &thetaColb,
                     const double &thetaEntryab){
+  
   return(dot(habSqrdCola,(thetaCola%log(thetaCola) + (1.0-thetaCola)%log(1.0-thetaCola)))+
          dot(habSqrdColb,(thetaColb%log(thetaColb) + (1.0-thetaColb)%log(1.0-thetaColb)))-
          (habSqrdEntryab*(thetaEntryab*log(thetaEntryab) + (1.0-thetaEntryab)*log(1.0-thetaEntryab))));
