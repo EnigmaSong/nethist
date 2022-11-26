@@ -25,5 +25,6 @@ Depends:
     R (>= 2.10)
 LazyData: true
 Config/testthat/edition: 3
+URL: https://enigmasong.github.io/nethist/
 Roxygen: list(markdown = TRUE)
 License: MIT + file LICENSE
