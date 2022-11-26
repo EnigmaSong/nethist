@@ -8,16 +8,16 @@ using namespace Rcpp;
 //
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.net_summary_subsample_adj)]]
-arma::mat net_summary_subsample_adj(arma::mat A, arma::vec subsample_sizes, int max_cycle_order, int R) {
-  int n = A.n_cols;
-  int Ns = subsample_sizes.n_elem;
+arma::mat net_summary_subsample_adj(const arma::mat &A, const arma::vec &subsample_sizes, int max_cycle_order, int R) {
+  const int n = A.n_cols;
+  const int Ns = subsample_sizes.n_elem;
   int subsample_size;  
   int temp_ind;
   arma::mat result(R, max_cycle_order-1);
   arma::vec deg_A_sub;
 
-  arma::vec powers  = 1.0/arma::regspace<arma::vec>(3, max_cycle_order);
-  arma::uvec total_ind = arma::regspace<arma::uvec>(0, n-1);
+  const arma::vec powers = 1.0/arma::regspace<arma::vec>(3, max_cycle_order);
+  const arma::uvec total_ind = arma::regspace<arma::uvec>(0, n-1);
   arma::uvec sample_ind;
   arma::vec cycle_ratio;
   arma::mat denoms(max_cycle_order-2,Ns);
@@ -44,5 +44,3 @@ arma::mat net_summary_subsample_adj(arma::mat A, arma::vec subsample_sizes, int 
   
   return result;
 }
-
-

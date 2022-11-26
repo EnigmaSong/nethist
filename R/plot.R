@@ -6,7 +6,7 @@
 ##' @param idx_order A numeric vector for index label order, which must be a permutation of `x$cluster`. If `NA`, it uses `1:max(x$clsuter)`. 
 ##' @param ... other arguments to pass to [stats::heatmap()].
 ##' @returns 
-##' a heatmap of `p_mat` orderd by `idx_order` in ``nethist`` object
+##' a heatmap of `p_mat` orderd by `idx_order` in ``nethist`` object.
 ##' @examples
 ##' \dontrun{
 ##' set.seed(2022)
