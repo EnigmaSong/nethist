@@ -1,6 +1,6 @@
-# nethist 0.2.1 (2022/11/25)
+# nethist 0.2.1 (2022/11/26)
 
-* Initialization of `nethist()` is faster by computing hamming distance from the (simple) adjacency matrix instead of Manhattan distance.
+* Initialization step of `nethist()` is faster than earlier by computing hamming distance from the (simple) adjacency matrix instead of Manhattan distance.
 
 
 # nethist 0.2.0 (2022/11/19)

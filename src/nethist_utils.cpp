@@ -18,12 +18,11 @@ arma::mat hamming_dist_adj_mat(const arma::mat &A){
   //To compute hamming distance matrix for adjacency matrix from pairs of column vectors
   //It is faster than dist(method="manhattan"), which uses primitive C function, because 
   //i) it does not have error handling in the C primitive (= no if statement for error handling like dist())
-  //ii) it runs smaller number of arithmetic operations.
   int n = A.n_cols;
   arma::mat result(n,n);
   
   for(int i = 0; i < n; i++){
-    for(int j = i+1; j <n; j++){
+    for(int j = i+1; j < n; j++){
       result(i,j) += sum(A.col(i)!= A.col(j));
     }
   }
@@ -44,7 +43,7 @@ bool is_undirected_simple(const arma::mat& A){
   
   for(int i = 0; i < n; i++){
     for(int j = i+1; j <n; j++){
-      if(((A(i,j)!=0)&&(A(i,j)!=1))||(A(i,j)!=A(j,i))){
+      if(((A.at(i,j)!=0)&&(A.at(i,j)!=1))||(A.at(i,j)!=A.at(j,i))){
         Rcout<< "A is not simple or symmetric.\n";
         return false;
       }
