@@ -2,6 +2,7 @@
 #include "graphest_fastgreedy.h"
 #include "nethist_utils.h"
 #include <Rcpp/Benchmark/Timer.h>
+
 using namespace Rcpp;
 const double eps = arma::datum::eps;
 const arma::uword IMPOSSIBLE_INDEX = 10000000;
@@ -10,8 +11,63 @@ const double absTol = 2.5*pow(10,-4);
 //
 // [[Rcpp::depends(RcppArmadillo)]]
 
+class Nethist {
+public:
+  Nethist(arma::mat Adj_mat, arma::vec Labels, int hbar){
+    A = Adj_mat;  
+    n = A.n_rows;
+    LabelVec = Labels;
+    
+    set_bin_size(hbar);
+  }
+  double update_LL_by_swap(arma::uword i, arma::uword j){
+    return 0;
+  }
+private:
+  arma::mat A;
+  int n;
+  int k;
+  int numEqualSizeGroup;
+  arma::vec h;
+  arma::vec LabelVec;
+  arma::umat ClusterInds;
+  arma::mat Acounts;
+  arma::mat habSqrd;
+  bool smallerLastGroup;
+  
+  void set_bin_size(int hbar){
+    smallerLastGroup = (n%hbar != 0);
+    k = (smallerLastGroup ? n/hbar : n/hbar + 1);
+    numEqualSizeGroup = k - smallerLastGroup;
+    h.zeros(k);
+    h.fill(hbar);
+    if(smallerLastGroup){
+      h[k-1] = (n%hbar);
+    }
+    habSqrd = h*h.t()-diagmat(h%(h+1)/2);
+  }
+  void init_clusterInds(){
+    ClusterInds.fill(IMPOSSIBLE_INDEX);
+    for(int a = 0; a < numEqualSizeGroup; a++){
+      ClusterInds.col(a) = find(LabelVec == a + 1);
+    }
+    if(smallerLastGroup){
+      ClusterInds(arma::span(0, h(k-1)-1), k-1) = find(LabelVec==k);
+    }
+    if(ClusterInds(arma::regspace<arma::uvec>(0, n-1)).max() != (unsigned int)(n-1)){
+      stop("All nodes must be assigned to a cluster.");
+    }
+  }
+  void swap_nodelabels(arma::uword i, arma::uword j){
+    
+  }
+  void update_Acounts(){
+    
+  }
+};
+
 // [[Rcpp::export(.graphest_fastgreedy)]]
-arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::vec &inputLabelVec, const bool &verbose){
+arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, arma::vec bestLabelVec, const bool &verbose){
   const int n = A.n_rows;
   const double sampleSize = (double)n*((double)n-1.0)/2.0;
   const double numOnes = accu(A);
@@ -29,7 +85,7 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
   //log-likelihood, label vectors, cluster index, ...
   arma::mat bestACounts(k,k);
   arma::umat bestClusterInds(hbar, k);
-  arma::vec bestLabelVec(n);
+  // arma::vec bestLabelVec(n);
   double bestLL,oldbestLL;
   const arma::uvec aLeqb = trimatu_ind(size(bestACounts));
   
@@ -90,7 +146,7 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
   
   //Convert bestLabelVec, a vector whose elements are between 1 to k, 
   //to bestClusterInds, an (hbar x k) matrix whose elements are between 0 to n-1 and each column is group  
-  bestLabelVec = inputLabelVec;
+  // bestLabelVec = inputLabelVec;
   bestClusterInds.fill(IMPOSSIBLE_INDEX);
   for(int a = 0; a < numEqualSizeGroup; a++){
     bestClusterInds.col(a) = find(bestLabelVec == a + 1);

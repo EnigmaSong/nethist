@@ -1,7 +1,7 @@
 #ifndef GRAPHEST_FASTGREEDY
 #define GRAPHEST_FASTGREEDY
 
-arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::vec &inputLabelVec, const bool &verbose);
+arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::vec bestLabelVec, const bool &verbose);
 
 arma::mat getSampleCounts(const arma::mat &X, const arma::umat &clusterInds, const arma::vec &h);
 double fastNormalizedBMLogLik(const arma::vec &thetaVec, const arma::vec &habSqrdVec, const double &sampleSize);
