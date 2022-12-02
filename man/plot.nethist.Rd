@@ -11,13 +11,16 @@
 
 \item{idx_order}{A numeric vector for index label order, which must be a permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$clsuter)}.}
 
-\item{...}{other arguments to pass to \code{\link[stats:heatmap]{stats::heatmap()}}.}
+\item{...}{other arguments to pass to \code{\link[stats:heatmap]{stats::heatmap()}}. See details.}
 }
 \value{
-a heatmap of \code{p_mat} orderd by \code{idx_order} in \code{nethist} object
+a heatmap of \code{p_mat} orderd by \code{idx_order} in \code{nethist} object.
 }
 \description{
 Drawing \code{\link[=heatmap]{heatmap()}} using an \code{nethist} object with an user-specified order.
+}
+\details{
+... includes various graphical parameters passes to \code{\link[stats:heatmap]{stats::heatmap()}}, then \code{\link[stats:image]{stats::image()}}.
 }
 \examples{
 \dontrun{

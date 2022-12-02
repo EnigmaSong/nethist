@@ -24,16 +24,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // graphest_fastgreedy
-arma::vec graphest_fastgreedy(const arma::mat& A, const int& hbar, const arma::vec& inputLabelVec, const bool& verbose);
-RcppExport SEXP _nethist_graphest_fastgreedy(SEXP ASEXP, SEXP hbarSEXP, SEXP inputLabelVecSEXP, SEXP verboseSEXP) {
+arma::vec graphest_fastgreedy(const arma::mat& A, const int& hbar, arma::vec bestLabelVec, const bool& verbose);
+RcppExport SEXP _nethist_graphest_fastgreedy(SEXP ASEXP, SEXP hbarSEXP, SEXP bestLabelVecSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
     Rcpp::traits::input_parameter< const int& >::type hbar(hbarSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type inputLabelVec(inputLabelVecSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type bestLabelVec(bestLabelVecSEXP);
     Rcpp::traits::input_parameter< const bool& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(graphest_fastgreedy(A, hbar, inputLabelVec, verbose));
+    rcpp_result_gen = Rcpp::wrap(graphest_fastgreedy(A, hbar, bestLabelVec, verbose));
     return rcpp_result_gen;
 END_RCPP
 }

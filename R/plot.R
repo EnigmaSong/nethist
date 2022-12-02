@@ -4,7 +4,9 @@
 ##'
 ##' @param x a nethist object from [nethist()].
 ##' @param idx_order A numeric vector for index label order, which must be a permutation of `x$cluster`. If `NA`, it uses `1:max(x$clsuter)`. 
-##' @param ... other arguments to pass to [stats::heatmap()].
+##' @param ... other arguments to pass to [stats::heatmap()]. See details.
+##' @details 
+##' ... includes various graphical parameters passes to [stats::heatmap()], then [stats::image()]. 
 ##' @returns 
 ##' a heatmap of `p_mat` orderd by `idx_order` in ``nethist`` object.
 ##' @examples
