@@ -59,6 +59,14 @@ plot(hist_polblog, idx_order = ind)
 
 <img src="man/figures/README-example2-1.png" width="100%" />
 
+``` r
+## Users can specify the color palette 
+library(RColorBrewer)
+plot(hist_polblog,  idx_order = ind, col = brewer.pal(9, "Greys"))
+```
+
+<img src="man/figures/README-example2-2.png" width="100%" />
+
 ### Summary violin plot
 
 If you want to check network summary violin plot of the data set:

@@ -69,6 +69,9 @@ You can use a user-specified indices for plots. Here is an example:
 print(ind) 
 ## Users can specify the index order of heatmap
 plot(hist_polblog, idx_order = ind)
+## Users can specify the color palette 
+library(RColorBrewer)
+plot(hist_polblog,  idx_order = ind, col = brewer.pal(9, "Greys"))
 ```
 
 ### Summary violin plot

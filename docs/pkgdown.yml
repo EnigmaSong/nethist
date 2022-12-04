@@ -1,8 +1,8 @@
-pandoc: '2.18'
+pandoc: 2.19.2
 pkgdown: 2.0.6
 pkgdown_sha: ~
 articles: {}
-last_built: 2022-11-04T16:34Z
+last_built: 2022-12-04T14:06Z
 urls:
   reference: https://enigmasong.github.io/nethist/reference
   article: https://enigmasong.github.io/nethist/articles
