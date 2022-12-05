@@ -60,12 +60,24 @@ plot(hist_polblog, idx_order = ind)
 <img src="man/figures/README-example2-1.png" width="100%" />
 
 ``` r
-## Users can specify the color palette 
+
+## Users can specify the color palette
 library(RColorBrewer)
 plot(hist_polblog,  idx_order = ind, col = brewer.pal(9, "Greys"))
 ```
 
 <img src="man/figures/README-example2-2.png" width="100%" />
+
+You can display the estimated block probabilities by setting
+`prob=TRUE`.
+
+``` r
+## Users can specify the color palette 
+plot(hist_polblog,  idx_order = ind, prob= TRUE, prob.col = "blue",
+     col = colorRampPalette(colors=c("#FFFFFF","#000000"))(200))
+```
+
+<img src="man/figures/README-example3-1.png" width="100%" />
 
 ### Summary violin plot
 
@@ -77,7 +89,7 @@ violin_netsummary(polblog, max_cycle_order = 7, subsample_sizes = 250)
 #> Use R= 697
 ```
 
-<img src="man/figures/README-example3-1.png" width="100%" />
+<img src="man/figures/README-example4-1.png" width="100%" />
 
 ``` r
 #Auto-selected subsample size.
@@ -85,7 +97,7 @@ violin_netsummary(polblog, max_cycle_order = 7)
 #> Use R= 697
 ```
 
-<img src="man/figures/README-example3-2.png" width="100%" />
+<img src="man/figures/README-example4-2.png" width="100%" />
 
 ## Reference
 
