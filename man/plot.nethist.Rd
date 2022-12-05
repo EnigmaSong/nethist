@@ -20,7 +20,7 @@ a heatmap of \code{p_mat} orderd by \code{idx_order} in \code{nethist} object.
 Drawing \code{\link[=heatmap]{heatmap()}} using an \code{nethist} object with an user-specified order.
 }
 \details{
-... includes various graphical parameters passes to \code{\link[stats:heatmap]{stats::heatmap()}}, then \code{\link[stats:image]{stats::image()}}.
+... includes various graphical parameters passes to \code{\link[stats:heatmap]{stats::heatmap()}}, then \code{\link[graphics:image]{graphics::image()}}.
 }
 \examples{
 \dontrun{
