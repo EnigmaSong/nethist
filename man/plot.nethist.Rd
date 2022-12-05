@@ -4,12 +4,28 @@
 \alias{plot.nethist}
 \title{Network histogram plot}
 \usage{
-\method{plot}{nethist}(x, idx_order = 1:max(x$cluster), ...)
+\method{plot}{nethist}(
+  x,
+  idx_order = 1:max(x$cluster),
+  prob = FALSE,
+  digits = 2,
+  prob.cex = 0.1 + 0.5/log10(k),
+  prob.col = "black",
+  ...
+)
 }
 \arguments{
 \item{x}{a nethist object from \code{\link[=nethist]{nethist()}}.}
 
 \item{idx_order}{A numeric vector for index label order, which must be a permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$clsuter)}.}
+
+\item{prob}{A logical variable indicating block probabilities are printed on the plot. Default is FALSE.}
+
+\item{digits}{integer indicating the number of decimal places for probability}
+
+\item{prob.cex}{A numerical value of \code{cex} of probabilites.}
+
+\item{prob.col}{color of probabilites.}
 
 \item{...}{other arguments to pass to \code{\link[stats:heatmap]{stats::heatmap()}}. See details.}
 }
