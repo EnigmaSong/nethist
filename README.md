@@ -35,11 +35,18 @@ Here are basic examples using political blog data set in the package:
 
 ### Network histogram
 
+``` r
+library(nethist)
+```
+
+We use *polblog* dataset in the package for our examples.
+
+<img src="man/figures/README-summary-1.png" width="100%" />
+
 First, we estimate a network histogram from the political blog data and
 plot it.
 
 ``` r
-library(nethist)
 ## Example code using polblog data set
 set.seed(42)
 hist_polblog <- nethist(polblog, h = 72) #using user-specified bin size.

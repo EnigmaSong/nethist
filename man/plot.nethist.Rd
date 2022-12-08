@@ -9,7 +9,7 @@
   idx_order = 1:max(x$cluster),
   prob = FALSE,
   digits = 2,
-  prob.cex = 0.1 + 0.5/log10(k),
+  prob.cex = 0.1 + 0.5/log10(max(x$cluster)),
   prob.col = "black",
   ...
 )
@@ -25,7 +25,7 @@
 
 \item{prob.cex}{A numerical value of \code{cex} of probabilites.}
 
-\item{prob.col}{color of probabilites.}
+\item{prob.col}{color of probabilities on each bin.}
 
 \item{...}{other arguments to pass to \code{\link[stats:heatmap]{stats::heatmap()}}. See details.}
 }
@@ -36,7 +36,7 @@ a heatmap of \code{p_mat} orderd by \code{idx_order} in \code{nethist} object.
 Drawing \code{\link[=heatmap]{heatmap()}} using an \code{nethist} object with an user-specified order.
 }
 \details{
-... includes various graphical parameters passes to \code{\link[stats:heatmap]{stats::heatmap()}}, then \code{\link[graphics:image]{graphics::image()}}.
+... includes various \code{\link{graphical parameters}} passes to \code{\link[stats:heatmap]{stats::heatmap()}}, then \code{\link[graphics:image]{graphics::image()}}.
 }
 \examples{
 \dontrun{
@@ -49,5 +49,12 @@ plot(hist_A)
 #with user-specified order
 idx<- unique(hist_A$cluster) 
 plot(hist_A, idx_order = idx)
+
+#User-speicifc bin color pallete (see [graphical parameters])
+plot(hist_polblog,  idx_order = ind, col = colorRampPalette(colors=c("#FFFFFF","#000000"))(50))
+
+#Users can print p_mat on the plot using user-specific colors
+plot(hist_polblog,  idx_order = ind, prob= TRUE, prob.col = "blue",
+      col = colorRampPalette(colors=c("#FFFFFF","#000000"))(50))
 }
 }
