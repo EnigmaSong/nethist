@@ -1,8 +1,9 @@
 # nethist 0.2.2
 
-update: 2022/12/31
+update: 2022/12/08
 
--   `plot()`: you can display the estimated probabilities in `p_mat` of `nethist` objects.
+-   `plot.nethist()`
+    -   You can display the estimated probabilities in `p_mat` of `nethist` objects by setting `prob=TRUE`. Use `prob.col` and `prob.cex` to set the color and size of text, respectively.
 -   `nethist()`
     -   Check the convergence criterion every 5 iterations from the fifth iteration (5,10,15,...) instead of every 5 iterations from the first iteration (1,6,11,...).
     -   minor speed improvement.

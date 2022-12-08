@@ -23,7 +23,7 @@ arma::mat hamming_dist_adj_mat(const arma::mat &A){
   
   for(int i = 0; i < n; i++){
     for(int j = i+1; j < n; j++){
-      result(i,j) += sum(A.col(i)!= A.col(j));
+      result.at(i,j) += sum(A.col(i)!= A.col(j));
     }
   }
   result = symmatu(result);

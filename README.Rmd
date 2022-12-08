@@ -39,9 +39,19 @@ Here are basic examples using political blog data set in the package:
 
 ### Network histogram 
 
+```{r load_library}
+library(nethist)
+```
+
+We use *polblog* dataset in the package for our examples. 
+
+```{r summary, echo = FALSE}
+A<- igraph::as_adj(polblog, sparse = FALSE)
+heatmap(A, Rowv = NA, symm=TRUE, col = c("white","red"))
+```
+
 First, we estimate a network histogram from the political blog data and plot it.
 ```{r example}
-library(nethist)
 ## Example code using polblog data set
 set.seed(42)
 hist_polblog <- nethist(polblog, h = 72) #using user-specified bin size.

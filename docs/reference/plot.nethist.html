@@ -63,7 +63,7 @@
 <span>  idx_order <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">cluster</span><span class="op">)</span>,</span>
 <span>  prob <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  prob.cex <span class="op">=</span> <span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.5</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">k</span><span class="op">)</span>,</span>
+<span>  prob.cex <span class="op">=</span> <span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.5</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">cluster</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  prob.col <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -92,7 +92,7 @@
 
 
 <dt>prob.col</dt>
-<dd><p>color of probabilites.</p></dd>
+<dd><p>color of probabilities on each bin.</p></dd>
 
 
 <dt>...</dt>
@@ -107,7 +107,7 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>... includes various graphical parameters passes to <code><a href="https://rdrr.io/r/stats/heatmap.html" class="external-link">stats::heatmap()</a></code>, then <code><a href="https://rdrr.io/r/graphics/image.html" class="external-link">graphics::image()</a></code>.</p>
+    <p>... includes various <code><a href="https://rdrr.io/r/graphics/par.html" class="external-link">graphical parameters</a></code> passes to <code><a href="https://rdrr.io/r/stats/heatmap.html" class="external-link">stats::heatmap()</a></code>, then <code><a href="https://rdrr.io/r/graphics/image.html" class="external-link">graphics::image()</a></code>.</p>
     </div>
 
     <div class="section level2">
@@ -122,6 +122,13 @@
 <span class="r-in"><span><span class="co">#with user-specified order</span></span></span>
 <span class="r-in"><span><span class="va">idx</span><span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">hist_A</span><span class="op">$</span><span class="va">cluster</span><span class="op">)</span> </span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hist_A</span>, idx_order <span class="op">=</span> <span class="va">idx</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#User-speicifc bin color pallete (see [graphical parameters])</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hist_polblog</span>,  idx_order <span class="op">=</span> <span class="va">ind</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">colorRampPalette</a></span><span class="op">(</span>colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#FFFFFF"</span>,<span class="st">"#000000"</span><span class="op">)</span><span class="op">)</span><span class="op">(</span><span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#Users can print p_mat on the plot using user-specific colors</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hist_polblog</span>,  idx_order <span class="op">=</span> <span class="va">ind</span>, prob<span class="op">=</span> <span class="cn">TRUE</span>, prob.col <span class="op">=</span> <span class="st">"blue"</span>,</span></span>
+<span class="r-in"><span>      col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">colorRampPalette</a></span><span class="op">(</span>colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#FFFFFF"</span>,<span class="st">"#000000"</span><span class="op">)</span><span class="op">)</span><span class="op">(</span><span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
