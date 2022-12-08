@@ -39,9 +39,19 @@ Here are basic examples using political blog data set in the package:
 
 ### Network histogram 
 
+```{r load_library}
+library(nethist)
+```
+
+We use *polblog* dataset in the package for our examples. 
+
+```{r summary, echo = FALSE}
+A<- igraph::as_adj(polblog, sparse = FALSE)
+heatmap(A, Rowv = NA, symm=TRUE, col = c("white","red"))
+```
+
 First, we estimate a network histogram from the political blog data and plot it.
 ```{r example}
-library(nethist)
 ## Example code using polblog data set
 set.seed(42)
 hist_polblog <- nethist(polblog, h = 72) #using user-specified bin size.
@@ -63,18 +73,29 @@ ind <- c(rev(liberal_ind[order(liberal_cp_con,decreasing=TRUE)]),
          conserv_ind[order(conserv_cp_con,decreasing=TRUE)],use.names=FALSE);
 ```
 
-
 You can use a user-specified indices for plots. Here is an example:
 ```{r example2}
 print(ind) 
 ## Users can specify the index order of heatmap
 plot(hist_polblog, idx_order = ind)
+
+## Users can specify the color palette
+library(RColorBrewer)
+plot(hist_polblog,  idx_order = ind, col = brewer.pal(9, "Greys"))
 ```
+
+You can display the estimated block probabilities by setting `prob=TRUE`.
+```{r example3}
+## Users can specify the color palette 
+plot(hist_polblog,  idx_order = ind, prob= TRUE, prob.col = "blue",
+     col = colorRampPalette(colors=c("#FFFFFF","#000000"))(200))
+```
+
 
 ### Summary violin plot
 
 If you want to check network summary violin plot of the data set:
-```{r example3}
+```{r example4}
 #User-specified subsample size.
 violin_netsummary(polblog, max_cycle_order = 7, subsample_sizes = 250) 
 #Auto-selected subsample size.

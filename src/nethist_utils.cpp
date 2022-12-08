@@ -5,7 +5,7 @@ using namespace Rcpp;
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(.ffct)]]
 double ffct(int n, int k){
-  double result = 1;
+  double result = 1.0;
   for(int i=n; i > n-k; i--){
     result = result*(double)i;
   }
@@ -23,7 +23,7 @@ arma::mat hamming_dist_adj_mat(const arma::mat &A){
   
   for(int i = 0; i < n; i++){
     for(int j = i+1; j < n; j++){
-      result(i,j) += sum(A.col(i)!= A.col(j));
+      result.at(i,j) += sum(A.col(i)!= A.col(j));
     }
   }
   result = symmatu(result);
@@ -36,10 +36,14 @@ bool is_undirected_simple(const arma::mat& A){
   // Checking simple & undirected graph
   int n = A.n_cols;
   
-  if(n != A.n_rows){
+  if(!A.is_square()){
     Rcout<< "A is not a square matrix.\n"; 
     return false;
   } 
+  if(any(A.diag()!=0)){
+    Rcout<<"A has self-loops.\n";
+    return false;
+  }
   
   for(int i = 0; i < n; i++){
     for(int j = i+1; j <n; j++){

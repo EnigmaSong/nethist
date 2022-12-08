@@ -2,6 +2,7 @@
 #include "graphest_fastgreedy.h"
 #include "nethist_utils.h"
 #include <Rcpp/Benchmark/Timer.h>
+
 using namespace Rcpp;
 const double eps = arma::datum::eps;
 const arma::uword IMPOSSIBLE_INDEX = 10000000;
@@ -10,8 +11,63 @@ const double absTol = 2.5*pow(10,-4);
 //
 // [[Rcpp::depends(RcppArmadillo)]]
 
+class Nethist {
+public:
+  Nethist(arma::mat Adj_mat, arma::vec Labels, int hbar){
+    A = Adj_mat;  
+    n = A.n_rows;
+    LabelVec = Labels;
+    
+    set_bin_size(hbar);
+  }
+  double update_LL_by_swap(arma::uword i, arma::uword j){
+    return 0;
+  }
+private:
+  arma::mat A;
+  int n;
+  int k;
+  int numEqualSizeGroup;
+  arma::vec h;
+  arma::vec LabelVec;
+  arma::umat ClusterInds;
+  arma::mat Acounts;
+  arma::mat habSqrd;
+  bool smallerLastGroup;
+  
+  void set_bin_size(int hbar){
+    smallerLastGroup = (n%hbar != 0);
+    k = (smallerLastGroup ? n/hbar : n/hbar + 1);
+    numEqualSizeGroup = k - smallerLastGroup;
+    h.zeros(k);
+    h.fill(hbar);
+    if(smallerLastGroup){
+      h[k-1] = (n%hbar);
+    }
+    habSqrd = h*h.t()-diagmat(h%(h+1)/2);
+  }
+  void init_clusterInds(){
+    ClusterInds.fill(IMPOSSIBLE_INDEX);
+    for(int a = 0; a < numEqualSizeGroup; a++){
+      ClusterInds.col(a) = find(LabelVec == a + 1);
+    }
+    if(smallerLastGroup){
+      ClusterInds(arma::span(0, h(k-1)-1), k-1) = find(LabelVec==k);
+    }
+    if(ClusterInds(arma::regspace<arma::uvec>(0, n-1)).max() != (unsigned int)(n-1)){
+      stop("All nodes must be assigned to a cluster.");
+    }
+  }
+  void swap_nodelabels(arma::uword i, arma::uword j){
+    
+  }
+  void update_Acounts(){
+    
+  }
+};
+
 // [[Rcpp::export(.graphest_fastgreedy)]]
-arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::vec &inputLabelVec, const bool &verbose){
+arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, arma::vec bestLabelVec, const bool &verbose){
   const int n = A.n_rows;
   const double sampleSize = (double)n*((double)n-1.0)/2.0;
   const double numOnes = accu(A);
@@ -29,9 +85,8 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
   //log-likelihood, label vectors, cluster index, ...
   arma::mat bestACounts(k,k);
   arma::umat bestClusterInds(hbar, k);
-  arma::vec bestLabelVec(n);
   double bestLL,oldbestLL;
-  const arma::uvec aLeqb = trimatu_ind(size(bestACounts));
+  const arma::uvec aLeqb = trimatu_ind(arma::size(bestACounts));
   
   double oldNormalizedBestLL;
   int bestCount = 0;
@@ -55,7 +110,7 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
   arma::mat habSqrd(k,k);
   arma::vec habSqrdCola(k), habSqrdColb(k);
   double habSqrdEntryab;
-  
+
   arma::vec oldThetaCola(k), oldThetaColb(k);
   double oldThetaEntryab;
   arma::vec thetaCola(k), thetaColb(k);
@@ -90,7 +145,6 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
   
   //Convert bestLabelVec, a vector whose elements are between 1 to k, 
   //to bestClusterInds, an (hbar x k) matrix whose elements are between 0 to n-1 and each column is group  
-  bestLabelVec = inputLabelVec;
   bestClusterInds.fill(IMPOSSIBLE_INDEX);
   for(int a = 0; a < numEqualSizeGroup; a++){
     bestClusterInds.col(a) = find(bestLabelVec == a + 1);
@@ -113,8 +167,8 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
   //initialization
   oldbestLL = bestLL;
   
-  for(int mm=0; mm< maxNumRestarts; mm++){
-    oneTwoVec = rand_oneTwovVec(numGreedySteps, 1.0/3.0); 
+  for(int mm=1; mm <= maxNumRestarts; mm++){
+    oneTwoVec = rand_oneTwoVec(numGreedySteps, 1.0/3.0); 
     iVec = sample(integerVec_nminusone, numGreedySteps, true);
     jVec = sample(integerVec_nminusone, numGreedySteps, true);
     kVec = sample(integerVec_nminusone, numGreedySteps, true);
@@ -124,58 +178,58 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
       trialClusterInds = bestClusterInds;
       trialLabelVec = bestLabelVec;
       trialLL = bestLL;
-      for(int swapNum=1; swapNum <= oneTwoVec(m); swapNum++){
+      for(int swapNum=1; swapNum <= oneTwoVec.at(m); swapNum++){
         if(swapNum==1){
           // Step 1 of 2
-          i = iVec(m);
-          j = jVec(m);
+          i = iVec.at(m);
+          j = jVec.at(m);
         }else{
           //Step 2 of 2
-          i = jVec(m);
-          j = kVec(m);
+          i = jVec.at(m);
+          j = kVec.at(m);
         }
-        a = trialLabelVec(i);
-        b = trialLabelVec(j);
+        a = trialLabelVec.at(i);
+        b = trialLabelVec.at(j);
         // Swap and update trial likelihood only if nodes i and j are in different clusters
         if(a != b){
-          trialLabelVec(i) = b;
-          trialLabelVec(j) = a;
+          trialLabelVec.at(i) = b;
+          trialLabelVec.at(j) = a;
           
           habSqrdCola = habSqrd.col(a-1);
           habSqrdColb = habSqrd.col(b-1);
-          habSqrdEntryab = habSqrd(a-1,b-1);
-          
+          habSqrdEntryab = habSqrd.at(a-1,b-1);
+
           oldThetaCola = trialACounts.col(a-1)/habSqrdCola;
           oldThetaColb = trialACounts.col(b-1)/habSqrdColb;
-          oldThetaEntryab = trialACounts(a-1,b-1)/habSqrdEntryab;
+          oldThetaEntryab = trialACounts.at(a-1,b-1)/habSqrdEntryab;
           
           oldThetaCola.clamp(eps, 1.0-eps);
           oldThetaColb.clamp(eps, 1.0-eps);
           clamp(&oldThetaEntryab,eps, 1.0-eps);
-          
+
           //Begin updating
           trialClusterInds.col(a-1).replace(i,j); // update that node j has replaced node i
           trialClusterInds.col(b-1).replace(j,i); // update that node i has replaced node j
           AColiMinusColj = A.col(i)-A.col(j);
           
           for(int kk = 0; kk< numEqualSizeGroup; kk++){
-            sumAijc(kk) = sum(AColiMinusColj(trialClusterInds.col(kk)));
+            sumAijc.at(kk) = sum(AColiMinusColj(trialClusterInds.col(kk)));
           }
           trialACounts(arma::span(0,numEqualSizeGroup-1), a-1) -= sumAijc;
           trialACounts(arma::span(0,numEqualSizeGroup-1), b-1) += sumAijc;
           
           if(smallerLastGroup){
-            sumAijEnd = sum(AColiMinusColj(trialClusterInds(arma::span(0, h(k-1)-1),k-1)));
-            trialACounts(k-1, a-1) -= sumAijEnd;
-            trialACounts(k-1, b-1) += sumAijEnd;
+            sumAijEnd = sum(AColiMinusColj(trialClusterInds(arma::span(0, h.at(k-1)-1),k-1)));
+            trialACounts.at(k-1, a-1) -= sumAijEnd;
+            trialACounts.at(k-1, b-1) += sumAijEnd;
           }
           // Update the above for special cases (c==a) or (c==b)
-          trialACounts(a-1,a-1) += A(i,j);
-          trialACounts(b-1,b-1) += A(i,j);
+          trialACounts.at(a-1,a-1) += A.at(i,j);
+          trialACounts.at(b-1,b-1) += A.at(i,j);
           if(smallerLastGroup && (b==k)){
-            trialACounts(a-1,b-1) += -sum(AColiMinusColj(trialClusterInds(arma::span(0, h(k-1)-1),k-1))) - 2*A(i,j);
+            trialACounts.at(a-1,b-1) += -sum(AColiMinusColj(trialClusterInds(arma::span(0, h.at(k-1)-1),k-1))) - 2*A.at(i,j);
           }else{
-            trialACounts(a-1,b-1) += -sum(AColiMinusColj(trialClusterInds.col(b-1))) - 2*A(i,j);
+            trialACounts.at(a-1,b-1) += -sum(AColiMinusColj(trialClusterInds.col(b-1))) - 2*A.at(i,j);
           }
           
           // Normalize and respect symmetry of trialAbar matrix
@@ -185,7 +239,7 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
           // Now calculate changed likelihood directly
           thetaCola = trialACounts.col(a-1)/habSqrdCola;
           thetaColb = trialACounts.col(b-1)/habSqrdColb;
-          thetaEntryab = trialACounts(a-1,b-1)/habSqrdEntryab;
+          thetaEntryab = trialACounts.at(a-1,b-1)/habSqrdEntryab;
           // Error handling to avoid p*log p and (1-p)*log(1-p) are NaN.
           thetaCola.clamp(eps, 1.0-eps);
           thetaColb.clamp(eps, 1.0-eps);
@@ -195,7 +249,7 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
           deltaNegEnt = Delta_NegEnt(habSqrdCola,habSqrdColb,habSqrdEntryab,
                                      thetaCola,thetaColb,thetaEntryab);
           oldDeltaNegEnt = Delta_NegEnt(habSqrdCola,habSqrdColb,habSqrdEntryab,
-                                        oldThetaCola,oldThetaColb,oldThetaEntryab);   
+                                        oldThetaCola,oldThetaColb,oldThetaEntryab);
           // Update log-likelihood - O(k)
           trialLL += (deltaNegEnt-oldDeltaNegEnt)/sampleSize;
         }
@@ -216,7 +270,7 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::v
     // Keep track of best clustering overall
     if(mm%5==0){
       normalizedBestLL = bestLL*normalizeC;
-      if(verbose) Rcout<< normalizedBestLL << " LL.  Iter " << mm << " of max " << maxNumRestarts << "; "
+      if(verbose) Rcout<< normalizedBestLL << " LL.  Iter " << mm<< " of max " << maxNumRestarts << "; "
                        << bestCount << " global improvements; \n";
       
       check_bestcount_improvecount(&bestCount, &consecZeroImprovements);
@@ -242,16 +296,16 @@ arma::mat getSampleCounts(const arma::mat &X, const arma::umat &clusterInds, con
   
   for(int b=1; b<numClusters; b++){
     for(int a=0; a < b; a++){
-      validIndCola = clusterInds(arma::span(0,h(a)-1),a);
-      validIndColb = clusterInds(arma::span(0,h(b)-1),b);
+      validIndCola = clusterInds(arma::span(0,h.at(a)-1),a);
+      validIndColb = clusterInds(arma::span(0,h.at(b)-1),b);
       
-      Xsums(a,b) = accu(X.submat(validIndCola, validIndColb));
+      Xsums.at(a,b) = accu(X.submat(validIndCola, validIndColb));
     }
   }
   Xsums = symmatu(Xsums);
   for(int a=0; a< numClusters; a++){
-    validIndCola = clusterInds(arma::span(0,h(a)-1),a);
-    Xsums(a,a) = accu(X.submat(validIndCola,validIndCola))/2.0;
+    validIndCola = clusterInds(arma::span(0,h.at(a)-1),a);
+    Xsums.at(a,a) = accu(X.submat(validIndCola,validIndCola))/2.0;
   }
   return Xsums;
 }
@@ -268,7 +322,7 @@ void clamp(double *x, const double &min_value, const double &max_value){
   }
 }
 
-arma::vec rand_oneTwovVec(const int &n, const double &prob){
+arma::vec rand_oneTwoVec(const int &n, const double &prob){
   return (arma::ones<arma::vec>(n) + (arma::randu<arma::vec>(n) >= prob));
 }  
 
@@ -282,18 +336,43 @@ void check_bestcount_improvecount(int* bestCount, int* consecZeroImprovements){
   }
 }
 
-double Delta_NegEnt(const arma::vec &habSqrdCola, 
+double Delta_NegEnt(const arma::vec &habSqrdCola,
                     const arma::vec &habSqrdColb,
                     const double &habSqrdEntryab,
                     const arma::vec &thetaCola,
                     const arma::vec &thetaColb,
                     const double &thetaEntryab){
-  
+
   return(dot(habSqrdCola,(thetaCola%log(thetaCola) + (1.0-thetaCola)%log(1.0-thetaCola)))+
          dot(habSqrdColb,(thetaColb%log(thetaColb) + (1.0-thetaColb)%log(1.0-thetaColb)))-
          (habSqrdEntryab*(thetaEntryab*log(thetaEntryab) + (1.0-thetaEntryab)*log(1.0-thetaEntryab))));
 }
 
+// double NegEnt(const double &x){
+//   // if((x<eps)||(x>1.0-eps)) return 0.0;
+//   
+//   return (x*log(x)+(1.0-x)*log(1.0-x));
+// }
+// arma::mat NegEnt(const arma::mat &X){
+//   arma::mat E(size(X));
+//   
+//   for(arma::uword i = 0; i<X.n_rows; i++){
+//     for(arma::uword j = 0; j<X.n_cols; j++){
+//       E.at(i,j) = NegEnt(X.at(i,j));
+//     }
+//   }
+//   return E;
+// }
+// double Delta_NegEnt(const arma::mat &habSqrdCols_ab,
+//                       const double &habSqrdEntryab,
+//                       const arma::mat &thetaCols_ab,
+//                       const double &thetaEntryab,
+//                       const arma::mat &oldThetaCols_ab,
+//                       const double &oldThetaEntryab){
+//   return(accu(habSqrdCols_ab%(NegEnt(thetaCols_ab)-NegEnt(oldThetaCols_ab)))
+//            -(habSqrdEntryab*(NegEnt(thetaEntryab)-NegEnt(oldThetaEntryab)))
+//   ); 
+// }
 
 void update_tolCounter(const double &normalizedBestLL, const double &oldNormalizedBestLL, int *tolCounter){
   *tolCounter = (normalizedBestLL - oldNormalizedBestLL < absTol ? *tolCounter+1 : 0);

@@ -4,20 +4,39 @@
 \alias{plot.nethist}
 \title{Network histogram plot}
 \usage{
-\method{plot}{nethist}(x, idx_order = 1:max(x$cluster), ...)
+\method{plot}{nethist}(
+  x,
+  idx_order = 1:max(x$cluster),
+  prob = FALSE,
+  digits = 2,
+  prob.cex = 0.1 + 0.5/log10(max(x$cluster)),
+  prob.col = "black",
+  ...
+)
 }
 \arguments{
 \item{x}{a nethist object from \code{\link[=nethist]{nethist()}}.}
 
 \item{idx_order}{A numeric vector for index label order, which must be a permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$clsuter)}.}
 
-\item{...}{other arguments to pass to \code{\link[stats:heatmap]{stats::heatmap()}}.}
+\item{prob}{A logical variable indicating block probabilities are printed on the plot. Default is FALSE.}
+
+\item{digits}{integer indicating the number of decimal places for probability}
+
+\item{prob.cex}{A numerical value of \code{cex} of probabilites.}
+
+\item{prob.col}{color of probabilities on each bin.}
+
+\item{...}{other arguments to pass to \code{\link[stats:heatmap]{stats::heatmap()}}. See details.}
 }
 \value{
-a heatmap of \code{p_mat} orderd by \code{idx_order} in \code{nethist} object
+a heatmap of \code{p_mat} orderd by \code{idx_order} in \code{nethist} object.
 }
 \description{
 Drawing \code{\link[=heatmap]{heatmap()}} using an \code{nethist} object with an user-specified order.
+}
+\details{
+... includes various \code{\link{graphical parameters}} passes to \code{\link[stats:heatmap]{stats::heatmap()}}, then \code{\link[graphics:image]{graphics::image()}}.
 }
 \examples{
 \dontrun{
@@ -30,5 +49,12 @@ plot(hist_A)
 #with user-specified order
 idx<- unique(hist_A$cluster) 
 plot(hist_A, idx_order = idx)
+
+#User-speicifc bin color pallete (see [graphical parameters])
+plot(hist_polblog,  idx_order = ind, col = colorRampPalette(colors=c("#FFFFFF","#000000"))(50))
+
+#Users can print p_mat on the plot using user-specific colors
+plot(hist_polblog,  idx_order = ind, prob= TRUE, prob.col = "blue",
+      col = colorRampPalette(colors=c("#FFFFFF","#000000"))(50))
 }
 }

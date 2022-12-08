@@ -77,7 +77,7 @@ nethist.default <- function(A, h = NA, outfile, verbose = F){
   # Pick an analysis bandwidth and initialize via regularized spectral clustering
   ##########################################################################
   if(is.na(h)){
-    h <- .oracbwplugin(A, min(4, sqrt(n)/8), 'degs', 1, rhoHat)$h
+    h <- .oracbwplugin(A, min(4, sqrt(n)/8), 'degs', 1, rhoHat, verbose)$h
     if(verbose) message(paste("Determining bandwidth from data:", round(h)))
   }else{
     if(verbose) message(paste("Determining bandwidth from user input:", round(h)))
@@ -129,7 +129,7 @@ nethist.default <- function(A, h = NA, outfile, verbose = F){
 }
 
 .oracbwplugin <- function(A,c,type, alpha,
-                          rhoHat){
+                          rhoHat, verbose){
   #Assume A is symmetric, simple, and no self-loop
   if(missing(type)) type <- 'degs'
   if(missing(alpha)) alpha <- 1
@@ -161,7 +161,9 @@ nethist.default <- function(A, h = NA, outfile, verbose = F){
   
   estMSqrd <- 2*mult^2*(lmfit.coef[2]*length(uMid)/2+lmfit.coef[1])^2*lmfit.coef[2]^2*rhoHat_inv^2*(n+1)^2
   MISEfhatBnd <- estMSqrd*((2/sqrt(estMSqrd))*(sampleSize*rhoHat)^(-1/2) + 1/n)
-  message(paste("M^2_hat =", round(estMSqrd,3), ", MISE bound_hat=", round(MISEfhatBnd,3)))
+  if(verbose){
+    message(paste("M^2_hat =", round(estMSqrd,3), ", MISE bound_hat=", round(MISEfhatBnd,3)))
+  }
   
   #Diagnostic plot (if the code is runned on interactive)
   if(interactive()){
