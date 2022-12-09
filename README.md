@@ -8,10 +8,10 @@
 [![R-CMD-check](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of *nethist* is to estimate scaled graphons via *network
-histogram* (Wolfe and Olhede 2013; Olhede and Wolfe 2014). It also
-provides extra tools for summary violin plot for networks (Maugis,
-Olhede, and Wolfe 2017) and visualizing network histogram.
+The goal of *nethist* is to estimate graphons by *network histogram*
+(Wolfe and Olhede 2013; Olhede and Wolfe 2014). It also provides extra
+tools for summary violin plot for networks (Maugis, Olhede, and Wolfe
+2017) and visualizing network histogram.
 
 *nethist()* is an *RcppArmadillo* (Eddelbuettel and Sanderson 2014)
 implementation of the original MATLAB code in Olhede and Wolfe (2014).
