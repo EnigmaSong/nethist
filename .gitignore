@@ -7,3 +7,4 @@ docs
 src/*.o
 src/*.so
 tests/testthat/Rplots.pdf
+nethist.Rproj
