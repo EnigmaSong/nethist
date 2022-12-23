@@ -67,32 +67,17 @@ nethist.dgCMatrix<-function(A, h, outfile, verbose){
 }
 ##' 
 nethist.default <- function(A, h = NA, outfile, verbose = F){
-  if(!.is_undirected_simple(A)) stop("Network A must be an undirected simple network.")
+  check_input_error(A, h, outfile, verbose)
+  # initialize_index(A, h, verbose)
+  # idx <- .graphest_fastgreedy(A,h,idxInit, verbose)
+  ## return variables
   
   # Compute necessary summaries from A
-  n <- dim(A)[1]
+  n <- dim(A)[1L]
   rhoHat <- sum(A)/(n*(n-1))
   
-  ##########################################################################
-  # Pick an analysis bandwidth and initialize via regularized spectral clustering
-  ##########################################################################
-  if(is.na(h)){
-    h <- .oracbwplugin(A, min(4, sqrt(n)/8), 'degs', 1, rhoHat, verbose)$h
-    if(verbose) message(paste("Determining bandwidth from data:", round(h)))
-  }else{
-    if(verbose) message(paste("Determining bandwidth from user input:", round(h)))
-  }
+  h <- get_bandwidth(A, h, verbose)
   
-  h <- max(2, min(n, round(h)))
-  if(verbose) message(paste("Final bandwidth:", h))
-  
-  lastGroupSize <- n %% h
-  # step down h, to avoid singleton final group
-  while((lastGroupSize==1) & (h>2)){
-    h <- h-1
-    lastGroupSize <- n %% h
-    if(verbose) message('NB: Bandwidth reduced to avoid singleton group')
-  }
   if(verbose) message(paste0('Adjacency matrix has ', n, ' rows/cols'))
   
   # Initialize using regularized spectral clustering based on row similarity
