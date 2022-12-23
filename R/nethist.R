@@ -72,13 +72,11 @@ nethist.default <- function(A, h = NA, outfile, verbose = F){
   # idx <- .graphest_fastgreedy(A,h,idxInit, verbose)
   ## return variables
   
-  # Compute necessary summaries from A
   n <- dim(A)[1L]
   rhoHat <- sum(A)/(n*(n-1))
-  
-  h <- get_bandwidth(A, h, verbose)
-  
   if(verbose) message(paste0('Adjacency matrix has ', n, ' rows/cols'))
+  
+  h <- get_bandwidth(A, n, rhoHat, h, verbose)
   
   # Initialize using regularized spectral clustering based on row similarity
   tstart <- Sys.time()
