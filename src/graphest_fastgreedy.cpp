@@ -13,6 +13,11 @@ const double absTol = 2.5*pow(10,-4);
 
 // [[Rcpp::export(.graphest_fastgreedy)]]
 arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, arma::vec bestLabelVec, const bool &verbose){
+  Timer timer; 
+  arma::vec time_by_step(3);
+  double temp_time;
+  
+  timer.step("start");
   const int n = A.n_rows;
   const double sampleSize = (double)n*((double)n-1.0)/2.0;
   const double numOnes = accu(A);
@@ -43,8 +48,6 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, arma::vec bes
   arma::vec trialLabelVec(n);
   double trialLL;
   
-  Timer timer; 
-  
   arma::vec oneTwoVec(numGreedySteps);
   arma::uvec iVec(numGreedySteps), jVec(numGreedySteps), kVec(numGreedySteps);
   const arma::uvec integerVec_nminusone = arma::regspace<arma::uvec>(0, n-1);
@@ -67,6 +70,11 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, arma::vec bes
   
   double deltaNegEnt, oldDeltaNegEnt;
   double normalizedBestLL;
+  
+  timer.step("define variables");
+  time_by_step(0) = timer.now()-timer.origin();
+  temp_time = timer.now();
+  Rcout<<"Define variables: "<<time_by_step(0)/1e6<<" milliseconds\n";
   
   // Initialize cluster assignemnts in order
   if(verbose) Rcout << "Fitting a(n) " << k << " group block model\n";
@@ -107,12 +115,17 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, arma::vec bes
   
   oldNormalizedBestLL = bestLL*normalizeC;
   
-  timer.step("start");
+  timer.step("initialization");
+  time_by_step(1) = timer.now()-temp_time;
+  temp_time = timer.now();
+  Rcout<<"Init: "<<time_by_step(1)/1e6<<" milliseconds\n";
   
   //initialization
   oldbestLL = bestLL;
+  int temp_mm=1;
   
   for(int mm=1; mm <= maxNumRestarts; mm++){
+    temp_mm++;
     oneTwoVec = rand_oneTwoVec(numGreedySteps, 1.0/3.0); 
     iVec = sample(integerVec_nminusone, numGreedySteps, true);
     jVec = sample(integerVec_nminusone, numGreedySteps, true);
@@ -228,7 +241,14 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, arma::vec bes
   }
   timer.step("End");
   NumericVector timer_res(timer);
-  if(verbose) Rcout<< "Greedy search: "<<(timer_res(1)/pow(10.0,9))<<" seconds\n";
+  for(int i=0; i<timer_res.length(); i++){
+    timer_res(i) = timer_res(i)/1e9;
+  }
+  
+  Rcout<< "Define variables:"<< time_by_step(0)/1e9 << " second \n";
+  Rcout<< "Initialization:"<< time_by_step(1)/1e9 << " second \n";
+  Rcout<< "Greedy total:"<< time_by_step(2)/1e9 << " second \n";
+  Rcout<< "Greedy per iter:"<< time_by_step(2)/(temp_mm*numGreedySteps*1e3) << " microsecond \n";
   
   return bestLabelVec;
 }
