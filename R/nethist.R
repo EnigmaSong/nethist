@@ -108,14 +108,17 @@ nethist.default <- function(A, h = NA, outfile, verbose = F){
   ind <- order(u) #Index vectors from smallest to largest.
   k <- ceiling(n/h)
   
-  idxInit = rep(0,n)
+  idxInit <- rep(0,n)
   for(i in 1:k){
-    idxInit[ind[((i-1)*h+1):min(n,i*h)]] = i
+    idxInit[ind[((i-1)*h+1):min(n,i*h)]] <- i
   }
-  if(verbose) message(paste0('Initial label vector assigned from row-similarity ordering; time ',
+  message(paste0('Initial label vector assigned from row-similarity ordering; time ',
                  round(difftime(Sys.time(),tstart),4), ' sec'))
   
+  tstart <- Sys.time()
   idx <- .graphest_fastgreedy(A,h,idxInit, verbose)
+  message(paste0('Greedy algorithm total; time ',
+                  round(difftime(Sys.time(),tstart),4), ' sec'))
   
   if(!missing(outfile)){
     write.table(file=outfile, x = idx, row.names = FALSE, col.names = FALSE)
