@@ -1,6 +1,6 @@
 ##' @noRd
 
-check_input_error<-function(A, h, outfile, verbose){
+check_input_error<-function(A, h, verbose){
   if(!.is_undirected_simple(A)) {
     stop("Network A must be an undirected simple network.")
   }
@@ -13,6 +13,9 @@ check_input_error<-function(A, h, outfile, verbose){
                   " is an invalid value. Use integers between 2 and ",
                   dim(A)[1L]))
     }
+  }
+  if(!is.logical(verbose)){
+    stop("verbose must be a logical variable: either TRUE or FALSE.")
   }
 }
 

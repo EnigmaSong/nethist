@@ -67,7 +67,7 @@ nethist.dgCMatrix<-function(A, h, outfile, verbose){
 }
 ##' 
 nethist.default <- function(A, h = NA, outfile, verbose = F){
-  check_input_error(A, h, outfile, verbose)
+  check_input_error(A, h, verbose)
   # initialize_index(A, h, verbose)
   # idx <- .graphest_fastgreedy(A,h,idxInit, verbose)
   ## return variables
