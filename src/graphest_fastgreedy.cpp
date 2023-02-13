@@ -122,7 +122,7 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, arma::vec bes
   
   //initialization
   oldbestLL = bestLL;
-  int temp_mm=1;
+  int temp_mm=0;
   
   for(int mm=1; mm <= maxNumRestarts; mm++){
     temp_mm++;
@@ -240,6 +240,7 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, arma::vec bes
     }
   }
   timer.step("End");
+  time_by_step(2) = timer.now()-temp_time;
   NumericVector timer_res(timer);
   for(int i=0; i<timer_res.length(); i++){
     timer_res(i) = timer_res(i)/1e9;
