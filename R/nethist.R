@@ -68,9 +68,6 @@ nethist.dgCMatrix<-function(A, h, outfile, verbose){
 ##' 
 nethist.default <- function(A, h = NA, outfile, verbose = F){
   check_input_error(A, h, verbose)
-  # initialize_index(A, h, verbose)
-  # idx <- .graphest_fastgreedy(A,h,idxInit, verbose)
-  ## return variables
   
   n <- dim(A)[1L]
   rhoHat <- sum(A)/(n*(n-1))
@@ -80,25 +77,11 @@ nethist.default <- function(A, h = NA, outfile, verbose = F){
   
   # Initialize using regularized spectral clustering based on row similarity
   tstart <- Sys.time()
-  
-  # exponential Taylor approximation to L_ij = exp(-||A_i. - A_j.||^2 / 2) = 1 -||A_i. - A_j.||^2 for small ||.||
-  L <- 1 - (.hamming_dist_adj_mat(A)/n)^2 
-  d <- rowSums(L)
-  L <- outer(d^(-1/2), d^(-1/2))*L - sqrt(d)%o%sqrt(d)/sqrt(sum(d^2))
-  eigen_res <- RSpectra::eigs_sym(L, 1) 
-  rm(L)
-  u <- eigen_res$vectors[,1] * sign(eigen_res$vectors[1,1])
-  ind <- order(u) #Index vectors from smallest to largest.
-  k <- ceiling(n/h)
-  
-  idxInit = rep(0,n)
-  for(i in 1:k){
-    idxInit[ind[((i-1)*h+1):min(n,i*h)]] = i
-  }
+  idx <- initialize_index(A, n, h, verbose)
   if(verbose) message(paste0('Initial label vector assigned from row-similarity ordering; time ',
                  round(difftime(Sys.time(),tstart),4), ' sec'))
   
-  idx <- .graphest_fastgreedy(A,h,idxInit, verbose)
+  idx <- .graphest_fastgreedy(A, h, idx, verbose)
   
   if(!missing(outfile)){
     write.table(file=outfile, x = idx, row.names = FALSE, col.names = FALSE)
