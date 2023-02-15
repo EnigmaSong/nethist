@@ -40,13 +40,32 @@ get_bandwidth<- function(A, n, rhoHat, h, verbose){
   return(h)
 }
 
+initialize_index <- function(A, n, h, verbose){
+  # exponential Taylor approximation to L_ij = exp(-||A_i. - A_j.||^2 / 2) = 1 -||A_i. - A_j.||^2 for small ||.||
+  L <- 1 - (.hamming_dist_adj_mat(A)/n)^2 
+  d <- rowSums(L)
+  L <- outer(d^(-1/2), d^(-1/2))*L - sqrt(d)%o%sqrt(d)/sqrt(sum(d^2))
+  eigen_res <- RSpectra::eigs_sym(L, 1) 
+  rm(L)
+  u <- eigen_res$vectors[,1] * sign(eigen_res$vectors[1,1])
+  u <- order(u) #Index vectors from smallest to largest.
+  k <- ceiling(n/h)
+  
+  idx <- rep(0,n)
+  for(i in 1:k){
+    idx[u[((i-1)*h+1):min(n,i*h)]] <- i
+  }
+  return(idx)
+}
+
+# Automatic Bandwidth Selection via Theorem 1 in Olhede and Wolfe (2014)
 oracbwplugin <- function(A,c,type, alpha,
                           rhoHat, verbose){
   #Assume A is symmetric, simple, and no self-loop
   if(missing(type)) type <- 'degs'
   if(missing(alpha)) alpha <- 1
   
-  n <- dim(A)[1]
+  n <- dim(A)[1L]
   midPt <- seq(round(n/2-c*sqrt(n),0), round(n/2+c*sqrt(n),0))
   rhoHat_inv <- .ginv(rhoHat)
   sampleSize <- n*(n-1)/2
@@ -77,7 +96,7 @@ oracbwplugin <- function(A,c,type, alpha,
     message(paste("M^2_hat =", round(estMSqrd,3), ", MISE bound_hat=", round(MISEfhatBnd,3)))
   }
   
-  #Diagnostic plot (if the code is runned on interactive)
+  #Diagnostic plot (if the code is running on interactive)
   if(interactive()){
     par(mfrow=c(1,2))
     plot(u, main = "Graphon projection for bandwidth estimation", type = 'l')
