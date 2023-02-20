@@ -6,6 +6,7 @@
 \usage{
 \method{plot}{nethist}(
   x,
+  type = "nethist",
   idx_order = 1:max(x$cluster),
   prob = FALSE,
   digits = 2,
@@ -17,20 +18,22 @@
 \arguments{
 \item{x}{a nethist object from \code{\link[=nethist]{nethist()}}.}
 
+\item{type}{One of \code{nethist} or \code{pmat}.}
+
 \item{idx_order}{A numeric vector for index label order, which must be a permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$clsuter)}.}
 
 \item{prob}{A logical variable indicating block probabilities are printed on the plot. Default is FALSE.}
 
 \item{digits}{integer indicating the number of decimal places for probability}
 
-\item{prob.cex}{A numerical value of \code{cex} of probabilites.}
+\item{prob.cex}{A numerical value of \code{cex} of probabilities.}
 
 \item{prob.col}{color of probabilities on each bin.}
 
 \item{...}{other arguments to pass to \code{\link[stats:heatmap]{stats::heatmap()}}. See details.}
 }
 \value{
-a heatmap of \code{p_mat} orderd by \code{idx_order} in \code{nethist} object.
+a heatmap of network histogram or \code{p_mat} ordered by \code{idx_order} in \code{nethist} object.
 }
 \description{
 Drawing \code{\link[=heatmap]{heatmap()}} using an \code{nethist} object with an user-specified order.
