@@ -20,9 +20,9 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of *nethist* is to estimate graphons by *network histogram* [@wolfe2013Nonparametric; @olhede2014Network]. It also provides extra tools for summary violin plot for networks [@maugis2017Topology] and visualizing network histogram.
+The goal of *nethist* is to estimate graphons by *network histogram* [@wolfe2013Nonparametric; @olhede2014Network]. It also provides extra tools for summary violin plot for networks [@maugis2017Topology] and visualizing network histogram. Use undirected and simple graphs with no self-loops (either igraph or matrix) as inputs for the functions in this package.
 
-*nethist()* is an *RcppArmadillo* [@RcppArmadillo] implementation of the original MATLAB code in @olhede2014Network. To install the package from source, you need C++ and Fortran compilers. Use undirected and simple graphs with no self-loops (either igraph or matrix) as inputs for the functions in this package.
+To install the package from source, you need C++ and Fortran compilers.
 
 ## Installation
 

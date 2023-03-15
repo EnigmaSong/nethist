@@ -1,3 +1,10 @@
+# nethist 0.2.3
+
+update: 2023/03/15
+ 
+-  Documentation updates
+-  Internal functions (not visible to users)
+
 # nethist 0.2.2
 
 update: 2022/12/08
