@@ -309,32 +309,6 @@ double Delta_NegEnt(const arma::vec &habSqrdCola,
          (habSqrdEntryab*(thetaEntryab*log(thetaEntryab) + (1.0-thetaEntryab)*log(1.0-thetaEntryab))));
 }
 
-// double NegEnt(const double &x){
-//   // if((x<eps)||(x>1.0-eps)) return 0.0;
-//   
-//   return (x*log(x)+(1.0-x)*log(1.0-x));
-// }
-// arma::mat NegEnt(const arma::mat &X){
-//   arma::mat E(size(X));
-//   
-//   for(arma::uword i = 0; i<X.n_rows; i++){
-//     for(arma::uword j = 0; j<X.n_cols; j++){
-//       E.at(i,j) = NegEnt(X.at(i,j));
-//     }
-//   }
-//   return E;
-// }
-// double Delta_NegEnt(const arma::mat &habSqrdCols_ab,
-//                       const double &habSqrdEntryab,
-//                       const arma::mat &thetaCols_ab,
-//                       const double &thetaEntryab,
-//                       const arma::mat &oldThetaCols_ab,
-//                       const double &oldThetaEntryab){
-//   return(accu(habSqrdCols_ab%(NegEnt(thetaCols_ab)-NegEnt(oldThetaCols_ab)))
-//            -(habSqrdEntryab*(NegEnt(thetaEntryab)-NegEnt(oldThetaEntryab)))
-//   ); 
-// }
-
 void update_tolCounter(const double &normalizedBestLL, const double &oldNormalizedBestLL, int *tolCounter){
   *tolCounter = (normalizedBestLL - oldNormalizedBestLL < absTol ? *tolCounter+1 : 0);
 }

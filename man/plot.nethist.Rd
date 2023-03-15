@@ -28,12 +28,12 @@
 
 \item{prob.cex}{A numerical value of \code{cex} of probabilities.}
 
-\item{prob.col}{color of probabilities on each bin.}
+\item{prob.col}{A color vector for network histogram values/probabilities on each bin.}
 
 \item{...}{other arguments to pass to \code{\link[stats:heatmap]{stats::heatmap()}}. See details.}
 }
 \value{
-a heatmap of network histogram or \code{p_mat} ordered by \code{idx_order} in \code{nethist} object.
+a heatmap of network histogram or \code{p_mat} ordered by \code{idx_order} from \code{nethist} object.
 }
 \description{
 Drawing \code{\link[=heatmap]{heatmap()}} using an \code{nethist} object with an user-specified order.
