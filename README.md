@@ -11,13 +11,11 @@
 The goal of *nethist* is to estimate graphons by *network histogram*
 (Wolfe and Olhede 2013; Olhede and Wolfe 2014). It also provides extra
 tools for summary violin plot for networks (Maugis, Olhede, and Wolfe
-2017) and visualizing network histogram.
+2017) and visualizing network histogram. Use undirected and simple
+graphs with no self-loops (either igraph or matrix) as inputs for the
+functions in this package.
 
-*nethist()* is an *RcppArmadillo* (Eddelbuettel and Sanderson 2014)
-implementation of the original MATLAB code in Olhede and Wolfe (2014).
 To install the package from source, you need C++ and Fortran compilers.
-Use undirected and simple graphs with no self-loops (either igraph or
-matrix) as inputs for the functions in this package.
 
 ## Installation
 
@@ -110,21 +108,11 @@ violin_netsummary(polblog, max_cycle_order = 7)
 
 <div id="refs" class="references csl-bib-body hanging-indent">
 
-<div id="ref-RcppArmadillo" class="csl-entry">
-
-Eddelbuettel, Dirk, and Conrad Sanderson. 2014. “RcppArmadillo:
-Accelerating r with High-Performance c++ Linear Algebra.” *Computational
-Statistics and Data Analysis* 71: 1054–63.
-<http://dx.doi.org/10.1016/j.csda.2013.02.005>.
-
-</div>
-
 <div id="ref-maugis2017Topology" class="csl-entry">
 
 Maugis, Pierre-André G., Sofia C. Olhede, and Patrick J. Wolfe. 2017.
 “Topology Reveals Universal Features for Network Comparison.”
-*arXiv:1705.05677 \[Cs, Math, Stat\]*, May.
-<http://arxiv.org/abs/1705.05677>.
+*arXiv:1705.05677*, May. <http://arxiv.org/abs/1705.05677>.
 
 </div>
 
@@ -140,7 +128,7 @@ Academy of Sciences* 111 (41): 14722–27.
 <div id="ref-wolfe2013Nonparametric" class="csl-entry">
 
 Wolfe, Patrick J., and Sofia C. Olhede. 2013. “Nonparametric Graphon
-Estimation.” *arXiv:1309.5936 \[Math, Stat\]*, September.
+Estimation.” *arXiv:1309.5936*, September.
 <http://arxiv.org/abs/1309.5936>.
 
 </div>

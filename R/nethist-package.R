@@ -1,4 +1,5 @@
 #' @keywords internal
+#' @aliases nethist-package
 "_PACKAGE"
 
 ## usethis namespace: start
