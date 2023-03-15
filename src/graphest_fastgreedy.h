@@ -3,8 +3,17 @@
 
 arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, const arma::vec bestLabelVec, const bool &verbose);
 
-arma::mat getSampleCounts(const arma::mat &X, const arma::umat &clusterInds, const arma::vec &h);
 double fastNormalizedBMLogLik(const arma::vec &thetaVec, const arma::vec &habSqrdVec, const double &sampleSize);
+arma::vec get_h(const int &hbar, const int &n, 
+                const int &k, const bool &smallerLastGroup,
+                const bool &verbose);
+arma::mat get_habSqrd(const arma::vec &h, const int &n);
+arma::mat getSampleCounts(const arma::mat &X, const arma::umat &clusterInds, const arma::vec &h);
+arma::umat init_ClusterInds(const arma::vec &LabelVec, 
+                            const arma::vec &h, 
+                            const int &k,
+                            const int &numEqualSizeGroup,
+                            const bool &smallerLastGroup);
 arma::vec rand_oneTwoVec(const int &n, const double &prob);
 
 void clamp(double *x, const double &min_value, const double &max_value);
