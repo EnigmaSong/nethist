@@ -68,49 +68,21 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, arma::vec bes
   double deltaNegEnt, oldDeltaNegEnt;
   double normalizedBestLL;
   
-  // Initialize cluster assignemnts in order
-  if(verbose) Rcout << "Fitting a(n) " << k << " group block model\n";
+  //initialization
+  //// Initialize cluster assignemnts in order
+  h = get_h(hbar, n, k, smallerLastGroup, verbose);
+  habSqrd = get_habSqrd(h, n);
   
-  h.fill(hbar);
-  if(smallerLastGroup){
-    h(k-1) = n%hbar; 
-    if(verbose) Rcout << "Final group of size: " << h(k-1) << ", smaller than other of size: " << h(0) <<"\n";
-  }else{
-    if(verbose) Rcout << "All groups of equal size: " << h(1) <<"\n";
-  }
-  habSqrd = h*h.t()-diagmat(h%(h+1)/2); // (4.3) in Wolfe and Olhede (2013)
-  
-  // Error handlings
-  if(any(any(habSqrd == 0))){
-    stop("All clusters must contain at least 2 nodes.");
-  }
-  if(!(sum(h)==n)){
-    stop("Number of cluster assignments must equal number of nodes.");
-  }
-  
-  //Convert bestLabelVec, a vector whose elements are between 1 to k, 
-  //to bestClusterInds, an (hbar x k) matrix whose elements are between 0 to n-1 and each column is group  
-  bestClusterInds.fill(IMPOSSIBLE_INDEX);
-  for(int a = 0; a < numEqualSizeGroup; a++){
-    bestClusterInds.col(a) = find(bestLabelVec == a + 1);
-  }
-  if(smallerLastGroup){
-    bestClusterInds(arma::span(0, h(k-1)-1), k-1) = find(bestLabelVec==k);
-  }
-  if(bestClusterInds(integerVec_nminusone).max() != (unsigned int)(n-1)){
-    stop("All nodes must be assigned to a cluster.");
-  }
-  
+  bestClusterInds = init_ClusterInds(bestLabelVec, h, k,
+                                    numEqualSizeGroup,
+                                    smallerLastGroup);
   bestACounts = getSampleCounts(A, bestClusterInds, h);
   bestLL = fastNormalizedBMLogLik(clamp(bestACounts(aLeqb)/habSqrd(aLeqb), eps, 1.0-eps), 
                                   habSqrd(aLeqb), sampleSize);
-  
   oldNormalizedBestLL = bestLL*normalizeC;
-  
-  timer.step("start");
-  
-  //initialization
   oldbestLL = bestLL;
+
+  timer.step("start");
   
   for(int mm=1; mm <= maxNumRestarts; mm++){
     oneTwoVec = rand_oneTwoVec(numGreedySteps, 1.0/3.0); 
@@ -233,6 +205,34 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, arma::vec bes
   return bestLabelVec;
 }
 
+arma::vec get_h(const int &hbar, const int &n, 
+                const int &k, const bool &smallerLastGroup,
+                const bool &verbose){
+  arma::vec h(k, arma::fill::value(hbar));
+  
+  if(verbose) Rcout << "Fitting a(n) " << k << " group block model\n";
+  if(smallerLastGroup){
+    h(k-1) = n%hbar; 
+    if(verbose) Rcout << "Final group of size: " << h(k-1) << ", smaller than other of size: " << h(0) <<"\n";
+  }else{
+    if(verbose) Rcout << "All groups of equal size: " << h(1) <<"\n";
+  }
+  return h;
+}
+
+arma::mat get_habSqrd(const arma::vec &h, const int &n){
+  arma::mat habSqrd(h.n_elem, h.n_elem);
+  habSqrd = h*h.t()-diagmat(h%(h+1)/2); // (4.3) in Wolfe and Olhede (2013)
+  // Error handlings
+  if(any(any(habSqrd == 0))){
+    stop("All clusters must contain at least 2 nodes.");
+  }
+  if(!(sum(h)==n)){
+    stop("Number of cluster assignments must equal number of nodes.");
+  }
+  
+  return habSqrd;
+}
 arma::mat getSampleCounts(const arma::mat &X, const arma::umat &clusterInds, const arma::vec &h){
   const int numClusters = clusterInds.n_cols;
   arma::mat Xsums(numClusters, numClusters);
@@ -252,6 +252,23 @@ arma::mat getSampleCounts(const arma::mat &X, const arma::umat &clusterInds, con
     Xsums.at(a,a) = accu(X.submat(validIndCola,validIndCola))/2.0;
   }
   return Xsums;
+}
+//Convert bestLabelVec, a vector whose elements are between 1 to k, 
+//to bestClusterInds, an (hbar x k) matrix whose elements are between 0 to n-1 and each column is group  
+arma::umat init_ClusterInds(const arma::vec &LabelVec, 
+                           const arma::vec &h, 
+                           const int &k,
+                           const int &numEqualSizeGroup,
+                           const bool &smallerLastGroup){
+  arma::umat ClusterInds(h.at(0), k, arma::fill::value(IMPOSSIBLE_INDEX));
+  for(int a = 0; a < numEqualSizeGroup; a++){
+    ClusterInds.col(a) = find(LabelVec == a + 1);
+  }
+  if(smallerLastGroup){
+    ClusterInds(arma::span(0, h(k-1)-1), k-1) = find(LabelVec==k);
+  }
+  
+  return ClusterInds;
 }
 
 double fastNormalizedBMLogLik(const arma::vec &thetaVec, const arma::vec &habSqrdVec, const double &sampleSize){
@@ -291,32 +308,6 @@ double Delta_NegEnt(const arma::vec &habSqrdCola,
          dot(habSqrdColb,(thetaColb%log(thetaColb) + (1.0-thetaColb)%log(1.0-thetaColb)))-
          (habSqrdEntryab*(thetaEntryab*log(thetaEntryab) + (1.0-thetaEntryab)*log(1.0-thetaEntryab))));
 }
-
-// double NegEnt(const double &x){
-//   // if((x<eps)||(x>1.0-eps)) return 0.0;
-//   
-//   return (x*log(x)+(1.0-x)*log(1.0-x));
-// }
-// arma::mat NegEnt(const arma::mat &X){
-//   arma::mat E(size(X));
-//   
-//   for(arma::uword i = 0; i<X.n_rows; i++){
-//     for(arma::uword j = 0; j<X.n_cols; j++){
-//       E.at(i,j) = NegEnt(X.at(i,j));
-//     }
-//   }
-//   return E;
-// }
-// double Delta_NegEnt(const arma::mat &habSqrdCols_ab,
-//                       const double &habSqrdEntryab,
-//                       const arma::mat &thetaCols_ab,
-//                       const double &thetaEntryab,
-//                       const arma::mat &oldThetaCols_ab,
-//                       const double &oldThetaEntryab){
-//   return(accu(habSqrdCols_ab%(NegEnt(thetaCols_ab)-NegEnt(oldThetaCols_ab)))
-//            -(habSqrdEntryab*(NegEnt(thetaEntryab)-NegEnt(oldThetaEntryab)))
-//   ); 
-// }
 
 void update_tolCounter(const double &normalizedBestLL, const double &oldNormalizedBestLL, int *tolCounter){
   *tolCounter = (normalizedBestLL - oldNormalizedBestLL < absTol ? *tolCounter+1 : 0);

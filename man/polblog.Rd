@@ -7,7 +7,7 @@ Political blog
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of the dataset. ~~
-Political blog data set from Olhede and Wolfe (2014), which is part of the original data set from Adamic and Glance (2005). The provided igraph object is the zero-degree removed and simplified graph from the edgelist \code{polblog_edgelist}.
+Political blog data set from Olhede and Wolfe (2014), which is a pre-processed version of the original data set from Adamic and Glance (2005). The provided igraph object is the zero-degree removed and simplified graph from the edgelist \code{polblog_edgelist}.
 
 }
 \usage{
@@ -18,8 +18,9 @@ data(polblog)
 }
 \details{
 %%  ~~ If necessary, more details than the __description__ above ~~
-The adjancency matrix from \code{polblog_edgelist} is sparse, assymetric, so it needs to be symmetrized if a method requires a symmetric matrix.
-First 586 blogs are liberal; remaining 638 are conservative. Nodes with zero degree need to be removed.
+The adjancency matrix from \code{polblog_edgelist} is sparse, assymetric, so it needs to be symmetrized if a method requires a symmetric matrix. Nodes with zero degree need to be removed. All edges are considered as undirected edges. Then, we get the undirected version of dataset as \code{polblog}.
+
+First 586 blogs are liberal; remaining 638 are conservative.
 }
 \source{
 %%  ~~ reference to a publication or URL from which the data were obtained ~~
