@@ -24,14 +24,7 @@ double Delta_NegEnt(const arma::vec &habSqrdCola,
                     const arma::vec &thetaCola,
                     const arma::vec &thetaColb,
                     const double &thetaEntryab);
-// double NegEnt(const double &x);
-// arma::mat NegEnt(const arma::mat &X);
-// double Delta_NegEnt(const arma::mat &habSqrdCols_ab,
-//                       const double &habSqrdEntryab,
-//                       const arma::mat &thetaCols_ab,
-//                       const double &thetaEntryab,
-//                       const arma::mat &oldThetaCols_ab,
-//                       const double &oldThetaEntryab);
+
 void update_tolCounter(const double &normalizedBestLL, const double &oldNormalizedBestLL, int *tolCounter);
 bool check_quit_greedy(const int &tolCounter, 
                        const int &consecZeroImprovements, 

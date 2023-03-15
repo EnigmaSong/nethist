@@ -8,7 +8,7 @@
 ##' @param prob A logical variable indicating block probabilities are printed on the plot. Default is FALSE.
 ##' @param digits integer indicating the number of decimal places for probability
 ##' @param prob.cex A numerical value of `cex` of probabilities. 
-##' @param prob.col color of probabilities on each bin.
+##' @param prob.col A color vector for network histogram values/probabilities on each bin.
 ##' @param ... other arguments to pass to [stats::heatmap()]. See details.
 ##' @details 
 ##' ... includes various [`graphical parameters`] passes to [stats::heatmap()], then [graphics::image()]. 
