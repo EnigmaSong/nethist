@@ -13,14 +13,14 @@
 ##' \dontrun{
 ##' set.seed(42)
 ##' hist_polblog <- nethist(polblog)
-##' plot3D(hist_polblog)
+##' plot3d(hist_polblog)
 ##' 
 ##' #with user-specified order
 ##' idx<- c(17,10,13,7,12,4,8,5,1,2,6,3,9,15,11,14,16)
-##' plot3D(hist_A, idx_order = idx)
+##' plot3d(hist_polblog, idx_order = idx)
 ##' 
 ##' #Rotate 3D plot
-##' plot3D(hist_A, idx_order = idx, phi = 20, theta = 60)
+##' plot3d(hist_polblog, idx_order = idx, phi = 20, theta = 60)
 ##' }
 ##' @importFrom plot3D hist3D
 ##' @export
