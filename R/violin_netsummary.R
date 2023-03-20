@@ -115,6 +115,14 @@ violin_netsummary.default<- function(A,
     subsample_sizes <- auto_select_subsample_sizes(A, Ns, k_max = max_cycle_order, R, alpha=0.05, delta = 0.05)
   }
   
+  
+  labels <- c(tree = "<img src = 'inst/violin_summary/v_shape_by_one_edge.png' width ='100' height ='50'/>",
+              triangle = "<img src = 'inst/violin_summary/triangle.png' width ='50' />",
+              square = "<img src = 'inst/violin_summary/square.png' width ='50' />",
+              pentagon = "<img src = 'inst/violin_summary/pentagon.png' width ='50' />",
+              hexagon = "<img src = 'inst/violin_summary/hexagon.png' width ='50' />",
+              septagon = "<img src = 'inst/violin_summary/septagon.png' width ='50' />"
+                )
   result <- .net_summary_subsample_adj(A, subsample_sizes, max_cycle_order, R)
   colnames(result) <- c("tree","triangle","square","pentagon", "hexagon", 'septagon')[1:(max_cycle_order-1)]
   if(!is.na(y.max) & ((y.max > 1)|(y.max < 0))){
@@ -128,8 +136,9 @@ violin_netsummary.default<- function(A,
   suppressMessages(result <- reshape2::melt(data.frame(result)))
   p <- ggplot2::ggplot(result, ggplot2::aes(variable, value))
   p <- p + ggplot2::geom_violin() + ggplot2::ylim(0,y.max) + ggplot2::ylab("Prevalence and local variability") + ggplot2::xlab("")
+  p <- p + ggplot2::scale_x_discrete(labels=labels[1:(max_cycle_order-1)]) + ggplot2::theme(axis.text.x = ggtext::element_markdown())
   if(save.plot){
-    ggplot2::ggsave(filename,width = 4, height = 4, unit = "in")
+    ggplot2::ggsave(filename,width = 7, height = 5, unit = "in")
   }else{
     print(p)
   }
