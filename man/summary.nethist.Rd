@@ -10,6 +10,7 @@
   idx_order = 1:max(x$cluster),
   main = NA,
   ylab = NA,
+  legend_title = NA,
   stat = "count",
   position = "stack"
 )
@@ -21,9 +22,11 @@
 
 \item{idx_order}{A numeric vector for index label order, which must be a permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$clsuter)}.}
 
-\item{main}{title of summary plot}
+\item{main}{title of summary plot. If NA, the plot has no title.}
 
-\item{ylab}{label of y-axis}
+\item{ylab}{label of y-axis. If NA, y-axis label is "covariate"}
+
+\item{legend_title}{title of legend. If NA, the legend title is "covariate"}
 
 \item{stat, }{position variables pass to \code{\link[ggplot2:geom_bar]{ggplot2::geom_bar()}}. Only used for a factor covariate.}
 }
