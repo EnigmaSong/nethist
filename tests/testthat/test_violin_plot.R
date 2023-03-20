@@ -1,8 +1,10 @@
-G<-polblog
+data(karate,package="igraphdata")
+G<-karate
+setwd("../../")
 
 #Network summary plot
 test_that("violin plots with pre-specified subsample size",
-          {expect_no_error({violin_netsummary(igraph::as_adj(G,sparse = FALSE), subsample_sizes = 100,
+          {expect_no_error({violin_netsummary(igraph::as_adj(G,sparse = FALSE), subsample_sizes = 20,
                   max_cycle_order = 7, save.plot = FALSE)})}
 )
 
@@ -20,3 +22,5 @@ test_that("violin plots with sparse matrix object",
           {expect_no_error({violin_netsummary(igraph::as_adj(G), Ns=5,
                              max_cycle_order = 7, save.plot = FALSE)})}
 )
+
+setwd("tests/testthat/")
