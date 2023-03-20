@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-R package for network histogram estimation and additional tools. The core function nethist() is an RcppArmadillo implementation of the original MATLAB code in Olhede and Wolfe (2014). To install the package from source, you need C++ and Fortran (due to RSpectra) compilers. We suggest you to use undirected and simple graphs (either igraph or matrix) as inputs for the functions in this package.
+R package for network histogram estimation and additional tools. To install the package from source, you need C++ and Fortran (due to RSpectra) compilers. We suggest you to use undirected and simple graphs (either igraph or matrix) as inputs for the functions in this package.
 }
 \seealso{
 Useful links:

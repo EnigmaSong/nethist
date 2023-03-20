@@ -30,6 +30,8 @@ Estimating network histogram and returning the indices of partitions.
 \details{
 Note that \code{cluster} only shows a partition of vertices, and the index labels is not an ordered variable. For example, nodes in cluster 1 do not have to more similar to nodes in cluster 2 than nodes in cluster 10. Hence, users would use a user-specified order in \code{\link[=plot.nethist]{plot.nethist()}}.
 
+Network histogram values are computed by \code{p_mat/rho_hat} in \code{nethist} object.
+
 \code{nethist()} runs the following two steps:
 \itemize{
 \item Initialization: With spectral clustering, find an initial partitions of vertices. If bandwidth \code{h} is not specified, automatic bandwidth selection is used.

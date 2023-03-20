@@ -17,6 +17,8 @@
 ##' @details 
 ##' Note that `cluster` only shows a partition of vertices, and the index labels is not an ordered variable. For example, nodes in cluster 1 do not have to more similar to nodes in cluster 2 than nodes in cluster 10. Hence, users would use a user-specified order in [plot.nethist()].
 ##' 
+##' Network histogram values are computed by `p_mat/rho_hat` in `nethist` object.
+##' 
 ##' ``nethist()`` runs the following two steps:
 ##' \itemize{
 ##' \item Initialization: With spectral clustering, find an initial partitions of vertices. If bandwidth `h` is not specified, automatic bandwidth selection is used.
