@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 The goal of *nethist* is to estimate graphons by *network histogram* [@wolfe2013Nonparametric; @olhede2014Network]. It also provides extra tools for summary violin plot for networks [@maugis2017Topology] and visualizing network histogram. Use undirected and simple graphs with no self-loops (either igraph or matrix) as inputs for the functions in this package.
