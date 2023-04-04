@@ -6,7 +6,7 @@ template:
   includes:
     in_header: |
        <!-- Global site tag (gtag.js) - Google Analytics -->
-       <script async src="https://www.googletagmanager.com/gtag/js?id=G-PLHC8X3G5G"#' ></script>
+       <script async src="https://www.googletagmanager.com/gtag/js?id=G-PLHC8X3G5G"></script>
        <script>
          window.dataLayer = window.dataLayer || [];
          function gtag(){dataLayer.push(arguments);}
@@ -18,3 +18,4 @@ repo:
   url:
     home: https://github.com/EnigmaSong/nethist/
     issue: https://github.com/EnigmaSong/nethist/issues/
+    

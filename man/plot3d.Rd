@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot3d.R
 \name{plot3d}
 \alias{plot3d}
-\title{Network histogram plot}
+\title{Network histogram 3D plot}
 \usage{
 plot3d(x, idx_order = 1:max(x$cluster), ...)
 }

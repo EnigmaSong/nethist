@@ -12,13 +12,14 @@
   digits = 2,
   prob.cex = 0.1 + 0.5/log10(max(x$cluster)),
   prob.col = "black",
+  y = NA,
   ...
 )
 }
 \arguments{
 \item{x}{a nethist object from \code{\link[=nethist]{nethist()}}.}
 
-\item{type}{One of \code{nethist} or \code{pmat}.}
+\item{type}{One of \code{nethist} or \code{prob}.}
 
 \item{idx_order}{A numeric vector for index label order, which must be a permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$clsuter)}.}
 
@@ -29,6 +30,8 @@
 \item{prob.cex}{A numerical value of \code{cex} of probabilities.}
 
 \item{prob.col}{A color vector for network histogram values/probabilities on each bin.}
+
+\item{y}{a dummy variable for S3 methods. Never used in the plotting.}
 
 \item{...}{other arguments to pass to \code{\link[stats:heatmap]{stats::heatmap()}}. See details.}
 }

@@ -50,13 +50,16 @@ A<- igraph::as_adj(polblog, sparse = FALSE)
 heatmap(A, Rowv = NA, symm=TRUE, col = c("white","red"))
 ```
 
-First, we estimate a network histogram from the political blog data and plot it.
+We can estimate a network histogram from the political blog data and plot it.
 ```{r example}
 ## Example code using polblog data set
 set.seed(42)
 hist_polblog <- nethist(polblog, h = 72) #using user-specified bin size.
 plot(hist_polblog)
 ```
+
+
+### Plotting option
 
 ```{r get_reorder, echo = FALSE}
 #Get ratio for liberal
@@ -73,6 +76,10 @@ ind <- c(rev(liberal_ind[order(liberal_cp_con,decreasing=TRUE)]),
          conserv_ind[order(conserv_cp_con,decreasing=TRUE)],use.names=FALSE);
 ```
 
+#### heatmap() style
+
+`plot()` provides 2D plot as `heatmap()`.
+
 You can use a user-specified indices for plots. Here is an example:
 ```{r example2}
 print(ind) 
@@ -84,13 +91,16 @@ library(RColorBrewer)
 plot(hist_polblog,  idx_order = ind, col = brewer.pal(9, "Greys"))
 ```
 
-You can display the estimated block probabilities by setting `prob=TRUE`.
+You can display the estimated block probabilities by setting `type = prob` and `prob=TRUE`.
 ```{r example3}
 ## Users can specify the color palette 
-plot(hist_polblog,  idx_order = ind, prob= TRUE, prob.col = "blue",
+plot(hist_polblog, idx_order = ind, type = "prob", prob= TRUE, prob.col = "blue",
      col = colorRampPalette(colors=c("#FFFFFF","#000000"))(200))
 ```
 
+### others
+
+There are more types of plots in `nethist` package. 
 
 ### Summary violin plot
 
