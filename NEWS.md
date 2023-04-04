@@ -1,3 +1,10 @@
+# nethist 0.2.4
+
+update: 2023/04/04
+
+-bug fix in plot()
+
+
 # nethist 0.2.3
 
 update: 2023/03/15

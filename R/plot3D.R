@@ -1,4 +1,4 @@
-##' Network histogram plot
+##' Network histogram 3D plot
 ##'
 ##' Drawing [heatmap()] using an `nethist` object with an user-specified order.
 ##'

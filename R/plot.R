@@ -4,11 +4,12 @@
 ##'
 ##' @param x a nethist object from [nethist()].
 ##' @param idx_order A numeric vector for index label order, which must be a permutation of `x$cluster`. If `NA`, it uses `1:max(x$clsuter)`. 
-##' @param type One of `nethist` or `pmat`.
+##' @param type One of `nethist` or `prob`.
 ##' @param prob A logical variable indicating block probabilities are printed on the plot. Default is FALSE.
 ##' @param digits integer indicating the number of decimal places for probability
 ##' @param prob.cex A numerical value of `cex` of probabilities. 
 ##' @param prob.col A color vector for network histogram values/probabilities on each bin.
+##' @param y a dummy variable for S3 methods. Never used in the plotting.
 ##' @param ... other arguments to pass to [stats::heatmap()]. See details.
 ##' @details 
 ##' ... includes various [`graphical parameters`] passes to [stats::heatmap()], then [graphics::image()]. 
@@ -34,18 +35,21 @@
 ##'       col = colorRampPalette(colors=c("#FFFFFF","#000000"))(50))
 ##' }
 ##' @importFrom stats heatmap
+##' @importFrom graphics text
 ##' @exportS3Method 
 ##' @export
 plot.nethist <- function(x, type = "nethist",
                          idx_order = 1:max(x$cluster), 
                          prob = FALSE, digits = 2,
                          prob.cex =  0.1 + 0.5/log10(max(x$cluster)),
-                         prob.col = "black",
+                         prob.col = "black", y = NA,
                          ...){
   k<-max(x$cluster)
-  if(!(type %in% c("nethist", "pmat"))){
-    Stop("type must be one of nethist or pmat.")
+  if(!(type %in% c("nethist", "prob", "pmat"))){
+    stop("type must be one of nethist or prob.")
   }
+  if(type== "pmat") type <- "prob"
+  
   if(!.is_valid_order(idx_order, 1:k)){
     warning(paste0("idx_order is invalid. Set idx_order = 1:",k))
     idx_order <- 1:k
@@ -53,9 +57,9 @@ plot.nethist <- function(x, type = "nethist",
   
   mat <- switch(type,
                 nethist = x$p_mat[idx_order, idx_order]/x$rho_hat,
-                pmat = x$p_mat[idx_order, idx_order])
+                prob = x$p_mat[idx_order, idx_order])
   
-  if(prob){
+  if(prob & (type=="prob")){
     heatmap(mat, Rowv = NA, symm = TRUE, 
             add.expr = {text(rep(1:k,each=k), rev(rep(1:k,k)), 
                              round(as.vector(mat), digits),
