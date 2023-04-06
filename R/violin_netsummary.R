@@ -45,6 +45,8 @@
 ##' #saving the plot with user-specified file name
 ##' violin_netsummary(A, save.plot = TRUE, filename = "myfig.pdf")
 ##' }
+##' @importFrom ggtext element_markdown
+##' @import png 
 ##' @export
 ##' 
 violin_netsummary <- function(A,
@@ -129,7 +131,7 @@ violin_netsummary.default<- function(A,
   p <- ggplot2::ggplot(result, ggplot2::aes(variable, value))
   p <- p + ggplot2::geom_violin() + ggplot2::ylim(0,y.max) + ggplot2::ylab("Prevalence and local variability") + ggplot2::xlab("")
   if(save.plot){
-    ggplot2::ggsave(filename,width = 4, height = 4, unit = "in")
+    ggplot2::ggsave(filename,width = 7, height = 5, unit = "in")
   }else{
     print(p)
   }
@@ -171,3 +173,5 @@ auto_select_subsample_sizes <- function(A, Ns, k_max, R, alpha=0.05, delta){
 
   return(subsample_sizes)
 }
+
+globalVariables(c("variable","value"))

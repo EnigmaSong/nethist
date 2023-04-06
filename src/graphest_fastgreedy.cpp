@@ -108,68 +108,68 @@ arma::vec graphest_fastgreedy(const arma::mat &A, const int &hbar, arma::vec bes
         a = trialLabelVec.at(i);
         b = trialLabelVec.at(j);
         // Swap and update trial likelihood only if nodes i and j are in different clusters
-        if(a != b){
-          trialLabelVec.at(i) = b;
-          trialLabelVec.at(j) = a;
-          
-          habSqrdCola = habSqrd.col(a-1);
-          habSqrdColb = habSqrd.col(b-1);
-          habSqrdEntryab = habSqrd.at(a-1,b-1);
+        if(a == b) continue;
+        
+        trialLabelVec.at(i) = b;
+        trialLabelVec.at(j) = a;
+        
+        habSqrdCola = habSqrd.col(a-1);
+        habSqrdColb = habSqrd.col(b-1);
+        habSqrdEntryab = habSqrd.at(a-1,b-1);
 
-          oldThetaCola = trialACounts.col(a-1)/habSqrdCola;
-          oldThetaColb = trialACounts.col(b-1)/habSqrdColb;
-          oldThetaEntryab = trialACounts.at(a-1,b-1)/habSqrdEntryab;
-          
-          oldThetaCola.clamp(eps, 1.0-eps);
-          oldThetaColb.clamp(eps, 1.0-eps);
-          clamp(&oldThetaEntryab,eps, 1.0-eps);
+        oldThetaCola = trialACounts.col(a-1)/habSqrdCola;
+        oldThetaColb = trialACounts.col(b-1)/habSqrdColb;
+        oldThetaEntryab = trialACounts.at(a-1,b-1)/habSqrdEntryab;
+        
+        oldThetaCola.clamp(eps, 1.0-eps);
+        oldThetaColb.clamp(eps, 1.0-eps);
+        clamp(&oldThetaEntryab,eps, 1.0-eps);
 
-          //Begin updating
-          trialClusterInds.col(a-1).replace(i,j); // update that node j has replaced node i
-          trialClusterInds.col(b-1).replace(j,i); // update that node i has replaced node j
-          AColiMinusColj = A.col(i)-A.col(j);
-          
-          for(int kk = 0; kk< numEqualSizeGroup; kk++){
-            sumAijc.at(kk) = sum(AColiMinusColj(trialClusterInds.col(kk)));
-          }
-          trialACounts(arma::span(0,numEqualSizeGroup-1), a-1) -= sumAijc;
-          trialACounts(arma::span(0,numEqualSizeGroup-1), b-1) += sumAijc;
-          
-          if(smallerLastGroup){
-            sumAijEnd = sum(AColiMinusColj(trialClusterInds(arma::span(0, h.at(k-1)-1),k-1)));
-            trialACounts.at(k-1, a-1) -= sumAijEnd;
-            trialACounts.at(k-1, b-1) += sumAijEnd;
-          }
-          // Update the above for special cases (c==a) or (c==b)
-          trialACounts.at(a-1,a-1) += A.at(i,j);
-          trialACounts.at(b-1,b-1) += A.at(i,j);
-          if(smallerLastGroup && (b==k)){
-            trialACounts.at(a-1,b-1) += -sum(AColiMinusColj(trialClusterInds(arma::span(0, h.at(k-1)-1),k-1))) - 2*A.at(i,j);
-          }else{
-            trialACounts.at(a-1,b-1) += -sum(AColiMinusColj(trialClusterInds.col(b-1))) - 2*A.at(i,j);
-          }
-          
-          // Normalize and respect symmetry of trialAbar matrix
-          trialACounts.row(b-1) = trialACounts.col(b-1).t();
-          trialACounts.row(a-1) = trialACounts.col(a-1).t();
-          
-          // Now calculate changed likelihood directly
-          thetaCola = trialACounts.col(a-1)/habSqrdCola;
-          thetaColb = trialACounts.col(b-1)/habSqrdColb;
-          thetaEntryab = trialACounts.at(a-1,b-1)/habSqrdEntryab;
-          // Error handling to avoid p*log p and (1-p)*log(1-p) are NaN.
-          thetaCola.clamp(eps, 1.0-eps);
-          thetaColb.clamp(eps, 1.0-eps);
-          clamp(&thetaEntryab, eps, 1.0-eps);
-          
-          // for this to work, we will have had to subtract out terms prior to updating
-          deltaNegEnt = Delta_NegEnt(habSqrdCola,habSqrdColb,habSqrdEntryab,
-                                     thetaCola,thetaColb,thetaEntryab);
-          oldDeltaNegEnt = Delta_NegEnt(habSqrdCola,habSqrdColb,habSqrdEntryab,
-                                        oldThetaCola,oldThetaColb,oldThetaEntryab);
-          // Update log-likelihood - O(k)
-          trialLL += (deltaNegEnt-oldDeltaNegEnt)/sampleSize;
+        //Begin updating
+        trialClusterInds.col(a-1).replace(i,j); // update that node j has replaced node i
+        trialClusterInds.col(b-1).replace(j,i); // update that node i has replaced node j
+        AColiMinusColj = A.col(i)-A.col(j);
+        
+        for(int kk = 0; kk< numEqualSizeGroup; kk++){
+          sumAijc.at(kk) = sum(AColiMinusColj(trialClusterInds.col(kk)));
         }
+        trialACounts(arma::span(0,numEqualSizeGroup-1), a-1) -= sumAijc;
+        trialACounts(arma::span(0,numEqualSizeGroup-1), b-1) += sumAijc;
+        
+        if(smallerLastGroup){
+          sumAijEnd = sum(AColiMinusColj(trialClusterInds(arma::span(0, h.at(k-1)-1),k-1)));
+          trialACounts.at(k-1, a-1) -= sumAijEnd;
+          trialACounts.at(k-1, b-1) += sumAijEnd;
+        }
+        // Update the above for special cases (c==a) or (c==b)
+        trialACounts.at(a-1,a-1) += A.at(i,j);
+        trialACounts.at(b-1,b-1) += A.at(i,j);
+        if(smallerLastGroup && (b==k)){
+          trialACounts.at(a-1,b-1) += -sum(AColiMinusColj(trialClusterInds(arma::span(0, h.at(k-1)-1),k-1))) - 2*A.at(i,j);
+        }else{
+          trialACounts.at(a-1,b-1) += -sum(AColiMinusColj(trialClusterInds.col(b-1))) - 2*A.at(i,j);
+        }
+        
+        // Normalize and respect symmetry of trialAbar matrix
+        trialACounts.row(b-1) = trialACounts.col(b-1).t();
+        trialACounts.row(a-1) = trialACounts.col(a-1).t();
+        
+        // Now calculate changed likelihood directly
+        thetaCola = trialACounts.col(a-1)/habSqrdCola;
+        thetaColb = trialACounts.col(b-1)/habSqrdColb;
+        thetaEntryab = trialACounts.at(a-1,b-1)/habSqrdEntryab;
+        // Error handling to avoid p*log p and (1-p)*log(1-p) are NaN.
+        thetaCola.clamp(eps, 1.0-eps);
+        thetaColb.clamp(eps, 1.0-eps);
+        clamp(&thetaEntryab, eps, 1.0-eps);
+        
+        // for this to work, we will have had to subtract out terms prior to updating
+        deltaNegEnt = Delta_NegEnt(habSqrdCola,habSqrdColb,habSqrdEntryab,
+                                   thetaCola,thetaColb,thetaEntryab);
+        oldDeltaNegEnt = Delta_NegEnt(habSqrdCola,habSqrdColb,habSqrdEntryab,
+                                      oldThetaCola,oldThetaColb,oldThetaEntryab);
+        // Update log-likelihood - O(k)
+        trialLL += (deltaNegEnt-oldDeltaNegEnt)/sampleSize;
       }
       // Metroplis or greedy step; if trial clustering accepted, then update current <-- trial
       if(trialLL > bestLL){
@@ -238,19 +238,18 @@ arma::mat getSampleCounts(const arma::mat &X, const arma::umat &clusterInds, con
   arma::mat Xsums(numClusters, numClusters);
   arma::uvec validIndCola, validIndColb;
   
-  for(int b=1; b<numClusters; b++){
-    for(int a=0; a < b; a++){
-      validIndCola = clusterInds(arma::span(0,h.at(a)-1),a);
+  for(int a=0; a < numClusters; a++){
+    validIndCola = clusterInds(arma::span(0,h.at(a)-1),a);
+    Xsums.at(a,a) = accu(X.submat(validIndCola,validIndCola))/2.0;
+    
+    for(int b=a+1; b < numClusters; b++){
       validIndColb = clusterInds(arma::span(0,h.at(b)-1),b);
       
       Xsums.at(a,b) = accu(X.submat(validIndCola, validIndColb));
     }
   }
   Xsums = symmatu(Xsums);
-  for(int a=0; a< numClusters; a++){
-    validIndCola = clusterInds(arma::span(0,h.at(a)-1),a);
-    Xsums.at(a,a) = accu(X.submat(validIndCola,validIndCola))/2.0;
-  }
+  
   return Xsums;
 }
 //Convert bestLabelVec, a vector whose elements are between 1 to k, 

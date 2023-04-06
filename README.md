@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 The goal of *nethist* is to estimate graphons by *network histogram*
@@ -41,7 +43,7 @@ We use *polblog* dataset in the package for our examples.
 
 <img src="man/figures/README-summary-1.png" width="100%" />
 
-First, we estimate a network histogram from the political blog data and
+We can estimate a network histogram from the political blog data and
 plot it.
 
 ``` r
@@ -52,6 +54,12 @@ plot(hist_polblog)
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
+
+### Plotting option
+
+#### heatmap() style
+
+`plot()` provides 2D plot as `heatmap()`.
 
 You can use a user-specified indices for plots. Here is an example:
 
@@ -74,15 +82,19 @@ plot(hist_polblog,  idx_order = ind, col = brewer.pal(9, "Greys"))
 <img src="man/figures/README-example2-2.png" width="100%" />
 
 You can display the estimated block probabilities by setting
-`prob=TRUE`.
+`type = prob` and `prob=TRUE`.
 
 ``` r
 ## Users can specify the color palette 
-plot(hist_polblog,  idx_order = ind, prob= TRUE, prob.col = "blue",
+plot(hist_polblog, idx_order = ind, type = "prob", prob= TRUE, prob.col = "blue",
      col = colorRampPalette(colors=c("#FFFFFF","#000000"))(200))
 ```
 
 <img src="man/figures/README-example3-1.png" width="100%" />
+
+### others
+
+There are more types of plots in `nethist` package.
 
 ### Summary violin plot
 
@@ -118,7 +130,7 @@ Maugis, Pierre-André G., Sofia C. Olhede, and Patrick J. Wolfe. 2017.
 
 <div id="ref-olhede2014Network" class="csl-entry">
 
-Olhede, S. C., and P. J. Wolfe. 2014. “Network Histograms and
+Olhede, Sofia C., and Patrick J. Wolfe. 2014. “Network Histograms and
 Universality of Blockmodel Approximation.” *Proceedings of the National
 Academy of Sciences* 111 (41): 14722–27.
 <https://doi.org/10.1073/pnas.1400374111>.
