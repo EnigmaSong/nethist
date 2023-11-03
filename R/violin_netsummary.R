@@ -118,7 +118,7 @@ violin_netsummary.default<- function(A,
   }
   
   result <- .net_summary_subsample_adj(A, subsample_sizes, max_cycle_order, R)
-  colnames(result) <- c("tree","triangle","square","pentagon", "hexagon", 'septagon')[1:(max_cycle_order-1)]
+  colnames(result) <- c("v-shape","triangle","square","pentagon", "hexagon", 'septagon')[1:(max_cycle_order-1)]
   if(!is.na(y.max) & ((y.max > 1)|(y.max < 0))){
     warning("y.max: Use a number between 0 and 1")
     y.max = NA
