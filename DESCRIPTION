@@ -21,11 +21,11 @@ Imports:
     RSpectra,
     ggplot2,
     ggtext,
+    graphics,
     png,
     reshape2,
     igraph,
-    plot3D,
-    stringr
+    plot3D
 LinkingTo: Rcpp, RcppArmadillo, testthat
 Depends: 
     R (>= 2.10)

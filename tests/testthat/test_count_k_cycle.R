@@ -12,7 +12,7 @@ test_that("Check cycle counts from a complete graph with n = 10.",
 
 test_that("Check cycle counts from a subset of political blog dataset",
           {
-            G <- igraph::as_adj(polblog, sparse = FALSE)[1:50,1:50]
+            G <- igraph::as_adj(igraph::upgrade_graph(polblog), sparse = FALSE)[1:50,1:50]
             true_num_cycles <- c(45,159,460,1223,2954)
             expect_equal(as.vector(.count_k_cycle(G, 7)), 
                          expected = true_num_cycles)

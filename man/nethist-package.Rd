@@ -18,7 +18,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Youngseok Song \email{youngseok.song@epfl.ch}
+\strong{Maintainer}: Youngseok Song \email{youngseok.song@mail.wvu.edu}
 
 Authors:
 \itemize{
