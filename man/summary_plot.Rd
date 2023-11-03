@@ -16,7 +16,7 @@ summary_plot(
 )
 }
 \arguments{
-\item{object}{a nethist object from \code{\link[=nethist]{nethist()}}.}
+\item{object}{a \code{multinethist} object from \code{\link[=multinethist]{multinethist()}}.}
 
 \item{covariate}{a vector for univariate covariate. If it is factor, draw a stacked barchart. If it is numeric, draw a violin plot.}
 
@@ -28,15 +28,15 @@ summary_plot(
 
 \item{legend_title}{title of legend. If NA, the legend title is "covariate"}
 
-\item{stat}{variable pass to \code{\link[ggplot2:geom_bar]{ggplot2::geom_bar()}}. Only used for a factor covariate.}
+\item{stat}{variables pass to \code{\link[ggplot2:geom_bar]{ggplot2::geom_bar()}}. Only used for a factor covariate.}
 
-\item{position}{variable pass to \code{\link[ggplot2:geom_bar]{ggplot2::geom_bar()}}. Only used for a factor covariate.}
+\item{position}{variables pass to \code{\link[ggplot2:geom_bar]{ggplot2::geom_bar()}}. Only used for a factor covariate.}
 }
 \value{
 a heatmap of network histogram or \code{p_mat} ordered by \code{idx_order} from \code{nethist} object.
 }
 \description{
-Drawing a bin summary plot of covariates given an \code{nethist} object with an user-specified order.
+Drawing a bin summary plot of covariates given an \code{multinethist} object with an user-specified order.
 }
 \details{
 ... includes various \code{\link{graphical parameters}} passes to \code{\link[stats:heatmap]{stats::heatmap()}}, then \code{\link[graphics:image]{graphics::image()}}.
@@ -44,26 +44,10 @@ Drawing a bin summary plot of covariates given an \code{nethist} object with an 
 \examples{
 \dontrun{
 set.seed(42)
-nethist_polblog <- nethist(polblog, h = 72)
+mnets <- rnets_graphon(3, 200, function(x,y) 0.2*pmin(x,y))
 
-#Add factor covariate
-politic <- factor(c(rep("Liberal", 586), rep("Conservative", 1224-586)))
-
-summary_plot(nethist_polblog, politic)
-
-#with user-specified order
-idx <-  c(17,10,13,7,12,4,8,5,1,2,6,3,9,15,11,14,16)
-summary_plot(nethist_polblog, politic, idx_order = idx)
-
-#Add title and change ylab
-summary_plot(nethist_polblog, politic, idx_order = idx, 
-              main = "Political View", ylab = "Number of blogs")
-
-#Add numeric covariates
-numeric_covariate <- nethist_polblog$cluster + rnorm(1224, sd = 3)
-
-summary_plot(nethist_polblog, numeric_covariate) 
-summary_plot(nethist_polblog, numeric_covariate, idx_order = idx) #With-user specified order
-
+mnhist <- multinethist(mnets)
+x <- rep(1:2, 100)
+summary_plot(mnets, x)
 }
 }

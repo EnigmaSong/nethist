@@ -8,3 +8,4 @@ src/*.o
 src/*.so
 tests/testthat/Rplots.pdf
 nethist.Rproj
+nethist_devel.Rproj

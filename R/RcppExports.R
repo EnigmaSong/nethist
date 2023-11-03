@@ -9,8 +9,20 @@
     .Call(`_nethist_graphest_fastgreedy`, A, hbar, bestLabelVec, verbose)
 }
 
+.multinethist_fastgreedy <- function(A, hbar, inputLabelVec, max_itr, swap_rule, consecutive_iter_threshold, verbose) {
+    .Call(`_nethist_multinethist_fastgreedy`, A, hbar, inputLabelVec, max_itr, swap_rule, consecutive_iter_threshold, verbose)
+}
+
+.mnhistCommon_fastgreedy <- function(A, hbar, inputLabelVec, max_itr, swap_rule, consecutive_iter_threshold, verbose) {
+    .Call(`_nethist_mnhistCommon_fastgreedy`, A, hbar, inputLabelVec, max_itr, swap_rule, consecutive_iter_threshold, verbose)
+}
+
 .net_summary_subsample_adj <- function(A, subsample_sizes, max_cycle_order, R) {
     .Call(`_nethist_net_summary_subsample_adj`, A, subsample_sizes, max_cycle_order, R)
+}
+
+.nethist_fastgreedy <- function(A, hbar, inputLabelVec, max_itr, swap_rule, consecutive_iter_threshold, verbose) {
+    .Call(`_nethist_nethist_fastgreedy`, A, hbar, inputLabelVec, max_itr, swap_rule, consecutive_iter_threshold, verbose)
 }
 
 .ffct <- function(n, k) {
