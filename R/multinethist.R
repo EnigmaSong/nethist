@@ -10,7 +10,7 @@
 ##' @param consecutive_iter_threshold an integer for stopping criterion. If the log-likelihood does not improve for the last `consecutive_iter_threshold` iterations, stop the algorithm.
 ##' @param verbose logical value indicating whether verbose output is generated.
 ##' @returns 
-##' An object of class ``multinethist``:
+##' If number of layer is greater than 1, it returns an object of class ``multinethist``:
 ##' 
 ##' \itemize{
 ##' \item `cluster` a vector of partition indices.
@@ -20,18 +20,19 @@
 ##' \item `homogeneous` a logical variable indicating homogeneous multinetwork histogram.
 ##' }
 ##' @details {
-##' lth layer's multinetwork histogram is defined by thetahat/rho_hat. We can plot multinetwork histogram using [plot()] and [plot3d()].
+##' lth layer's multi-network histogram is defined by thetahat/rho_hat. We can plot multinetwork histogram using [plot()] and [plot3d()].
 ##' 
 ##' If number of layer is 1, then it calls single-layer network histogram. See. nethist() in nethist package.
 ##' 
 ##' Note that `cluster` only shows a partition of vertices, and the index labels is not an ordered variable. For example, nodes in cluster 1 do not have to more similar to nodes in cluster 2 than nodes in cluster 10. Hence, users would use a user-specified order in [plot.multinethist()].
 ##' }
-##' @seealso [plot.multinethist()]
+##' @seealso [plot.multinethist()], [plot.nethist()]
 ##' @references Song, Y. & Olhede. S. C. (2023)
 ##' @import Rcpp
 ##' @importFrom stats .lm.fit dist pnorm weighted.mean
 ##' @importFrom RSpectra eigs
 ##' @export
+
 multinethist <- function(A, h = NA, common_f = FALSE, 
                          max_itr = 5e6,
                          swap_rule = "random", 
@@ -39,6 +40,7 @@ multinethist <- function(A, h = NA, common_f = FALSE,
                          verbose = FALSE){
   UseMethod("multinethist")
 } 
+
 ##' @exportS3Method
 multinethist.matrix <-  function(A, h = NA, common_f = FALSE, 
                                  max_itr = 5e6,

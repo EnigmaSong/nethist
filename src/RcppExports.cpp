@@ -137,6 +137,8 @@ BEGIN_RCPP
 END_RCPP
 }
 
+RcppExport SEXP run_testthat_tests(void *);
+
 static const R_CallMethodDef CallEntries[] = {
     {"_nethist_count_k_cycle", (DL_FUNC) &_nethist_count_k_cycle, 2},
     {"_nethist_graphest_fastgreedy", (DL_FUNC) &_nethist_graphest_fastgreedy, 4},
@@ -147,6 +149,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nethist_ffct", (DL_FUNC) &_nethist_ffct, 2},
     {"_nethist_hamming_dist_adj_mat", (DL_FUNC) &_nethist_hamming_dist_adj_mat, 1},
     {"_nethist_is_undirected_simple", (DL_FUNC) &_nethist_is_undirected_simple, 1},
+    {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };
 

@@ -1,6 +1,6 @@
 data(karate, package="igraphdata")
 set.seed(42)
-nethist_karate <- nethist(karate)
+nethist_karate <- multinethist(igraph::as_adj(igraph::upgrade_graph(karate), sparse = FALSE))
 
 #Define covariates
 #factor

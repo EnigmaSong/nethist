@@ -1,5 +1,5 @@
 data(karate,package="igraphdata")
-G<-karate
+G<-igraph::upgrade_graph(karate)
 
 #Network summary plot
 test_that("violin plots with pre-specified subsample size",

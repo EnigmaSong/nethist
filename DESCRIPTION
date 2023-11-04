@@ -17,7 +17,6 @@ RoxygenNote: 7.2.3
 Imports: 
     Rcpp(>= 1.0.9),
     stats,
-    utils,
     RSpectra,
     ggplot2,
     ggtext,

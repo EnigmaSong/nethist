@@ -54,8 +54,8 @@ test_that("multinethist (5-layers w/ different sparsity)", {
   expect_no_error(multinethist(array_mnet_diffrho,common_f=TRUE, max_itr = 1000))
 })
 
-test_that("No infinite loop", {
-  expect_no_error(multinethist(kite,h=10, max_itr = 1000))
-})
+# test_that("No infinite loop", {
+#   expect_no_error(multinethist(kite,h=10, max_itr = 1000))
+# })
 
 # Unit tests

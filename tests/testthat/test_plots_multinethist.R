@@ -61,8 +61,8 @@ test_that("check no errors in summary_plots with custom order",
 #heatmap
 test_that("check no errors in summary_plots",
           {
-            expect_no_error(plot(mnhist_id))
-            expect_no_error(plot(mnhist_id_cf))
+            expect_no_error(plot(mnhist_id, idx_order = 1:16))
+            expect_no_error(plot(mnhist_id_cf, idx_order = 1:33))
           }
 )
 

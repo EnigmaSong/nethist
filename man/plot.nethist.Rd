@@ -17,7 +17,7 @@
 )
 }
 \arguments{
-\item{x}{a nethist object from \code{\link[=nethist]{nethist()}}.}
+\item{x}{a nethist object from \code{\link[=nethist]{nethist()}} or \code{\link[=multinethist]{multinethist()}}.}
 
 \item{type}{One of \code{nethist} or \code{prob}.}
 
@@ -49,7 +49,7 @@ Drawing \code{\link[=heatmap]{heatmap()}} using an \code{nethist} object with an
 set.seed(2022)
 #Generating Erdos-Renyi graph
 A <- igraph::sample_gnp(200, 0.05)
-hist_A <- nethist(A)
+hist_A <- multinethist(A)
 plot(hist_A)
 
 #with user-specified order

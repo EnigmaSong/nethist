@@ -24,12 +24,12 @@ test_that("Check hamming distance of binary matrix",
 
 test_that("Check .is_undirected_simple() for binary matrix with self-loop",
           {
-            expect_false(.is_undirected_simple(A2))
+            expect_warning(expect_false(.is_undirected_simple(A2)))
           }
 )
 test_that("Check .is_undirected_simple() for a multigraph",
           {
-            expect_false(.is_undirected_simple(A3))
+            expect_warning(expect_false(.is_undirected_simple(A3)))
           }
 )
 

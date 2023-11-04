@@ -10,10 +10,10 @@
 ##' @examples
 ##' set.seed(2022)
 ##' #Generating Erdos-Renyi graph
-##' A <- igraph::sample_gnp(100, 0.05)
-##' hist_A <- nethist(A) 
+##' A <- igraph::as_adj(igraph::sample_gnp(100, 0.05),sparse= FALSE)
+##' hist_A <- multinethist(A) 
 ##' 
-##' all.equal(.prob_mat_from_adj(igraph::as_adj(A, sparse= FALSE), hist_A$cluster), hist_A$p_mat)
+##' all.equal(.prob_mat_from_adj(A, hist_A$cluster), hist_A$p_mat)
 ##' @keywords internal
 ##' @export
 .prob_mat_from_adj<-function(A, idx){

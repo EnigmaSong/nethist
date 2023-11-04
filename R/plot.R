@@ -2,7 +2,7 @@
 ##'
 ##' Drawing [heatmap()] using an `nethist` object with an user-specified order.
 ##'
-##' @param x a nethist object from [nethist()].
+##' @param x a nethist object from [nethist()] or [multinethist()].
 ##' @param idx_order A numeric vector for index label order, which must be a permutation of `x$cluster`. If `NA`, it uses `1:max(x$clsuter)`. 
 ##' @param type One of `nethist` or `prob`.
 ##' @param prob A logical variable indicating block probabilities are printed on the plot. Default is FALSE.
@@ -20,7 +20,7 @@
 ##' set.seed(2022)
 ##' #Generating Erdos-Renyi graph
 ##' A <- igraph::sample_gnp(200, 0.05)
-##' hist_A <- nethist(A)
+##' hist_A <- multinethist(A)
 ##' plot(hist_A)
 ##' 
 ##' #with user-specified order
