@@ -56,8 +56,8 @@ plot.nethist <- function(x, type = "nethist",
   }
   
   mat <- switch(type,
-                nethist = x$p_mat[idx_order, idx_order]/x$rho_hat,
-                prob = x$p_mat[idx_order, idx_order])
+                nethist = x$thetahat[idx_order, idx_order]/x$rho_hat,
+                prob = x$thetahat[idx_order, idx_order])
   
   if(prob & (type=="prob")){
     heatmap(mat, Rowv = NA, symm = TRUE, 

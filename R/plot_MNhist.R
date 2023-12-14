@@ -50,7 +50,7 @@ plot.multinethist <- function(x, y= NA, type = "MNhist",
   n_layers <- ifelse(length(dim(x$thetahat)) == 2, 1, dim(x$thetahat)[3])
   
   if(n_layers == 1){
-    invisible(plot_nethist(x, type, idx_order, prob, digits,
+    invisible(plot.nethist(x, type, idx_order, prob, digits,
                            prob.cex, prob.col, ...))
   }else{
     invisible(plot_MNhist_Mlayers(x, type, idx_order, prob, digits,
@@ -95,36 +95,4 @@ plot_MNhist_Mlayers <- function(x, type = "MNhist",
       heatmap(mat, Rowv = NA, symm = TRUE, main = paste("Layer ", l), ...)
     }
   }
-}
-
-#temperary function. when it merges to nethist package, I need to rewrite.
-plot_nethist <- function(x, type = "MNhist",
-                                idx_order = 1:max(x$cluster), 
-                                prob = FALSE, digits = 2,
-                                prob.cex =  0.1 + 0.5/log10(max(x$cluster)),
-                                prob.col = "black",
-                                ...){
-  k<-dim(x$thetahat)[1]
-  if(!(type %in% c("MNhist", "prob"))){
-    stop("type must be one of MNhist or prob.")
-  }
-  if(!.is_valid_order(idx_order, 1:k)){
-    warning(paste0("idx_order is invalid. Set idx_order = 1:",k))
-    idx_order <- 1:k
-  }
-  
-  mat <- switch(type,
-                "MNhist" = (x$thetahat[idx_order, idx_order])/x$rho_hat,
-                "prob" = x$thetahat[idx_order, idx_order])
-  
-  if(prob & (type=="prob")){
-    heatmap(mat, Rowv = NA, symm = TRUE, 
-            add.expr = {text(x=rep(1:k,each=k), y=rev(rep(1:k,k)), 
-                             round(as.vector(mat), digits),
-                             cex = prob.cex, col = prob.col)},
-            ...)
-  }else{
-    heatmap(mat, Rowv = NA, symm = TRUE, ...)
-  }
-
 }
