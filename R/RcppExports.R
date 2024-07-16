@@ -5,10 +5,6 @@
     .Call(`_nethist_count_k_cycle`, A, max_cycle_order)
 }
 
-.graphest_fastgreedy <- function(A, hbar, bestLabelVec, verbose) {
-    .Call(`_nethist_graphest_fastgreedy`, A, hbar, bestLabelVec, verbose)
-}
-
 .multinethist_fastgreedy <- function(A, hbar, inputLabelVec, max_itr, swap_rule, consecutive_iter_threshold, verbose) {
     .Call(`_nethist_multinethist_fastgreedy`, A, hbar, inputLabelVec, max_itr, swap_rule, consecutive_iter_threshold, verbose)
 }

@@ -23,20 +23,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// graphest_fastgreedy
-arma::vec graphest_fastgreedy(const arma::mat& A, const int& hbar, arma::vec bestLabelVec, const bool& verbose);
-RcppExport SEXP _nethist_graphest_fastgreedy(SEXP ASEXP, SEXP hbarSEXP, SEXP bestLabelVecSEXP, SEXP verboseSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
-    Rcpp::traits::input_parameter< const int& >::type hbar(hbarSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type bestLabelVec(bestLabelVecSEXP);
-    Rcpp::traits::input_parameter< const bool& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(graphest_fastgreedy(A, hbar, bestLabelVec, verbose));
-    return rcpp_result_gen;
-END_RCPP
-}
 // multinethist_fastgreedy
 List multinethist_fastgreedy(const arma::icube& A, const int& hbar, const arma::uvec& inputLabelVec, const int& max_itr, const int& swap_rule, const int& consecutive_iter_threshold, const bool& verbose);
 RcppExport SEXP _nethist_multinethist_fastgreedy(SEXP ASEXP, SEXP hbarSEXP, SEXP inputLabelVecSEXP, SEXP max_itrSEXP, SEXP swap_ruleSEXP, SEXP consecutive_iter_thresholdSEXP, SEXP verboseSEXP) {
@@ -137,11 +123,10 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP run_testthat_tests(void *);
+RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_nethist_count_k_cycle", (DL_FUNC) &_nethist_count_k_cycle, 2},
-    {"_nethist_graphest_fastgreedy", (DL_FUNC) &_nethist_graphest_fastgreedy, 4},
     {"_nethist_multinethist_fastgreedy", (DL_FUNC) &_nethist_multinethist_fastgreedy, 7},
     {"_nethist_mnhistCommon_fastgreedy", (DL_FUNC) &_nethist_mnhistCommon_fastgreedy, 7},
     {"_nethist_net_summary_subsample_adj", (DL_FUNC) &_nethist_net_summary_subsample_adj, 4},
