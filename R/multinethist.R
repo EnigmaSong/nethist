@@ -5,6 +5,7 @@
 ##' @param A An adjacency array or list of igraph object. It must be an undirected and simple graph.
 ##' @param h A bandwidth parameter. If `NA`, selecting bandwidth by Olhede and Wolfe (2014). If specified, the user input value is used.
 ##' @param common_f a logical variable indicating assume the common network histogram function for all layers.
+##' @param method Type of loss functions for network histogram. It must be one of `PLL` (default) or `LSE`. `LSE` is implemented only for single-layer network histogram. See details
 ##' @param max_itr an integer for number of maximum iteration for greedy search.
 ##' @param swap_rule string of swap node selection methods. only "random" implemented. See details.
 ##' @param consecutive_iter_threshold an integer for stopping criterion. If the log-likelihood does not improve for the last `consecutive_iter_threshold` iterations, stop the algorithm.
@@ -19,21 +20,28 @@
 ##' \item `normalized_LL` a normalized likelihood from the algorithm.
 ##' \item `homogeneous` a logical variable indicating homogeneous multinetwork histogram.
 ##' }
+##' @usage nethist(A, h = NA, max_itr = 5e6, swap_rule = "random", consecutive_iter_threshold = 2e4, verbose = FALSE)
+##' @usage multinethist(A, h = NA, common_f = FALSE, max_itr = 5e6, swap_rule = "random",consecutive_iter_threshold = 2e4, verbose = FALSE)
 ##' @details {
 ##' lth layer's multi-network histogram is defined by thetahat/rho_hat. We can plot multinetwork histogram using [plot()] and [plot3d()].
 ##' 
-##' If number of layer is 1, then it calls single-layer network histogram. See. nethist() in nethist package.
+##' If the number of layer is 1, then it calls single-layer network histogram. See. nethist() in nethist package.
+##' 
+##' `method` is only used for single-layer networks. `method = "PLL"` is for Olhede and Wolfe (2014), and `method = "LSE"` is for Gao et al. (2015).
 ##' 
 ##' Note that `cluster` only shows a partition of vertices, and the index labels is not an ordered variable. For example, nodes in cluster 1 do not have to more similar to nodes in cluster 2 than nodes in cluster 10. Hence, users would use a user-specified order in [plot.multinethist()].
 ##' }
 ##' @seealso [plot.multinethist()], [plot.nethist()]
-##' @references Song, Y. & Olhede. S. C. (2023)
+##' @references Song, Y. & Olhede. S. C. (2024)
+##' @references Olhede, S. C. & Wolfe, P. J. (2014). Network Histograms and Universality of Blockmodel Approximation. Proceedings of the National Academy of Sciences, 111(41), 14722-14727. doi:10.1073/pnas.1400374111
+##' @references #' Gao, C., Lu, Y., & Zhou, H. H. (2015). Rate-Optimal Graphon Estimation. The Annals of Statistics, 43(6), 2624-2652. doi:10.1214/15-AOS1354
 ##' @import Rcpp
 ##' @importFrom stats .lm.fit dist pnorm weighted.mean
 ##' @importFrom RSpectra eigs
 ##' @export
 
 multinethist <- function(A, h = NA, common_f = FALSE, 
+                         method = c("PLL", "LSE"),
                          max_itr = 5e6,
                          swap_rule = "random", 
                          consecutive_iter_threshold = 2e4,
@@ -43,22 +51,26 @@ multinethist <- function(A, h = NA, common_f = FALSE,
 
 ##' @exportS3Method
 multinethist.matrix <-  function(A, h = NA, common_f = FALSE, 
+                                 method = c("PLL", "LSE"),
                                  max_itr = 5e6,
                                  swap_rule = "random", 
                                  consecutive_iter_threshold = 2e4,
                                  verbose = FALSE){
   return(multinethist.array(array(A, dim=c(nrow(A), ncol(A), 1)), 
-                            h, common_f,
+                            h, common_f, method,
                             max_itr, swap_rule, 
                             consecutive_iter_threshold, verbose)) #should think about the design of code.
 }
 ##' @exportS3Method
 multinethist.array <- function(A, h = NA, common_f = FALSE, 
+                               method = c("PLL", "LSE"),
                          max_itr = 5e6,
                          swap_rule = "random", 
                          consecutive_iter_threshold = 2e4,
                          verbose = FALSE){
   if(!all(apply(A, 3, .is_undirected_simple))) stop("Network A must be an undirected simple network.")
+  method <- pmatch(method, c("PLL","LSE"))
+  if(!is.na(method)) stop("method must be one of the followings: PLL, LSE")
   n_nodes <- dim(A)[1]
   n_layers <- dim(A)[3]
   swap_rule <- pmatch(swap_rule, c("random"))
@@ -94,8 +106,8 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
                              round(difftime(Sys.time(),tstart),4), ' sec'))
   
   if(n_layers == 1){
-    res<- .nethist_fastgreedy(A[,,1], h, Rind_to_Cind(idxInit), max_itr,
-                              swap_rule, consecutive_iter_threshold, verbose)
+    res<- .nethist_fastgreedy(A[,,1], h, Rind_to_Cind(idxInit), method,
+                              max_itr, swap_rule, consecutive_iter_threshold, verbose)
   }else if(common_f){
     res<- .mnhistCommon_fastgreedy(A, h, Rind_to_Cind(idxInit), 
                                    max_itr, swap_rule, consecutive_iter_threshold, verbose)
@@ -109,6 +121,7 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
                  thetahat =  res$ThetaHat,
                  rho_hat = rhoHat,
                  normalized_LL = res$norm_LL,
+                 LSE = res$LSE,
                  homogeneous = common_f)
   result <- structure(result, class= ifelse(n_layers > 1, "multinethist", "nethist"))
   return(result)
