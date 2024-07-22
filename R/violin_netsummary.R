@@ -94,6 +94,7 @@ violin_netsummary.dgCMatrix<- function(A,
   do.call("violin_netsummary.default", args = args)
 }
 
+##' @exportS3Method 
 violin_netsummary.default<- function(A, 
                                      subsample_sizes = NA, 
                                      max_cycle_order = 4, 
