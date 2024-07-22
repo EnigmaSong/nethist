@@ -29,6 +29,7 @@ Rcpp::List mnhistCommon_fastgreedy(const arma::icube &A, const int &hbar,
 //Single Layer
 Rcpp::List nethist_fastgreedy(const arma::imat &A, const int &hbar, 
                         const arma::uvec &inputLabelVec, 
+                        const int &method,
                         const int &max_itr,
                         const int &swap_rule,
                         const int &consecutive_iter_threshold,
@@ -81,22 +82,32 @@ public:
   arma::cube bin_edge_counts;
   arma::cube estimated_theta;
   double likelihood;
+  double LSE;
   
   //constructor
   Assignment(const arma::icube& A, 
              const arma::uvec& v_labels,
              const GroupSize& g_size);
   //operator
-  bool operator>(const Assignment& other) const {
+  ////for likelihood
+  virtual bool operator>(const Assignment& other) const {
     return likelihood > other.likelihood;
   }
-  bool operator<(const Assignment& other) const {
+  virtual bool operator<(const Assignment& other) const {
     return likelihood < other.likelihood;
+  }
+  ////for LSE
+  virtual bool operator>>(const Assignment& other) const {
+    return LSE > other.LSE;
+  }
+  virtual bool operator<<(const Assignment& other) const {
+    return LSE < other.LSE;
   }
   bool operator==(const Assignment& other) const {
     bool res = (n_nodes == other.n_nodes) && (n_layers == other.n_layers);
     res = res && all(node_labels == other.node_labels) && (group_size == other.group_size);
     res = res && (likelihood == other.likelihood);
+    res = res && (LSE == other.LSE);
     res = res && approx_equal(bin_cell_counts, other.bin_cell_counts, "absdiff", 2*eps);
     for(arma::uword l = 0; l < n_layers; l++){
       res = res && approx_equal(bin_edge_counts.slice(l), other.bin_edge_counts.slice(l), "absdiff", 2*eps);
@@ -113,10 +124,12 @@ public:
                        const arma::icube& A, 
                        const int& swap_rule);
   virtual double compute_normalize_log_likelihood();
-  void copy_labels_theta_LL(const Assignment& other);
+  virtual double compute_LSE();
+  void copy_labels_theta(const Assignment& other);
   void swap_nodes(const Assignment& assignment, const arma::uvec& swap);
   virtual void update_thetahat(const arma::uvec& swap, const arma::icube& A);
   void updateLL();
+  void updateLSE();
 };
 //derived class of Assignment when f are the same for all layers
 class AssignCommonF : public Assignment {
@@ -135,6 +148,7 @@ public:
     res = res && all(rho_hat == other.rho_hat);
     res = res && all(node_labels == other.node_labels) && (group_size == other.group_size);
     res = res && (likelihood == other.likelihood);
+    res = res && (LSE == other.LSE);
     res = res && approx_equal(bin_cell_counts, other.bin_cell_counts, "absdiff", 2*eps);
     res = res && approx_equal(fhat_common, other.fhat_common, "absdiff", 2*eps);
     for(arma::uword l = 0; l < n_layers; l++){
@@ -144,7 +158,7 @@ public:
     return res;
   }
   //methods
-  void copy_labels_theta_LL(const AssignCommonF& other);
+  void copy_labels_theta(const AssignCommonF& other);
   void update_thetahat(const arma::uvec& swap, const arma::icube& A) override;
   void get_thetahat_common_f();
 };
@@ -164,10 +178,25 @@ public:
                       const GroupSize& g_size
   );
   //operator
+  ////for likelihood
+  bool operator>(const AssignSingleLayer& other) const {
+    return likelihood > other.likelihood;
+  }
+  bool operator<(const AssignSingleLayer& other) const {
+    return likelihood < other.likelihood;
+  }
+  ////for LSE
+  bool operator>>(const AssignSingleLayer& other) const {
+    return LSE > other.LSE;
+  }
+  bool operator<<(const AssignSingleLayer& other) const {
+    return LSE < other.LSE;
+  }
   bool operator==(const AssignSingleLayer& other) const{
     bool res = (n_nodes == other.n_nodes);
     res = res && all(node_labels == other.node_labels) && (group_size == other.group_size);
     res = res && (likelihood == other.likelihood);
+    res = res && (LSE == other.LSE);
     res = res && approx_equal(bin_cell_counts, other.bin_cell_counts, "absdiff", 2*eps);
     res = res && approx_equal(bin_edge_counts, other.bin_edge_counts, "absdiff", 2*eps);
     res = res && approx_equal(estimated_theta, other.estimated_theta, "absdiff", 2*eps);
@@ -182,7 +211,8 @@ public:
                                     const arma::imat& A, 
                                     const int& swap_rule);
   double compute_normalize_log_likelihood() override;
-  void copy_labels_theta_LL(const AssignSingleLayer& other);
+  double compute_LSE() override;
+  void copy_labels_theta(const AssignSingleLayer& other);
   void update_thetahat(const arma::uvec& swap, const arma::icube& A) override;
   void update_thetahat(const arma::uvec& swap, const arma::imat& A);
 };
@@ -190,10 +220,26 @@ public:
 struct BestInfo{
   int best_iter;
   double normalized_bestLL;
-  BestInfo() : best_iter(1), normalized_bestLL(-1e12){}
-  BestInfo(const double& norm_LL) : best_iter(1), normalized_bestLL(norm_LL){}
-  bool check_stop_rule(const Assignment& best, const int& stop_rule,
-                       const double& normalizedC, const int& i);
+  double bestLSE;
+  BestInfo() : best_iter(1), normalized_bestLL(-1e12), bestLSE(1e7){}
+  BestInfo(const double& norm_LL, const double& LSE) : best_iter(1), normalized_bestLL(norm_LL), bestLSE(LSE){}
+  bool check_stop_rule_LL(const Assignment& best, const int& consecutive_iter_threshold,
+                       const double& normalizedC, 
+                       const int& i);
+  bool check_stop_rule_LSE(const Assignment& best, const int& consecutive_iter_threshold,
+                           const double& normalizedC, 
+                          const int& i);
+  bool check_stop_rule_LL(const AssignSingleLayer& best, const int& consecutive_iter_threshold,
+                          const double& normalizedC, 
+                          const int& i);
+  bool check_stop_rule_LSE(const AssignSingleLayer& best, const int& consecutive_iter_threshold,
+                           const double& normalizedC, 
+                           const int& i);
 };
+
+// Define function pointer type
+typedef bool (AssignSingleLayer::*Comparator)(const AssignSingleLayer&) const;
+typedef bool (BestInfo::*CheckStopRuleFunction)(const AssignSingleLayer&, const int&, 
+                                      const double&, const int&);
 
 #endif

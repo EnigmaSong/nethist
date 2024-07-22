@@ -20,8 +20,8 @@
 ##' \item `normalized_LL` a normalized likelihood from the algorithm.
 ##' \item `homogeneous` a logical variable indicating homogeneous multinetwork histogram.
 ##' }
-##' @usage nethist(A, h = NA, max_itr = 5e6, swap_rule = "random", consecutive_iter_threshold = 2e4, verbose = FALSE)
-##' @usage multinethist(A, h = NA, common_f = FALSE, max_itr = 5e6, swap_rule = "random",consecutive_iter_threshold = 2e4, verbose = FALSE)
+##' @usage nethist(A, h = NA, method = "PLL", max_itr = 5e6, swap_rule = "random", consecutive_iter_threshold = 2e4, verbose = FALSE)
+##' @usage multinethist(A, h = NA, common_f = FALSE, method = "PLL", max_itr = 5e6, swap_rule = "random",consecutive_iter_threshold = 2e4, verbose = FALSE)
 ##' @details {
 ##' lth layer's multi-network histogram is defined by thetahat/rho_hat. We can plot multinetwork histogram using [plot()] and [plot3d()].
 ##' 
@@ -41,7 +41,7 @@
 ##' @export
 
 multinethist <- function(A, h = NA, common_f = FALSE, 
-                         method = c("PLL", "LSE"),
+                         method = "PLL",
                          max_itr = 5e6,
                          swap_rule = "random", 
                          consecutive_iter_threshold = 2e4,
@@ -51,7 +51,7 @@ multinethist <- function(A, h = NA, common_f = FALSE,
 
 ##' @exportS3Method
 multinethist.matrix <-  function(A, h = NA, common_f = FALSE, 
-                                 method = c("PLL", "LSE"),
+                                 method = "PLL",
                                  max_itr = 5e6,
                                  swap_rule = "random", 
                                  consecutive_iter_threshold = 2e4,
@@ -63,14 +63,14 @@ multinethist.matrix <-  function(A, h = NA, common_f = FALSE,
 }
 ##' @exportS3Method
 multinethist.array <- function(A, h = NA, common_f = FALSE, 
-                               method = c("PLL", "LSE"),
+                               method = "PLL",
                          max_itr = 5e6,
                          swap_rule = "random", 
                          consecutive_iter_threshold = 2e4,
                          verbose = FALSE){
   if(!all(apply(A, 3, .is_undirected_simple))) stop("Network A must be an undirected simple network.")
-  method <- pmatch(method, c("PLL","LSE"))
-  if(!is.na(method)) stop("method must be one of the followings: PLL, LSE")
+  method <- pmatch(method, c("PLL","LSE")) # PLL = 1, LSE = 2
+  if(is.na(method)) stop("method must be one of the followings: PLL, LSE")
   n_nodes <- dim(A)[1]
   n_layers <- dim(A)[3]
   swap_rule <- pmatch(swap_rule, c("random"))
@@ -122,57 +122,9 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
                  rho_hat = rhoHat,
                  normalized_LL = res$norm_LL,
                  LSE = res$LSE,
+                 method = method,
                  homogeneous = common_f)
   result <- structure(result, class= ifelse(n_layers > 1, "multinethist", "nethist"))
   return(result)
-}
-
-.oracbwplugin <- function(A,c,type, alpha,
-                          rhoHat, common_f, 
-                          verbose){
-  #Assume A[,,l] is symmetric, simple, and no self-loop
-  if(missing(type)) type <- 'degs'
-  if(!(type %in% c("degs","eigs"))) stop(paste("Invalid input type",type))
-  if(missing(alpha)) alpha <- 1
-  if(alpha != 1) stop("Currently only supports alpha = 1")
-  
-  n <- dim(A)[1]
-  L <- ifelse(length(dim(A)) == 2, 1, dim(A)[3])
-  
-  midPt <- seq(round(n/2-c*sqrt(n),0), round(n/2+c*sqrt(n),0))
-  rhoHat_inv <- ginv(rhoHat)
-  sampleSize <- n*(n-1)/2
-  estMSqrd <- rep(0,L)
-  
-  #Rank-1 graphon estimate via fhat(x,y) = mult*u(x)*u(y)*pinv(rhoHat);
-  for(l in 1:L){
-    estMSqrd[l] <- estim_M(A[,,l], type, 
-                           MoreArgs = list(n = n, midPt = midPt, 
-                                           rhoHat_inv = rhoHat_inv[l]))
-  }
-
-  mean_estMSqrd <- mean(estMSqrd)
-  mean_edgenum <- mean(sampleSize*rhoHat)  
-  weigths <- rhoHat/sum(rhoHat)
-  wmean_estMSqrd <- weighted.mean(estMSqrd, weigths)
-  mean_inv_edgenum <- mean(1/(sampleSize*rhoHat))
-  h <- ifelse(common_f,
-              sqrt(n)*(2*mean_estMSqrd^2*sum(rhoHat))^(-0.25),
-              sqrt(n)*(2*mean(estMSqrd*rhoHat))^(-0.25)
-  )
-  
-  MISEfhatBnd <- mean_estMSqrd*((2/sqrt(mean_estMSqrd))*sqrt(mean_inv_edgenum) + 1/n)
-  WMISEfhatBnd <- wmean_estMSqrd*((2/sqrt(wmean_estMSqrd))*(mean_edgenum)^(-1/2) + 1/n)
-  
-  if(verbose){
-    message("M^2_hat=")
-    message(round(estMSqrd,3))
-    message(ifelse(common_f, 
-                   paste("MISE bound_hat=", round(WMISEfhatBnd,3)),
-                   paste("WMISE bound_hat=", round(WMISEfhatBnd,3)))
-            )
-  }
-  
-  return(list(h=h, estMSqrd=estMSqrd))
 }
 

@@ -3,7 +3,6 @@
 \docType{package}
 \name{nethist-package}
 \alias{nethist-package}
-\alias{_PACKAGE}
 \title{nethist: Network histogram}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}

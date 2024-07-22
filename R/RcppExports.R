@@ -17,8 +17,8 @@
     .Call(`_nethist_net_summary_subsample_adj`, A, subsample_sizes, max_cycle_order, R)
 }
 
-.nethist_fastgreedy <- function(A, hbar, inputLabelVec, max_itr, swap_rule, consecutive_iter_threshold, verbose) {
-    .Call(`_nethist_nethist_fastgreedy`, A, hbar, inputLabelVec, max_itr, swap_rule, consecutive_iter_threshold, verbose)
+.nethist_fastgreedy <- function(A, hbar, inputLabelVec, method, max_itr, swap_rule, consecutive_iter_threshold, verbose) {
+    .Call(`_nethist_nethist_fastgreedy`, A, hbar, inputLabelVec, method, max_itr, swap_rule, consecutive_iter_threshold, verbose)
 }
 
 .ffct <- function(n, k) {

@@ -72,19 +72,20 @@ BEGIN_RCPP
 END_RCPP
 }
 // nethist_fastgreedy
-List nethist_fastgreedy(const arma::imat& A, const int& hbar, const arma::uvec& inputLabelVec, const int& max_itr, const int& swap_rule, const int& consecutive_iter_threshold, const bool& verbose);
-RcppExport SEXP _nethist_nethist_fastgreedy(SEXP ASEXP, SEXP hbarSEXP, SEXP inputLabelVecSEXP, SEXP max_itrSEXP, SEXP swap_ruleSEXP, SEXP consecutive_iter_thresholdSEXP, SEXP verboseSEXP) {
+List nethist_fastgreedy(const arma::imat& A, const int& hbar, const arma::uvec& inputLabelVec, const int& method, const int& max_itr, const int& swap_rule, const int& consecutive_iter_threshold, const bool& verbose);
+RcppExport SEXP _nethist_nethist_fastgreedy(SEXP ASEXP, SEXP hbarSEXP, SEXP inputLabelVecSEXP, SEXP methodSEXP, SEXP max_itrSEXP, SEXP swap_ruleSEXP, SEXP consecutive_iter_thresholdSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::imat& >::type A(ASEXP);
     Rcpp::traits::input_parameter< const int& >::type hbar(hbarSEXP);
     Rcpp::traits::input_parameter< const arma::uvec& >::type inputLabelVec(inputLabelVecSEXP);
+    Rcpp::traits::input_parameter< const int& >::type method(methodSEXP);
     Rcpp::traits::input_parameter< const int& >::type max_itr(max_itrSEXP);
     Rcpp::traits::input_parameter< const int& >::type swap_rule(swap_ruleSEXP);
     Rcpp::traits::input_parameter< const int& >::type consecutive_iter_threshold(consecutive_iter_thresholdSEXP);
     Rcpp::traits::input_parameter< const bool& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(nethist_fastgreedy(A, hbar, inputLabelVec, max_itr, swap_rule, consecutive_iter_threshold, verbose));
+    rcpp_result_gen = Rcpp::wrap(nethist_fastgreedy(A, hbar, inputLabelVec, method, max_itr, swap_rule, consecutive_iter_threshold, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -130,7 +131,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nethist_multinethist_fastgreedy", (DL_FUNC) &_nethist_multinethist_fastgreedy, 7},
     {"_nethist_mnhistCommon_fastgreedy", (DL_FUNC) &_nethist_mnhistCommon_fastgreedy, 7},
     {"_nethist_net_summary_subsample_adj", (DL_FUNC) &_nethist_net_summary_subsample_adj, 4},
-    {"_nethist_nethist_fastgreedy", (DL_FUNC) &_nethist_nethist_fastgreedy, 7},
+    {"_nethist_nethist_fastgreedy", (DL_FUNC) &_nethist_nethist_fastgreedy, 8},
     {"_nethist_ffct", (DL_FUNC) &_nethist_ffct, 2},
     {"_nethist_hamming_dist_adj_mat", (DL_FUNC) &_nethist_hamming_dist_adj_mat, 1},
     {"_nethist_is_undirected_simple", (DL_FUNC) &_nethist_is_undirected_simple, 1},

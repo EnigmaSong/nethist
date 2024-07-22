@@ -5,19 +5,14 @@
 \alias{nethist}
 \title{Network histogram estimation}
 \usage{
-multinethist(
-  A,
-  h = NA,
-  common_f = FALSE,
-  max_itr = 5e+06,
-  swap_rule = "random",
-  consecutive_iter_threshold = 20000,
-  verbose = FALSE
-)
+nethist(A, h = NA, method = "PLL", max_itr = 5e6, swap_rule = "random", consecutive_iter_threshold = 2e4, verbose = FALSE)
+
+multinethist(A, h = NA, common_f = FALSE, method = "PLL", max_itr = 5e6, swap_rule = "random",consecutive_iter_threshold = 2e4, verbose = FALSE)
 
 nethist(
   A,
   h = NA,
+  method = "PLL",
   max_itr = 5e+06,
   swap_rule = "random",
   consecutive_iter_threshold = 20000,
@@ -30,6 +25,8 @@ nethist(
 \item{h}{A bandwidth parameter. If \code{NA}, selecting bandwidth by Olhede and Wolfe (2014). If specified, the user input value is used.}
 
 \item{common_f}{a logical variable indicating assume the common network histogram function for all layers.}
+
+\item{method}{Type of loss functions for network histogram. It must be one of \code{PLL} (default) or \code{LSE}. \code{LSE} is implemented only for single-layer network histogram. See details}
 
 \item{max_itr}{an integer for number of maximum iteration for greedy search.}
 
@@ -57,13 +54,19 @@ Estimating network histogram for multiplex networks and returning the indices of
 {
 lth layer's multi-network histogram is defined by thetahat/rho_hat. We can plot multinetwork histogram using \code{\link[=plot]{plot()}} and \code{\link[=plot3d]{plot3d()}}.
 
-If number of layer is 1, then it calls single-layer network histogram. See. nethist() in nethist package.
+If the number of layer is 1, then it calls single-layer network histogram. See. nethist() in nethist package.
+
+\code{method} is only used for single-layer networks. \code{method = "PLL"} is for Olhede and Wolfe (2014), and \code{method = "LSE"} is for Gao et al. (2015).
 
 Note that \code{cluster} only shows a partition of vertices, and the index labels is not an ordered variable. For example, nodes in cluster 1 do not have to more similar to nodes in cluster 2 than nodes in cluster 10. Hence, users would use a user-specified order in \code{\link[=plot.multinethist]{plot.multinethist()}}.
 }
 }
 \references{
-Song, Y. & Olhede. S. C. (2023)
+Song, Y. & Olhede. S. C. (2024)
+
+Olhede, S. C. & Wolfe, P. J. (2014). Network Histograms and Universality of Blockmodel Approximation. Proceedings of the National Academy of Sciences, 111(41), 14722-14727. doi:10.1073/pnas.1400374111
+
+#' Gao, C., Lu, Y., & Zhou, H. H. (2015). Rate-Optimal Graphon Estimation. The Annals of Statistics, 43(6), 2624-2652. doi:10.1214/15-AOS1354
 }
 \seealso{
 \code{\link[=plot.multinethist]{plot.multinethist()}}, \code{\link[=plot.nethist]{plot.nethist()}}

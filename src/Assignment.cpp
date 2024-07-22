@@ -31,6 +31,7 @@ likelihood(0)
   
   estimated_theta = bin_edge_counts.each_slice()/bin_cell_counts;
   likelihood = compute_normalize_log_likelihood();
+  LSE = compute_LSE();
 }
 
 void Assignment::create_proposal_from(const Assignment& current, 
@@ -41,6 +42,7 @@ void Assignment::create_proposal_from(const Assignment& current,
   update_thetahat(swap, A);
   swap_nodes(current, swap);
   updateLL();
+  updateLSE();
 }
 double Assignment::compute_normalize_log_likelihood(){
   double loglik = 0.0;
@@ -56,12 +58,27 @@ double Assignment::compute_normalize_log_likelihood(){
   }
   return loglik;
 }
-void Assignment::copy_labels_theta_LL(const Assignment& other){
+double Assignment::compute_LSE(){
+  double LSE = 0.0;
+  double theta_ijl;
+  
+  for(arma::uword l = 0; l < n_layers; l++){
+    for(arma::uword j = 0; j < num_groups(); j++){
+      for(arma::uword i = j; i< num_groups() ; i++){
+        theta_ijl = clamp_eps(estimated_theta.at(i,j,l));
+        LSE += (pow(theta_ijl - 1, 2) * bin_edge_counts.at(i,j,l)) + (pow(theta_ijl,2)*(bin_cell_counts.at(i,j) - bin_edge_counts.at(i,j,l)));
+      }
+    }
+  }
+  return LSE;
+}
+void Assignment::copy_labels_theta(const Assignment& other){
   //assume no change on bin size
   node_labels = other.node_labels;
   bin_edge_counts = other.bin_edge_counts;
   estimated_theta = other.estimated_theta;
   likelihood = other.likelihood;
+  LSE = other.LSE;
 }
 
 //Update node lables by swap rule
@@ -106,6 +123,9 @@ void Assignment::update_thetahat(const arma::uvec& swap, const arma::icube& A){
 void Assignment::updateLL(){
   likelihood = compute_normalize_log_likelihood();
 }
+void Assignment::updateLSE(){
+  LSE = compute_LSE();
+}
 
 // AssignCommonF class methods
 AssignCommonF::AssignCommonF(const arma::icube& A, 
@@ -134,8 +154,9 @@ AssignCommonF::AssignCommonF(const arma::icube& A,
   get_thetahat_common_f();
   
   likelihood = compute_normalize_log_likelihood();
+  LSE = compute_LSE();
 }
-void AssignCommonF::copy_labels_theta_LL(const AssignCommonF& other){
+void AssignCommonF::copy_labels_theta(const AssignCommonF& other){
   node_labels = other.node_labels;
   bin_edge_counts = other.bin_edge_counts;
   estimated_theta = other.estimated_theta;
@@ -216,7 +237,7 @@ AssignSingleLayer::AssignSingleLayer(const arma::imat& A,
   
   estimated_theta = bin_edge_counts/bin_cell_counts;
   likelihood = compute_normalize_log_likelihood();
-  
+  LSE = compute_LSE();
 }
 void AssignSingleLayer::create_proposal_from(const AssignSingleLayer& current, 
                           const arma::imat& A, 
@@ -226,6 +247,7 @@ void AssignSingleLayer::create_proposal_from(const AssignSingleLayer& current,
   update_thetahat(swap, A);
   swap_nodes(current, swap);
   updateLL();
+  updateLSE();
 }
 double AssignSingleLayer::compute_normalize_log_likelihood(){
   double loglik = 0.0;
@@ -240,11 +262,25 @@ double AssignSingleLayer::compute_normalize_log_likelihood(){
   
   return loglik;
 }
-void AssignSingleLayer::copy_labels_theta_LL(const AssignSingleLayer& other){
+double AssignSingleLayer::compute_LSE(){
+  double LSE = 0.0;
+  double theta_ij;
+  
+  for(arma::uword j= 0; j< num_groups(); j++){
+    for(arma::uword i = j; i < num_groups(); i++){
+      theta_ij = clamp_eps(estimated_theta.at(i,j));
+      LSE += (pow(theta_ij - 1, 2) * bin_edge_counts.at(i,j)) + (pow(theta_ij,2)*(bin_cell_counts.at(i,j) - bin_edge_counts.at(i,j)));
+    }
+  }
+  
+  return LSE;
+}
+void AssignSingleLayer::copy_labels_theta(const AssignSingleLayer& other){
   node_labels = other.node_labels;
   bin_edge_counts = other.bin_edge_counts;
   estimated_theta = other.estimated_theta;
   likelihood = other.likelihood;
+  LSE = other.LSE;
 }
 
 void AssignSingleLayer::update_thetahat(const arma::uvec& swap, const arma::icube& A){
