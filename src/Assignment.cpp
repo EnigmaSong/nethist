@@ -64,7 +64,7 @@ double Assignment::compute_LSE(){
   
   for(arma::uword l = 0; l < n_layers; l++){
     for(arma::uword j = 0; j < num_groups(); j++){
-      for(arma::uword i = j; i< num_groups() ; i++){
+      for(arma::uword i = 0; i< num_groups() ; i++){
         theta_ijl = clamp_eps(estimated_theta.at(i,j,l));
         LSE += (pow(theta_ijl - 1, 2) * bin_edge_counts.at(i,j,l)) + (pow(theta_ijl,2)*(bin_cell_counts.at(i,j) - bin_edge_counts.at(i,j,l)));
       }
@@ -267,7 +267,7 @@ double AssignSingleLayer::compute_LSE(){
   double theta_ij;
   
   for(arma::uword j= 0; j< num_groups(); j++){
-    for(arma::uword i = j; i < num_groups(); i++){
+    for(arma::uword i = 0; i < num_groups(); i++){
       theta_ij = clamp_eps(estimated_theta.at(i,j));
       LSE += (pow(theta_ij - 1, 2) * bin_edge_counts.at(i,j)) + (pow(theta_ij,2)*(bin_cell_counts.at(i,j) - bin_edge_counts.at(i,j)));
     }
