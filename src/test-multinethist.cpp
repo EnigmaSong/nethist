@@ -65,6 +65,8 @@ context("Assignment check") {
   test_that("Assignment comparison") {
     // assignF.likelihood == -5.049031
     // assignG.likelihood == -5.004024
+    // assignF.LSE == 1.55556 // if only using upper diagonal part
+    // assignG.LSE == 1.6 // if only using upper diagonal part
     // mulitnethist
     expect_false(assignF > assignG);
     expect_true(assignF < assignG);
@@ -76,6 +78,9 @@ context("Assignment check") {
     // single layer nethist
     expect_false(assignSL_F > assignSL_G);
     expect_true(assignSL_F < assignSL_G);
+    expect_false(assignSL_F == assignSL_G);
+    expect_false(assignSL_F >> assignSL_G);
+    expect_true(assignSL_F << assignSL_G);
     expect_false(assignSL_F == assignSL_G);
   }
   test_that("Assignment method") {
@@ -103,12 +108,18 @@ context("Assignment check") {
     expect_true(abs(assignCF_F2.likelihood - (-5.049031)) < 1e-6);
     assignSL_F2.updateLL();
     expect_true(abs(assignSL_F2.likelihood - (-5.049031)) < 1e-6);
+    expect_true(abs(assignSL_G.likelihood - (-5.004024)) < 1e-6);
+    //updateLSE
+    assignSL_F2.updateLSE();
+    Rcout << assignSL_F2.LSE <<"\n";
+    expect_true(abs(assignSL_F2.LSE - (1.555556)) < 1e-6);
+    expect_true(abs(assignSL_G.LSE - (1.6)) < 1e-6);
     //copy_labels_theta_LL
-    assignF2.copy_labels_theta_LL(assignF);
+    assignF2.copy_labels_theta(assignF);
     expect_true(assignF2==assignF);
-    assignCF_F2.copy_labels_theta_LL(assignCF_F);
+    assignCF_F2.copy_labels_theta(assignCF_F);
     expect_true(assignCF_F2==assignCF_F);
-    assignSL_F2.copy_labels_theta_LL(assignSL_F);
+    assignSL_F2.copy_labels_theta(assignSL_F);
     expect_true(assignSL_F2==assignSL_F);
   }
 }

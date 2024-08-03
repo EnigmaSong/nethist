@@ -42,6 +42,7 @@ for(l in 1:length(sample_mnet)){
 
 test_that("multinethist (one layer)", {
   expect_no_error(multinethist(kite,h=5, max_itr = 1000))
+  expect_no_error(multinethist(kite,h=5, method = "LSE", max_itr = 1000))
 })
 
 test_that("multinethist (5-layers)", {
@@ -53,6 +54,12 @@ test_that("multinethist (5-layers w/ different sparsity)", {
   expect_no_error(multinethist(array_mnet_diffrho, max_itr = 1000))
   expect_no_error(multinethist(array_mnet_diffrho,common_f=TRUE, max_itr = 1000))
 })
+
+test_that("nethist (checking default argument)", {
+  expect_equal({set.seed(42); multinethist(kite,h=5, max_itr = 1000)},
+               {set.seed(42); multinethist(kite,h=5, method = "PLL", max_itr = 1000)})
+})
+
 
 # test_that("No infinite loop", {
 #   expect_no_error(multinethist(kite,h=10, max_itr = 1000))
