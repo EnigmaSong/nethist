@@ -43,7 +43,6 @@ List nethist_fastgreedy(const arma::imat &A, const int &hbar,
     proposal.copy_labels_theta(current);
     
     if((best_iter.*check_stop_rule)(current, consecutive_iter_threshold, normalizeC, i)){
-      Rcout << "Best LSE=" << current.LSE << ", proposed LSE = " << proposal.LSE <<"\n";
       if(verbose) Rcout<<"total num iter = "<<i<<"\n";
       break;
     }
