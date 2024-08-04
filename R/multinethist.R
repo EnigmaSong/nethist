@@ -79,10 +79,7 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
   # Compute necessary summaries from A
   rhoHat <- apply(A, 3, function(A_l) sum(A_l)/(n_nodes*(n_nodes-1)))
   
-  ##########################################################################
-  # Pick an analysis bandwidth and initialize via regularized spectral clustering
-  # Temporary (use the densest layer for h)
-  ##########################################################################
+  # Pick a bandwidth
   if(is.na(h)){
     h <- .oracbwplugin(A, min(4, sqrt(n_nodes)/8), 
                        'degs', 1, rhoHat, common_f, verbose)$h
@@ -97,7 +94,7 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
     message(paste0('Adjacency matrix has ', n_nodes, ' rows/cols'))
   }
   
-  # Initialize using regularized spectral clustering based on row similarity
+  # Initialize using regularized spectral clustering based on row similarity (used densest layer)
   tstart <- Sys.time()
   idxInit <- initialize_index(A[,,which.max(rhoHat)], n_nodes, h, verbose)
   k <- ceiling(n_nodes/h)
