@@ -62,6 +62,7 @@ double Assignment::compute_LSE(){
   double LSE = 0.0;
   double theta_ijl;
   
+  //off-diagonal entries
   for(arma::uword l = 0; l < n_layers; l++){
     for(arma::uword j = 0; j < num_groups(); j++){
       for(arma::uword i = 0; i< num_groups() ; i++){
@@ -70,6 +71,17 @@ double Assignment::compute_LSE(){
       }
     }
   }
+  LSE *= 2.0;
+  //diagonal entries
+  for(arma::uword l = 0; l < n_layers; l++){
+    for(arma::uword i=0; i < num_groups()-1; i++){
+      theta_ijl = clamp_eps(estimated_theta.at(i,i,l));
+      LSE += pow(theta_ijl,2)*group_size.group_number(0);
+    }
+    theta_ijl = clamp_eps(estimated_theta.at(num_groups()-1,num_groups()-1,l));
+    LSE += pow(theta_ijl,2)*group_size.group_number(1);
+  }
+  
   return LSE/(n_nodes*n_nodes);
 }
 void Assignment::copy_labels_theta(const Assignment& other){
@@ -266,12 +278,21 @@ double AssignSingleLayer::compute_LSE(){
   double LSE = 0.0;
   double theta_ij;
   
+  //off-diagonal entries of (A - P_hat)^2
   for(arma::uword j= 0; j< num_groups(); j++){
     for(arma::uword i = j; i < num_groups(); i++){
       theta_ij = clamp_eps(estimated_theta.at(i,j));
       LSE += (pow(theta_ij - 1, 2) * bin_edge_counts.at(i,j)) + (pow(theta_ij,2)*(bin_cell_counts.at(i,j) - bin_edge_counts.at(i,j)));
     }
   }
+  LSE *= 2.0;
+  //diagonal entries
+  for(arma::uword i=0; i < num_groups()-1; i++){
+    theta_ij = clamp_eps(estimated_theta.at(i,i));
+    LSE += pow(theta_ij,2)*group_size.group_number(0);
+  }
+  theta_ij = clamp_eps(estimated_theta.at(num_groups()-1,num_groups()-1));
+  LSE += pow(theta_ij,2)*group_size.group_number(1);
   
   return LSE/(n_nodes*n_nodes);
 }

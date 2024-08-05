@@ -65,8 +65,10 @@ context("Assignment check") {
   test_that("Assignment comparison") {
     // assignF.likelihood == -5.049031
     // assignG.likelihood == -5.004024
-    // assignF.LSE == 1.55556 // if only using upper diagonal part
-    // assignG.LSE == 1.6 // if only using upper diagonal part
+    // assignF.LSE == 1.55556/100 // if only using upper diagonal part
+    // assignG.LSE == 1.6/100 // if only using upper diagonal part
+    // assignF.LSE == 3.444444/100 // if using all entries
+    // assignG.LSE == 3.4/100 // if using all entries
     // mulitnethist
     expect_false(assignF > assignG);
     expect_true(assignF < assignG);
@@ -79,8 +81,8 @@ context("Assignment check") {
     expect_false(assignSL_F > assignSL_G);
     expect_true(assignSL_F < assignSL_G);
     expect_false(assignSL_F == assignSL_G);
-    expect_false(assignSL_F >> assignSL_G);
-    expect_true(assignSL_F << assignSL_G);
+    expect_false(assignSL_F << assignSL_G);
+    expect_true(assignSL_F >> assignSL_G);
     expect_false(assignSL_F == assignSL_G);
   }
   test_that("Assignment method") {
@@ -112,8 +114,10 @@ context("Assignment check") {
     //updateLSE
     assignSL_F2.updateLSE();
     Rcout << assignSL_F2.LSE <<"\n";
-    expect_true(abs(assignSL_F2.LSE - (1.555556)) < 1e-6);
-    expect_true(abs(assignSL_G.LSE - (1.6)) < 1e-6);
+    // expect_true(abs(assignSL_F2.LSE - (1.555556)) < 1e-6);
+    // expect_true(abs(assignSL_G.LSE - (1.6)) < 1e-6);
+    expect_true(abs(assignSL_F2.LSE - 0.03444444) < 1e-6);
+    expect_true(abs(assignSL_G.LSE - 0.034) < 1e-6);
     //copy_labels_theta_LL
     assignF2.copy_labels_theta(assignF);
     expect_true(assignF2==assignF);
