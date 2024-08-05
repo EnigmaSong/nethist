@@ -70,7 +70,7 @@ double Assignment::compute_LSE(){
       }
     }
   }
-  return LSE;
+  return LSE/(n_nodes*n_nodes);
 }
 void Assignment::copy_labels_theta(const Assignment& other){
   //assume no change on bin size
@@ -273,7 +273,7 @@ double AssignSingleLayer::compute_LSE(){
     }
   }
   
-  return LSE;
+  return LSE/(n_nodes*n_nodes);
 }
 void AssignSingleLayer::copy_labels_theta(const AssignSingleLayer& other){
   node_labels = other.node_labels;
