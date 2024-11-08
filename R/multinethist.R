@@ -69,6 +69,7 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
                          consecutive_iter_threshold = 2e4,
                          verbose = FALSE){
   if(!all(apply(A, 3, .is_undirected_simple))) stop("Network A must be an undirected simple network.")
+  method_char <- method
   method <- pmatch(method, c("PLL","LSE")) # PLL = 1, LSE = 2
   if(is.na(method)) stop("method must be one of the followings: PLL, LSE")
   n_nodes <- dim(A)[1]
@@ -119,7 +120,7 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
                  rho_hat = rhoHat,
                  normalized_LL = res$norm_LL,
                  LSE = res$LSE,
-                 method = method,
+                 method = method_char,
                  homogeneous = common_f)
   result <- structure(result, class= ifelse(n_layers > 1, "multinethist", "nethist"))
   return(result)
