@@ -16,7 +16,7 @@
 ##' a heatmap of network histogram or `p_mat` ordered by `idx_order` from ``nethist`` object.
 ##' @import ggplot2
 ##' @examples
-##' \dontrun{
+##' {
 ##' set.seed(42)
 ##' mnets <- rnets_graphon(3, 200, function(x,y) 0.2*pmin(x,y))
 ##' 

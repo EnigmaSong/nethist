@@ -31,6 +31,15 @@
 ##' 
 ##' Note that `cluster` only shows a partition of vertices, and the index labels is not an ordered variable. For example, nodes in cluster 1 do not have to more similar to nodes in cluster 2 than nodes in cluster 10. Hence, users would use a user-specified order in [plot.multinethist()].
 ##' }
+##' @examples
+##' \donttest{
+      set.seed(42)
+      nethist_polblog <- nethist(polblog)
+      nethist_polblog_with_h <- nethist(polblog, h = 72)
+
+      set.seed(42)
+      mnethist_Ind_Vil <- multinethist(IndianVil)
+##' }
 ##' @seealso [plot.multinethist()], [plot.nethist()]
 ##' @references Song, Y. & Olhede. S. C. (2024)
 ##' @references Olhede, S. C. & Wolfe, P. J. (2014). Network Histograms and Universality of Blockmodel Approximation. Proceedings of the National Academy of Sciences, 111(41), 14722-14727. doi:10.1073/pnas.1400374111
@@ -50,6 +59,19 @@ multinethist <- function(A, h = NA, common_f = FALSE,
 } 
 
 ##' @exportS3Method
+multinethist.igraph <-  function(A, h = NA, common_f = FALSE, 
+                                 method = "PLL",
+                                 max_itr = 5e6,
+                                 swap_rule = "random", 
+                                 consecutive_iter_threshold = 2e4,
+                                 verbose = FALSE){
+  return(multinethist.matrix(igraph::as_adjacency_matrix(A), 
+                             h, common_f, method,
+                             max_itr, swap_rule, 
+                             consecutive_iter_threshold, verbose)) 
+}
+
+##' @exportS3Method
 multinethist.matrix <-  function(A, h = NA, common_f = FALSE, 
                                  method = "PLL",
                                  max_itr = 5e6,
@@ -61,6 +83,7 @@ multinethist.matrix <-  function(A, h = NA, common_f = FALSE,
                             max_itr, swap_rule, 
                             consecutive_iter_threshold, verbose)) #should think about the design of code.
 }
+
 ##' @exportS3Method
 multinethist.array <- function(A, h = NA, common_f = FALSE, 
                                method = "PLL",

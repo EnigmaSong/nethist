@@ -20,7 +20,7 @@
 ##' @references Maugis et al. (2017). Topology reveals universal features for network comparison. arXiv: 1705.05677 
 ##' @references Alon et al. (1997). Finding and counting given length cycles. Algorithmica 17, 209–223 (1997). https://doi.org/10.1007/BF02523189
 ##' @examples
-##' \dontrun{
+##' {
 ##' set.seed(2022)
 ##' #Generating Erdos-Renyi graph
 ##' n <- 400

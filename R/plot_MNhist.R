@@ -16,7 +16,7 @@
 ##' @returns 
 ##' a heatmap of network histogram or `p_mat` ordered by `idx_order` from ``nethist`` object.
 ##' @examples
-##' \dontrun{
+##' \donttest{
 ##' set.seed(2022)
 ##' #Generating Erdos-Renyi graph
 ##' A <- array(0, dim=c(200,200,2))

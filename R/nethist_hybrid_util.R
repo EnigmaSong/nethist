@@ -1,5 +1,4 @@
 ##' @noMd
-##' wrapper for kmeans algorithm on network histogram
 hnethist_kmeans <- function(nh, centers){
   vec_thetahat <- c(nh$thetahat)
   cluster <- kmeans(vec_thetahat, centers = centers)

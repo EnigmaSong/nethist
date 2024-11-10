@@ -11,7 +11,7 @@
 ##' @returns 
 ##' a heatmap of network histogram or `thetahat` ordered by `idx_order` from ``multinethist`` object.
 ##' @examples
-##' \dontrun{
+##' {
 ##' set.seed(42)
 ##' mnets <- rnets_graphon(3, 200, function(x,y) 0.2*pmin(x,y))
 ##' 
