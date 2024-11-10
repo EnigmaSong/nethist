@@ -7,8 +7,7 @@ Political blog
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of the dataset. ~~
-Political blog data set from Olhede and Wolfe (2014), which is a pre-processed version of the original data set from Adamic and Glance (2005). The provided igraph object is the zero-degree removed and simplified graph from the edgelist \code{polblog_edgelist}.
-
+A pre-processed version of the Political Blog dataset from Olhede and Wolfe (2014), based on the original data by Adamic and Glance (2005). The provided igraph object represents the graph after removing zero-degree nodes and simplifying the graph structure. The graph is derived from the edge list \code{polblog_edgelist}.
 }
 \usage{
 data(polblog)
