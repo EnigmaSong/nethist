@@ -1,6 +1,6 @@
 set.seed(42)
 data(kite, package="igraphdata")
-kite <- array(igraph::as_adj(igraph::upgrade_graph(kite),sparse=FALSE), dim=c(10,10,1))
+kite <- array(igraph::as_adjacency_matrix(igraph::upgrade_graph(kite),sparse=FALSE), dim=c(10,10,1))
 ## Later remove this if we add this function in another public package
 rnets_graphon<- function(n, num_vertice, graphon_fun, identical_latent_vars=TRUE){
   if(identical_latent_vars){
@@ -38,8 +38,13 @@ for(l in 1:length(sample_mnet)){
   array_mnet_diffrho[,,l] = rnets_graphon(5, 200, function(x,y) (0.25+0.15*l)*pmin(x,y))[[1]]
 }
 
-## Main methods
+## Main methods ----
+### Checking invalide input ----
+# test_that("LSE is not used for multinethist (Temperally)",{
+#     expect_error(multinethist(array_mnet, method = "LSE"))
+# })
 
+### Checking default value in argument ----
 test_that("multinethist (one layer)", {
   expect_no_error(multinethist(kite,h=5, max_itr = 1000))
   expect_no_error(multinethist(kite,h=5, method = "LSE", max_itr = 1000))

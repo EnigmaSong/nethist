@@ -66,7 +66,7 @@ violin_netsummary.igraph<- function(A,
                                      y.max, save.plot, 
                                      filename){
   args <- as.list(environment())
-  args$A<- igraph::as_adj(args$A, sparse = FALSE)
+  args$A<- igraph::as_adjacency_matrix(args$A, sparse = FALSE)
   
   do.call("violin_netsummary.default", args = args)
 }
