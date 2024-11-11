@@ -4,7 +4,8 @@
 \alias{hnethist}
 \title{Hybrid Network histogram estimation}
 \usage{
-hnethist(A, h = NA, method = "LSE", max_itr = 5e6, swap_rule = "random", consecutive_iter_threshold = 2e4, verbose = FALSE)
+hnethist(A, h = NA, method = "LSE", max_itr = 5e6, swap_rule = "random", 
+                consecutive_iter_threshold = 2e4, verbose = FALSE)
 }
 \arguments{
 \item{A}{An adjacency matrix or an igraph object. It must be an undirected and simple graph.}
@@ -22,15 +23,14 @@ hnethist(A, h = NA, method = "LSE", max_itr = 5e6, swap_rule = "random", consecu
 \item{verbose}{logical value indicating whether verbose output is generated.}
 }
 \value{
-If number of layer is greater than 1, it returns an object of class \code{multinethist}:
-
 \itemize{
-\item \code{cluster} a vector of partition indices.
+\item \code{initial} a nethist object from nethist(), which serves as the initial point of block clustering.
+\item \code{blockcluster} A matrix of block partitions, where two blocks with the same index are part of the same cluster.
 \item \code{thetahat} a probability matrix from hybrid network histogram ordered by cluster labels.
 \item \code{rho_hat} a vector of estimated sparsity parameters.
 \item \code{LSE} a LSE of the selected model.
-\item \code{BIC} BIC value of the selected model
-\item \code{details} list of models information: thetahat, LSE, BIC, and the number of shapes.
+\item \code{BIC} BIC value of the selected model.
+\item \code{details} list of models information: kmeans clustering outputs, thetahat, LSE, BIC, and the number of shapes.
 }
 }
 \description{
@@ -38,20 +38,9 @@ Estimating hybrid network histogram for single-layer networks and returning the 
 }
 \details{
 {
-lth layer's multi-network histogram is defined by thetahat/rho_hat. We can plot multinetwork histogram using \code{\link[=plot]{plot()}} and \code{\link[=plot3d]{plot3d()}}.
-
-If the number of layer is 1, then it calls single-layer network histogram. See. nethist() in nethist package.
-
-\code{method} is only used for single-layer networks. \code{method = "PLL"} is for Olhede and Wolfe (2014), and \code{method = "LSE"} is for Gao et al. (2015).
-
-Note that \code{cluster} only shows a partition of vertices, and the index labels is not an ordered variable. For example, nodes in cluster 1 do not have to more similar to nodes in cluster 2 than nodes in cluster 10. Hence, users would use a user-specified order in \code{\link[=plot.multinethist]{plot.multinethist()}}.
+Among the outputs, the best model is selected based on the BIC criterion.
 }
 }
 \references{
-Song, Y. & Olhede. S. C. (2024)
-
 Verdeyme, A. & Olhede. S. C. (2024). Hybrid of Node and Link Communities for Graphon Estimation. arXiv:2401.05088
-}
-\seealso{
-\code{\link[=plot.multinethist]{plot.multinethist()}}, \code{\link[=plot.nethist]{plot.nethist()}}
 }

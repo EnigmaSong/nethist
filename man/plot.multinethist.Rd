@@ -46,23 +46,19 @@ Drawing \code{\link[=heatmap]{heatmap()}} using an \code{multinethist} object wi
 }
 \examples{
 \donttest{
-set.seed(2022)
-#Generating Erdos-Renyi graph
-A <- array(0, dim=c(200,200,2))
-A[,,1] <- igraph::sample_gnp(200, 0.05)
-A[,,2] <- igraph::sample_gnp(200, 0.05)
-hist_A <- multinethist(A)
-plot(hist_A)
+set.seed(42)
+data(IndianVil)
+mnhist_Ind_vil <- multinethist(IndianVil)
 
 #with user-specified order
-idx<- unique(hist_A$cluster) 
-plot(hist_A, idx_order = idx)
+idx<- unique(mnhist_Ind_vil$cluster) 
+plot(mnhist_Ind_vil, idx_order = idx)
 
 #User-speicifc bin color pallete (see [graphical parameters])
-plot(hist_polblog,  idx_order = ind, col = colorRampPalette(colors=c("#FFFFFF","#000000"))(50))
+plot(mnhist_Ind_vil,  idx_order = idx, col = colorRampPalette(colors=c("#FFFFFF","#000000"))(50))
 
 #Users can print p_mat on the plot using user-specific colors
-plot(hist_polblog,  idx_order = ind, prob= TRUE, prob.col = "blue",
+plot(mnhist_Ind_vil,  idx_order = idx, prob= TRUE, prob.col = "blue",
       col = colorRampPalette(colors=c("#FFFFFF","#000000"))(50))
 }
 }

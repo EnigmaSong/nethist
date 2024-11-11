@@ -27,7 +27,7 @@ Imports:
     plot3D
 LinkingTo: Rcpp, RcppArmadillo, testthat
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5.0)
 LazyData: true
 Config/testthat/edition: 3
 URL: https://enigmasong.github.io/nethist/

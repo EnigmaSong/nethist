@@ -18,11 +18,10 @@
 ##' @examples
 ##' {
 ##' set.seed(42)
-##' mnets <- rnets_graphon(3, 200, function(x,y) 0.2*pmin(x,y))
-##' 
-##' mnhist <- multinethist(mnets)
-##' x <- rep(1:2, 100)
-##' summary_plot(mnets, x)
+##' data(polblog)
+##' nethist_polblog <- multinethist(polblog)
+##' x <- factor(c(rep("Liberal",586), rep("Conservative", 638)))
+##' summary_plot(nethist_polblog, x)
 ##' }
 ##' @export
 summary_plot <- function(object, covariate,
@@ -32,6 +31,16 @@ summary_plot <- function(object, covariate,
                           legend_title = NA,
                           stat = "count", position = "stack"){
   UseMethod("summary_plot")
+}
+##' @exportS3Method 
+summary_plot.nethist <- function(object, covariate,
+                                 idx_order = 1:max(object$cluster),
+                                 main = NA,
+                                 ylab = NA,
+                                 legend_title = NA,
+                                 stat = "count", position = "stack"){
+  return(summary_plot.multinethist(object, covariate, idx_order, main, ylab, 
+                                   legend_title, stat, position))
 }
 ##' @exportS3Method 
 summary_plot.multinethist <- function(object, covariate,

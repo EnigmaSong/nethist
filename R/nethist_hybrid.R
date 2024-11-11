@@ -10,30 +10,22 @@
 ##' @param consecutive_iter_threshold an integer for stopping criterion. If the log-likelihood does not improve for the last `consecutive_iter_threshold` iterations, stop the algorithm.
 ##' @param verbose logical value indicating whether verbose output is generated.
 ##' @returns 
-##' If number of layer is greater than 1, it returns an object of class ``multinethist``:
 ##' 
 ##' \itemize{
-##' \item `cluster` a vector of partition indices.
+##' \item `initial` a nethist object from nethist(), which serves as the initial point of block clustering.
+##' \item `blockcluster` A matrix of block partitions, where two blocks with the same index are part of the same cluster.
 ##' \item `thetahat` a probability matrix from hybrid network histogram ordered by cluster labels. 
 ##' \item `rho_hat` a vector of estimated sparsity parameters. 
 ##' \item `LSE` a LSE of the selected model.
-##' \item `BIC` BIC value of the selected model
-##' \item `details` list of models information: thetahat, LSE, BIC, and the number of shapes.
+##' \item `BIC` BIC value of the selected model.
+##' \item `details` list of models information: kmeans clustering outputs, thetahat, LSE, BIC, and the number of shapes.
 ##' }
-##' @usage hnethist(A, h = NA, method = "LSE", max_itr = 5e6, swap_rule = "random", consecutive_iter_threshold = 2e4, verbose = FALSE)
+##' @usage hnethist(A, h = NA, method = "LSE", max_itr = 5e6, swap_rule = "random", 
+##'                 consecutive_iter_threshold = 2e4, verbose = FALSE)
 ##' @details {
-##' lth layer's multi-network histogram is defined by thetahat/rho_hat. We can plot multinetwork histogram using [plot()] and [plot3d()].
-##' 
-##' If the number of layer is 1, then it calls single-layer network histogram. See. nethist() in nethist package.
-##' 
-##' `method` is only used for single-layer networks. `method = "PLL"` is for Olhede and Wolfe (2014), and `method = "LSE"` is for Gao et al. (2015).
-##' 
-##' Note that `cluster` only shows a partition of vertices, and the index labels is not an ordered variable. For example, nodes in cluster 1 do not have to more similar to nodes in cluster 2 than nodes in cluster 10. Hence, users would use a user-specified order in [plot.multinethist()].
+##' Among the outputs, the best model is selected based on the BIC criterion.
 ##' }
-##' @seealso [plot.multinethist()], [plot.nethist()]
-##' @references Song, Y. & Olhede. S. C. (2024)
 ##' @references Verdeyme, A. & Olhede. S. C. (2024). Hybrid of Node and Link Communities for Graphon Estimation. arXiv:2401.05088
-##' @import Rcpp 
 ##' @importFrom stats kmeans
 ##' @export
 
@@ -89,8 +81,10 @@ hnethist.matrix <- function(A, h = NA,
   BICs <- sapply(result$details, function(x) return(x$BIC))
   min_BIC_index <- which.min(BICs)
   
-  result$cluster <- result$details[[min_BIC_index]]$cluster
+  result$blockcluster <- result$details[[min_BIC_index]]$cluster
   result$thetahat <- result$details[[min_BIC_index]]$thetahat
+  result$LSE <- result$details[[min_BIC_index]]$LSE
+  result$rho_hat <- result$initialrho_hat
   
   result <- structure(result, class= "hnethist")
   

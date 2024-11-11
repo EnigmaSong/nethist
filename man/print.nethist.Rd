@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{x}{one of \verb{nethist", }multinethist", and ``hnethist" objects.}
+
+\item{...}{see print()}
 }
 \value{
 Prints the objects

@@ -20,9 +20,9 @@ Nodes with zero degrees across all layers were removed, reducing the total numbe
 }
 \examples{
 
-  data(InvianVil)
+  data(IndianVil)
   
-  InvianVil
+  IndianVil
 
 }
 \references{

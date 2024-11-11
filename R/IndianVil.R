@@ -16,8 +16,8 @@
 #' @keywords datasets
 #' @examples
 #' 
-#'   data(InvianVil)
+#'   data(IndianVil)
 #'   
-#'   InvianVil
+#'   IndianVil
 #' 
 NULL

@@ -57,10 +57,10 @@ idx<- unique(hist_A$cluster)
 plot(hist_A, idx_order = idx)
 
 #User-speicifc bin color pallete (see [graphical parameters])
-plot(hist_polblog,  idx_order = ind, col = colorRampPalette(colors=c("#FFFFFF","#000000"))(50))
+plot(hist_A,  idx_order = idx, col = colorRampPalette(colors=c("#FFFFFF","#000000"))(50))
 
 #Users can print p_mat on the plot using user-specific colors
-plot(hist_polblog,  idx_order = ind, prob= TRUE, prob.col = "blue",
+plot(hist_A,  idx_order = idx, prob= TRUE, prob.col = "blue",
       col = colorRampPalette(colors=c("#FFFFFF","#000000"))(50))
 }
 }

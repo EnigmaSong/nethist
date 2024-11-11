@@ -11,12 +11,11 @@
 ##' @returns 
 ##' a heatmap of network histogram or `thetahat` ordered by `idx_order` from ``multinethist`` object.
 ##' @examples
-##' {
+##' \donttest{
 ##' set.seed(42)
-##' mnets <- rnets_graphon(3, 200, function(x,y) 0.2*pmin(x,y))
-##' 
-##' mnhist <- multinethist(mnets)
-##' plot3d(mnets)
+##' data(IndianVil)
+##' mnhist_Ind_vil <- multinethist(IndianVil)
+##' plot3d(mnhist_Ind_vil)
 ##' }
 ##' @importFrom plot3D hist3D
 ##' @rdname plot3d.multinethist

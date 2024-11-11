@@ -5,9 +5,13 @@
 \alias{nethist}
 \title{Network histogram estimation}
 \usage{
-nethist(A, h = NA, method = "PLL", max_itr = 5e6, swap_rule = "random", consecutive_iter_threshold = 2e4, verbose = FALSE)
+nethist(A, h = NA, method = "PLL", max_itr = 5e6, swap_rule = "random",
 
-multinethist(A, h = NA, common_f = FALSE, method = "PLL", max_itr = 5e6, swap_rule = "random",consecutive_iter_threshold = 2e4, verbose = FALSE)
+consecutive_iter_threshold = 2e4, verbose = FALSE)
+
+multinethist(A, h = NA, common_f = FALSE, method = "PLL", max_itr = 5e6,
+
+swap_rule = "random",consecutive_iter_threshold = 2e4, verbose = FALSE)
 
 nethist(
   A,

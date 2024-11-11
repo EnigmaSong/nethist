@@ -3,6 +3,7 @@
 ##' Printing ``nethist", ``multinethist", and ``hnethist" 
 ##'
 ##' @param x one of ``nethist", ``multinethist", and ``hnethist" objects.
+##' @param ... see print()
 ##' @details 
 ##' ... 
 ##' @returns 

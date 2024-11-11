@@ -25,11 +25,10 @@ Drawing \code{\link[=heatmap]{heatmap()}} using an \code{multinethist} object wi
 ... includes various \code{\link{graphical parameters}} passes to \code{\link[plot3D:persp3D]{plot3D::hist3D()}}, then \code{\link[graphics:image]{graphics::image()}}.
 }
 \examples{
-{
+\donttest{
 set.seed(42)
-mnets <- rnets_graphon(3, 200, function(x,y) 0.2*pmin(x,y))
-
-mnhist <- multinethist(mnets)
-plot3d(mnets)
+data(IndianVil)
+mnhist_Ind_vil <- multinethist(IndianVil)
+plot3d(mnhist_Ind_vil)
 }
 }

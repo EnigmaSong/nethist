@@ -21,8 +21,10 @@
 ##' \item `normalized_LL` a normalized likelihood from the algorithm.
 ##' \item `homogeneous` a logical variable indicating homogeneous multinetwork histogram.
 ##' }
-##' @usage nethist(A, h = NA, method = "PLL", max_itr = 5e6, swap_rule = "random", consecutive_iter_threshold = 2e4, verbose = FALSE)
-##' @usage multinethist(A, h = NA, common_f = FALSE, method = "PLL", max_itr = 5e6, swap_rule = "random",consecutive_iter_threshold = 2e4, verbose = FALSE)
+##' @usage nethist(A, h = NA, method = "PLL", max_itr = 5e6, swap_rule = "random", 
+##' @usage         consecutive_iter_threshold = 2e4, verbose = FALSE)
+##' @usage multinethist(A, h = NA, common_f = FALSE, method = "PLL", max_itr = 5e6, 
+##' @usage              swap_rule = "random",consecutive_iter_threshold = 2e4, verbose = FALSE)
 ##' @details {
 ##' lth layer's multi-network histogram is defined by thetahat/rho_hat. We can plot multinetwork histogram using [plot()] and [plot3d()].
 ##' 

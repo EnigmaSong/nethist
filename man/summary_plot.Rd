@@ -44,10 +44,9 @@ Drawing a bin summary plot of covariates given an \code{multinethist} object wit
 \examples{
 {
 set.seed(42)
-mnets <- rnets_graphon(3, 200, function(x,y) 0.2*pmin(x,y))
-
-mnhist <- multinethist(mnets)
-x <- rep(1:2, 100)
-summary_plot(mnets, x)
+data(polblog)
+nethist_polblog <- multinethist(polblog)
+x <- factor(c(rep("Liberal",586), rep("Conservative", 638)))
+summary_plot(nethist_polblog, x)
 }
 }
