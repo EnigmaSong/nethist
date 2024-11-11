@@ -45,7 +45,7 @@ Drawing \code{\link[=heatmap]{heatmap()}} using an \code{nethist} object with an
 ... includes various \code{\link{graphical parameters}} passes to \code{\link[stats:heatmap]{stats::heatmap()}}, then \code{\link[graphics:image]{graphics::image()}}.
 }
 \examples{
-\dontrun{
+\donttest{
 set.seed(2022)
 #Generating Erdos-Renyi graph
 A <- igraph::sample_gnp(200, 0.05)

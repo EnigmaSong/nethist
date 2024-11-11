@@ -1,6 +1,5 @@
 ##' @rdname multinethist
 ##' @export
-##' 
 nethist<-function(A, h = NA, 
                   method = "PLL",
                   max_itr = 5e6,

@@ -45,7 +45,7 @@ Drawing \code{\link[=heatmap]{heatmap()}} using an \code{multinethist} object wi
 ... includes various \code{\link{graphical parameters}} passes to \code{\link[stats:heatmap]{stats::heatmap()}}, then \code{\link[graphics:image]{graphics::image()}}.
 }
 \examples{
-\dontrun{
+\donttest{
 set.seed(2022)
 #Generating Erdos-Renyi graph
 A <- array(0, dim=c(200,200,2))

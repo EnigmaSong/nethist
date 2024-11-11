@@ -42,7 +42,7 @@ Drawing a bin summary plot of covariates given an \code{multinethist} object wit
 ... includes various \code{\link{graphical parameters}} passes to \code{\link[stats:heatmap]{stats::heatmap()}}, then \code{\link[graphics:image]{graphics::image()}}.
 }
 \examples{
-\dontrun{
+{
 set.seed(42)
 mnets <- rnets_graphon(3, 200, function(x,y) 0.2*pmin(x,y))
 

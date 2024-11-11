@@ -61,6 +61,21 @@ If the number of layer is 1, then it calls single-layer network histogram. See. 
 Note that \code{cluster} only shows a partition of vertices, and the index labels is not an ordered variable. For example, nodes in cluster 1 do not have to more similar to nodes in cluster 2 than nodes in cluster 10. Hence, users would use a user-specified order in \code{\link[=plot.multinethist]{plot.multinethist()}}.
 }
 }
+\examples{
+\donttest{
+   #single-layer network histogram
+   set.seed(42)
+   data(polblog)
+   nethist_polblog <- nethist(polblog)
+   nethist_polblog_with_h <- nethist(polblog, h = 72)
+   
+   #multi-network histogram
+   set.seed(42)
+   data(IndianVil)
+   IndianVil
+   mnethist_Ind_Vil <- multinethist(IndianVil)
+}
+}
 \references{
 Song, Y. & Olhede. S. C. (2024)
 

@@ -2,6 +2,7 @@
 ##'
 ##' Estimating network histogram for multiplex networks and returning the indices of partitions.
 ##'
+##' @name multinethist
 ##' @param A An adjacency array or list of igraph object. It must be an undirected and simple graph.
 ##' @param h A bandwidth parameter. If `NA`, selecting bandwidth by Olhede and Wolfe (2014). If specified, the user input value is used.
 ##' @param common_f a logical variable indicating assume the common network histogram function for all layers.
@@ -33,12 +34,18 @@
 ##' }
 ##' @examples
 ##' \donttest{
-      set.seed(42)
-      nethist_polblog <- nethist(polblog)
-      nethist_polblog_with_h <- nethist(polblog, h = 72)
-
-      set.seed(42)
-      mnethist_Ind_Vil <- multinethist(IndianVil)
+##'    #single-layer network histogram
+##'    set.seed(42)
+##'    data(polblog)
+##.    nethist(polblog)
+##'    nethist_polblog <- nethist(polblog)
+##'    nethist_polblog_with_h <- nethist(polblog, h = 72)
+##'    
+##'    #multi-network histogram
+##'    set.seed(42)
+##'    data(IndianVil)
+##'    IndianVil
+##'    mnethist_Ind_Vil <- multinethist(IndianVil)
 ##' }
 ##' @seealso [plot.multinethist()], [plot.nethist()]
 ##' @references Song, Y. & Olhede. S. C. (2024)
@@ -48,7 +55,6 @@
 ##' @importFrom stats .lm.fit dist pnorm weighted.mean
 ##' @importFrom RSpectra eigs
 ##' @export
-
 multinethist <- function(A, h = NA, common_f = FALSE, 
                          method = "PLL",
                          max_itr = 5e6,

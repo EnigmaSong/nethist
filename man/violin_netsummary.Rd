@@ -47,7 +47,7 @@ Vertex sampling is done by simple random sampling without replacement.
 Following matrix classes are supported: \link[base:matrix]{base::matrix}, \link[Matrix:dgCMatrix-class]{Matrix::dgCMatrix}
 }
 \examples{
-\dontrun{
+{
 set.seed(2022)
 #Generating Erdos-Renyi graph
 n <- 400
