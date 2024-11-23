@@ -99,6 +99,7 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
                          swap_rule = "random", 
                          consecutive_iter_threshold = 2e4,
                          verbose = FALSE){
+  if(!is.array(A)) stop("A is not supported object")
   if(!all(apply(A, 3, .is_undirected_simple))) stop("Network A must be an undirected simple network.")
   method_char <- method
   method <- pmatch(method, c("PLL","LSE")) # PLL = 1, LSE = 2
@@ -157,3 +158,13 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
   return(result)
 }
 
+##' @exportS3Method
+multinethist.default <- function(A, h = NA, common_f = FALSE, 
+                                         method = "PLL",
+                                         max_itr = 5e6,
+                                         swap_rule = "random", 
+                                         consecutive_iter_threshold = 2e4,
+                                         verbose = FALSE){
+  args <- ls()
+  do.call(multinethist.array, args)
+}

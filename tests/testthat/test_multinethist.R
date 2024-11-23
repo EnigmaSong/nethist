@@ -39,10 +39,24 @@ for(l in 1:length(sample_mnet)){
 }
 
 ## Main methods ----
-### Checking invalide input ----
+### Checking invalid input ----
 # test_that("LSE is not used for multinethist (Temperally)",{
 #     expect_error(multinethist(array_mnet, method = "LSE"))
 # })
+test_that("non-simple graph input for A (self-loop)", {
+  A <- kite
+  A[1,1,1] <- 1
+  expect_error(multinethist(A))
+})
+test_that("non-simple graph input for A (asymmetric)", {
+  A <- kite
+  A[1,2,1] <- 1; A[2,1,1] <- 0
+  expect_error(multinethist(A))
+})
+test_that("A is not supported object", {
+  A <- structure(list(kite[,,1]), class = "test_object")
+  expect_error(multinethist(A))
+})
 
 ### Checking default value in argument ----
 test_that("multinethist (one layer)", {
