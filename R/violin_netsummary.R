@@ -145,8 +145,9 @@ auto_select_subsample_sizes <- function(A, Ns, k_max, R, alpha=0.05, delta){
   s_star <- min(max(k_max + 1, min(floor(n/4), 3*(k_max+1))), n)/(1+delta)
   K_set <- 2:k_max
   s_max <- n
-
+  print(ceiling(log(n)/log(1+delta)))
   for(i in 1:ceiling(log(n)/log(1+delta))){
+    print(paste0(i,"th iteration for auto selection"))
     s_star <- min(ceiling((1+delta)*s_star), n)
     t_k <- .net_summary_subsample_adj(A = A, subsample_sizes = s_star,
                                      max_cycle_order = k_max, R = R)
@@ -174,5 +175,3 @@ auto_select_subsample_sizes <- function(A, Ns, k_max, R, alpha=0.05, delta){
 
   return(subsample_sizes)
 }
-
-globalVariables(c("variable","value"))
