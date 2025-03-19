@@ -3,6 +3,7 @@
 S3method(hnethist,igraph)
 S3method(hnethist,matrix)
 S3method(multinethist,array)
+S3method(multinethist,default)
 S3method(multinethist,igraph)
 S3method(multinethist,matrix)
 S3method(nethist,default)
