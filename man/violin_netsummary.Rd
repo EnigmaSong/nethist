@@ -13,7 +13,9 @@ violin_netsummary(
   alpha = 0.05,
   y.max = NA,
   save.plot = FALSE,
-  filename = "myplot.pdf"
+  filename = "myplot.pdf",
+  width = 7,
+  height = 5
 )
 }
 \arguments{
@@ -34,6 +36,10 @@ violin_netsummary(
 \item{save.plot}{logical variable whether save the generated figure or not. If \code{TRUE}, the plot is saved by \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} in the specified file name. Otherwise, display the generated plot.}
 
 \item{filename}{file name to save the generated figure.}
+
+\item{width}{a numeric value of the width of the generated figure in inch. It is only used when \code{save.plot = TRUE}.}
+
+\item{height}{a numeric value of the height of the generated figure in inch. It is only used when \code{save.plot = TRUE}.}
 }
 \value{
 A network summary plot, and a data.frame about the networks summaries.
@@ -70,7 +76,9 @@ violin_netsummary(A, R = 500, subsample_sizes = 150)
 violin_netsummary(A, alpha = 0.1)
 
 #saving the plot with user-specified file name
+\dontrun{
 violin_netsummary(A, save.plot = TRUE, filename = "myfig.pdf")
+}
 }
 }
 \references{

@@ -11,6 +11,8 @@
 ##' @param y.max Upper limit of y-axis of the plot. Must be 0 < `y.max` <= 1. If `NA`, the upper limit is automatically selected.
 ##' @param save.plot logical variable whether save the generated figure or not. If `TRUE`, the plot is saved by [ggplot2::ggsave()] in the specified file name. Otherwise, display the generated plot.
 ##' @param filename file name to save the generated figure. 
+##' @param width a numeric value of the width of the generated figure in inch. It is only used when `save.plot = TRUE`.
+##' @param height a numeric value of the height of the generated figure in inch. It is only used when `save.plot = TRUE`.
 ##' @return 
 ##' A network summary plot, and a data.frame about the networks summaries.
 ##' @details 
@@ -43,7 +45,9 @@
 ##' violin_netsummary(A, alpha = 0.1)
 ##'
 ##' #saving the plot with user-specified file name
+##' \dontrun{
 ##' violin_netsummary(A, save.plot = TRUE, filename = "myfig.pdf")
+##' }
 ##' }
 ##' @importFrom ggtext element_markdown
 ##' @import png 
@@ -55,7 +59,8 @@ violin_netsummary <- function(A,
                               R=NA, 
                               Ns = 11, alpha = 0.05,
                               y.max=NA, save.plot = FALSE, 
-                              filename = "myplot.pdf"){
+                              filename = "myplot.pdf", 
+                              width = 7, height = 5){
   UseMethod("violin_netsummary")
 }
 ##' @exportS3Method
@@ -64,7 +69,7 @@ violin_netsummary.igraph<- function(A,
                                      max_cycle_order, 
                                      R, Ns, alpha,
                                      y.max, save.plot, 
-                                     filename){
+                                     filename, width, height){
   args <- as.list(environment())
   args$A<- igraph::as_adjacency_matrix(args$A, sparse = FALSE)
   
@@ -77,7 +82,7 @@ violin_netsummary.matrix<- function(A,
                                     max_cycle_order, 
                                     R, Ns, alpha,
                                     y.max, save.plot, 
-                                    filename){
+                                    filename, width, height){
   args <- as.list(environment())
   do.call("violin_netsummary.default", args = args)
 }
@@ -88,7 +93,7 @@ violin_netsummary.dgCMatrix<- function(A,
                                     max_cycle_order, 
                                     R, Ns, alpha,
                                     y.max, save.plot, 
-                                    filename){
+                                    filename, width, height){
   args <- as.list(environment())
   args$A <- as.matrix(args$A)
   do.call("violin_netsummary.default", args = args)
@@ -100,7 +105,7 @@ violin_netsummary.default<- function(A,
                                      max_cycle_order = 4, 
                                      R=NA, Ns = 11, alpha = 0.05,
                                      y.max=NA, save.plot = FALSE, 
-                                     filename = "myplot.pdf"){
+                                     filename = "myplot.pdf", width = 7, height = 5){
   if(!.is_undirected_simple(A)) stop("Network A must be an undirected simple network.")
   
   if((max_cycle_order < 3)|(max_cycle_order%%1 != 0)){
@@ -127,51 +132,21 @@ violin_netsummary.default<- function(A,
   if(is.na(y.max)){
     y.max <- max(result)
   }
-
-  suppressMessages(result <- reshape2::melt(data.frame(result)))
-  p <- ggplot2::ggplot(result, ggplot2::aes(variable, value))
-  p <- p + ggplot2::geom_violin() + ggplot2::ylim(0,y.max) + ggplot2::ylab("Prevalence and local variability") + ggplot2::xlab("")
+  
+  result <- data.frame(result)
+  melt_result <- suppressMessages(reshape2::melt(result, 
+                           value.name= "summaries", variable.name= "subgraphs"))
+  xlabels <- get_netsummary_xlables(max_cycle_order)
+  p <- ggplot2::ggplot(melt_result, ggplot2::aes(.data$subgraphs, .data$summaries))
+  p <- p + ggplot2::geom_violin() + ggplot2::ylim(0,y.max) 
+  p <- p + ggplot2::ylab("Prevalence and local variability") 
+  p <- p + ggplot2::scale_x_discrete(name=NULL, labels=xlabels)
+  p <- p + ggplot2::theme(axis.text.x=ggtext::element_markdown(color="black",size=rel(1)))
+  
   if(save.plot){
-    ggplot2::ggsave(filename,width = 7, height = 5, unit = "in")
+    ggplot2::ggsave(filename,width = width, height = height, unit = "in")
   }else{
     print(p)
   }
   return(invisible(result))
-}
-
-auto_select_subsample_sizes <- function(A, Ns, k_max, R, alpha=0.05, delta){
-  n <- dim(A)[1]
-
-  s_star <- min(max(k_max + 1, min(floor(n/4), 3*(k_max+1))), n)/(1+delta)
-  K_set <- 2:k_max
-  s_max <- n
-  print(ceiling(log(n)/log(1+delta)))
-  for(i in 1:ceiling(log(n)/log(1+delta))){
-    print(paste0(i,"th iteration for auto selection"))
-    s_star <- min(ceiling((1+delta)*s_star), n)
-    t_k <- .net_summary_subsample_adj(A = A, subsample_sizes = s_star,
-                                     max_cycle_order = k_max, R = R)
-    #Check summary separated from 0
-    R_cols <- apply(t_k,2,function(x) sum(!is.na(x)))
-    colSums_t_k <- colSums(t_k, na.rm=TRUE)
-    colSums_t_k_square <- colSums(t_k^2, na.rm=TRUE)
-    p_k_numer <- 1/R*colSums_t_k
-    p_k_denom <- sqrt(1/(R_cols-1)*colSums_t_k_square - 1/(R_cols*(R_cols-1))*(colSums_t_k)^2)
-    p_k_denom[which(p_k_denom==0)] <- 1 #denominator is 0 iff all t_k are zero.
-    p_k <- pnorm(p_k_numer/p_k_denom, lower.tail = FALSE)
-    p <- max(p_k[K_set-1]) #quantify least-separated summary
-
-    if((p <= alpha/(k_max-1))|(s_star >= s_max)){
-      if(s_max == floor(0.8*n)){
-        subsample_sizes <- round(seq(0.9,1.1, length.out = Ns)*s_star)
-        #Reset and halt
-        return(subsample_sizes)
-      }
-      s_star <- min(max(k_max + 1, min(floor(n/4), 3*(k_max+1))), n)/(1+delta)
-      K_set <- K_set[p_k < 1/2] #ignore all-zero summaries
-      s_max <- floor(0.8*n) #restrict maximum subgraph size
-    }
-  }
-
-  return(subsample_sizes)
 }

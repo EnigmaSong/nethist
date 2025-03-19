@@ -7,3 +7,5 @@
 ^reference\.bib$
 ^\.github$
 ^LICENSE\.md$
+^myfig.pdf$
+^\.DS_Store$
