@@ -59,7 +59,7 @@ test_that("A is not supported object", {
 })
 
 ### Checking default value in argument ----
-test_that("multinethist (one layer)", {
+test_that("multinethist (one layer, both PLL/LSE)", {
   expect_no_error(multinethist(kite,h=5, max_itr = 1000))
   expect_no_error(multinethist(kite,h=5, method = "LSE", max_itr = 1000))
 })
