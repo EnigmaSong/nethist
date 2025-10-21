@@ -64,12 +64,12 @@ test_that("multinethist (one layer)", {
   expect_no_error(multinethist(kite,h=5, method = "LSE", max_itr = 1000))
 })
 
-test_that("multinethist (5-layers)", {
+test_that("multinethist (general/homogeneous, 5-layers)", {
   expect_no_error(multinethist(array_mnet, max_itr = 1000))
   expect_no_error(multinethist(array_mnet,common_f=TRUE, max_itr = 1000))
 })
 
-test_that("multinethist (5-layers w/ different sparsity)", {
+test_that("multinethist (general/homogeneous, 5-layers w/ different sparsity)", {
   expect_no_error(multinethist(array_mnet_diffrho, max_itr = 1000))
   expect_no_error(multinethist(array_mnet_diffrho,common_f=TRUE, max_itr = 1000))
 })
