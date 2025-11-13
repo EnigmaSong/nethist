@@ -127,6 +127,29 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
     message(paste0('Adjacency matrix has ', n_nodes, ' rows/cols'))
   }
   
+  if(n_nodes == h){
+    message(paste("Bandwidth h=", h, "and number of nodes=",n_nodes,"are equal. Return theta_hat = rho_n",sep =" "))
+    if(n_layers == 1){
+      Log_Likelihood <- log(1-rhoHat)*(n_nodes*(n_nodes-1)/2) + log(rhoHat/(1-rhoHat))*(sum(A)/2)
+      LSE <- sum((A-rhoHat)^2)
+    }else{
+      Log_Likelihood <- 0
+      LSE <- 0
+      for(l in 1:n_layers){
+        Log_Likelihood <- Log_Likelihood + log(1-rhoHat[l])*(n_nodes*(n_nodes-1)/2) + log(rhoHat[l]/(1-rhoHat[l]))*(sum(A[,,l])/2)
+        LSE <- sum((A[,,l]-rhoHat[l])^2)
+      }
+    }
+    result <- list(cluster = rep(1, n_nodes), 
+                   thetahat =  rhoHat,
+                   rho_hat = rhoHat,
+                   normalized_LL = Log_Likelihood/(sum(A)/2),
+                   LSE = LSE/n_nodes^2,
+                   method = method_char,
+                   homogeneous = common_f)
+    result <- structure(result, class= ifelse(n_layers > 1, "multinethist", "nethist"))
+    return(result)
+  }
   # Initialize using regularized spectral clustering based on row similarity (used densest layer)
   tstart <- Sys.time()
   idxInit <- initialize_index(A[,,which.max(rhoHat)], n_nodes, h, verbose)
