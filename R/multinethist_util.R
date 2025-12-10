@@ -18,8 +18,8 @@ Rind_to_Cind <- function(x){
   return(x-1);
 }
 
-#estimate M
-estim_M <- function(A, type, MoreArgs){
+#estimate M^2
+estim_MSqrd <- function(A, type, MoreArgs){
   n <- MoreArgs$n
   rhoHat_inv <- MoreArgs$rhoHat_inv
   

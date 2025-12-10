@@ -15,11 +15,11 @@
   midPt <- seq(round(n/2-c*sqrt(n),0), round(n/2+c*sqrt(n),0))
   rhoHat_inv <- ginv(rhoHat)
   sampleSize <- n*(n-1)/2
-  estMSqrd <- rep(0,L)
+  estMSqrd <- rep(0,L) #estmate of M^2
   
   #Rank-1 graphon estimate via fhat(x,y) = mult*u(x)*u(y)*pinv(rhoHat);
   for(l in 1:L){
-    estMSqrd[l] <- estim_M(A[,,l], type, 
+    estMSqrd[l] <- estim_MSqrd(A[,,l], type, 
                            MoreArgs = list(n = n, midPt = midPt, 
                                            rhoHat_inv = rhoHat_inv[l]))
   }
@@ -30,7 +30,7 @@
   wmean_estMSqrd <- weighted.mean(estMSqrd, weigths)
   mean_inv_edgenum <- mean(1/(sampleSize*rhoHat))
   h <- ifelse(common_f,
-              sqrt(n)*(2*mean_estMSqrd^2*sum(rhoHat))^(-0.25),
+              sqrt(n)*(2*mean_estMSqrd*sum(rhoHat))^(-0.25),
               sqrt(n)*(2*mean(estMSqrd*rhoHat))^(-0.25)
   )
   
