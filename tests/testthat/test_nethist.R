@@ -1,44 +1,126 @@
-# G<-igraph::sample_gnp(100, p = 0.1)
-# h_used <- 10
-# 
-# hist_G <- nethist(G, h = h_used)
-# bin_size <- table(hist_G$cluster)
-# num_bins <- length(bin_size)
-# 
-# test_that("Check any error when the input is igraph",
-#           {
-#             expect_no_error(nethist(G, h = h_used))
-#           }
-# )
-# 
-# test_that("Check any error when the input is sparse matrix",
-#           {
-#             expect_no_error(nethist(igraph::as_adj(G), h = h_used))
-#           }
-# )
-# 
-# test_that("Check any error when the input is dense matrix",
-#           {
-#             expect_no_error(nethist(igraph::as_adj(G, sparse = FALSE), h = h_used))
-#           }
-# )
-# 
-# test_that("Check the estimated probablity matrix is symmetric",
-#           {
-#             expect_equal(isSymmetric(hist_G$p_mat), expected = TRUE)
-#           }
-# )
-# 
-# test_that("Check the size of bin is equal to h_used (except the last group)",
-#           {
-#             
-#             expect_equal(all(bin_size[num_bins-1] == h_used), expected = TRUE)
-#           }
-# )
-# 
-# test_that("Check rho_hat is between 0 and 1",
-#           {
-#             
-#             expect_true((hist_G$rho_hat <=1)&(hist_G$rho_hat>=0))
-#           }
-# )
+# Tests for nethist()
+
+set.seed(42)
+G        <- igraph::sample_gnp(100, p = 0.1)
+A_dense  <- igraph::as_adj(G, sparse = FALSE)
+A_sparse <- igraph::as_adj(G)
+h_used   <- 10
+
+## Input validation ----
+test_that("self-loop input errors", {
+  A <- A_dense
+  A[1, 1] <- 1
+  expect_error(nethist(A))
+})
+
+test_that("asymmetric matrix input errors", {
+  A <- A_dense
+  A[1, 2] <- 1; A[2, 1] <- 0
+  expect_error(nethist(A))
+})
+
+test_that("non-matrix input errors", {
+  expect_error(nethist(list()))
+})
+
+test_that("invalid method errors", {
+  expect_error(nethist(G, h = h_used, method = "foo"))
+})
+
+## Valid input types ----
+test_that("igraph input works", {
+  expect_no_error(nethist(G, h = h_used))
+})
+
+test_that("dense matrix input works", {
+  expect_no_error(nethist(A_dense, h = h_used))
+})
+
+test_that("sparse matrix input works", {
+  expect_no_error(nethist(A_sparse, h = h_used))
+})
+
+## Output structure ----
+hist_G <- nethist(G, h = h_used)
+
+test_that("return class is nethist", {
+  expect_s3_class(hist_G, "nethist")
+})
+
+test_that("required fields present", {
+  expect_named(hist_G,
+               c("cluster", "thetahat", "rho_hat", "normalized_LL",
+                 "LSE", "method", "homogeneous"),
+               ignore.order = TRUE)
+})
+
+test_that("thetahat is symmetric", {
+  expect_equal(hist_G$thetahat, t(hist_G$thetahat))
+})
+
+test_that("thetahat entries are in [0, 1]", {
+  expect_true(all(hist_G$thetahat >= 0))
+  expect_true(all(hist_G$thetahat <= 1))
+})
+
+test_that("rho_hat is in [0, 1]", {
+  expect_true(hist_G$rho_hat >= 0)
+  expect_true(hist_G$rho_hat <= 1)
+})
+
+test_that("cluster vector length matches number of nodes", {
+  expect_equal(length(hist_G$cluster), igraph::vcount(G))
+})
+
+test_that("cluster labels are positive integers up to k", {
+  k <- max(hist_G$cluster)
+  expect_true(all(hist_G$cluster %in% seq_len(k)))
+})
+
+test_that("all cluster labels appear at least once", {
+  k <- max(hist_G$cluster)
+  expect_equal(sort(unique(hist_G$cluster)), seq_len(k))
+})
+
+test_that("thetahat dimensions equal number of clusters", {
+  k <- max(hist_G$cluster)
+  expect_equal(dim(hist_G$thetahat), c(k, k))
+})
+
+test_that("method field is 'PLL' by default", {
+  expect_equal(hist_G$method, "PLL")
+})
+
+test_that("method field is 'LSE' when specified", {
+  hist_lse <- nethist(G, h = h_used, method = "LSE")
+  expect_equal(hist_lse$method, "LSE")
+})
+
+## Bandwidth ----
+test_that("auto bandwidth selection (h = NA) works", {
+  expect_no_error(nethist(G))
+})
+
+test_that("bin sizes do not exceed h (except the last bin)", {
+  bin_size <- as.integer(table(hist_G$cluster))
+  bin_size_excl_last <- sort(bin_size)[-length(bin_size)]
+  expect_true(all(bin_size_excl_last <= h_used))
+})
+
+## Methods ----
+test_that("default method equals explicit PLL", {
+  expect_equal({set.seed(42); nethist(G, h = h_used)},
+               {set.seed(42); nethist(G, h = h_used, method = "PLL")})
+})
+
+## Reproducibility ----
+test_that("same seed gives identical results", {
+  expect_equal({set.seed(1); nethist(G, h = h_used)},
+               {set.seed(1); nethist(G, h = h_used)})
+})
+
+## Edge case: n == h ----
+test_that("n == h (single-bin) returns without error", {
+  n <- igraph::vcount(G)
+  expect_no_error(nethist(G, h = n))
+})
