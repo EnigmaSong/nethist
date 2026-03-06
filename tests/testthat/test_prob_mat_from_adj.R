@@ -31,5 +31,6 @@ test_that("diagonal entries are consistent with within-group edge rates", {
 
 test_that("result is consistent with thetahat from nethist", {
   # .prob_mat_from_adj should agree with nethist's thetahat (which is the same computation)
-  expect_equal(p_mat, hist_A$thetahat, tolerance = 1e-10)
+  # unname() because .prob_mat_from_adj sets dimnames but thetahat does not
+  expect_equal(unname(p_mat), hist_A$thetahat, tolerance = 1e-10)
 })
