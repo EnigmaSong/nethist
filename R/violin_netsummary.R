@@ -31,11 +31,11 @@
 ##' violin_netsummary(A)
 ##' 
 ##' #sparse adjacency matrix
-##' A2 <- igraph::as_adj(A)
+##' A2 <- igraph::as_adjacency_matrix(A)
 ##' violin_netsummary(A2)
 ##' 
 ##' #dense adjacency matrix
-##' A2 <- igraph::as_adj(A, sparse = FALSE)
+##' A2 <- igraph::as_adjacency_matrix(A, sparse = FALSE)
 ##' violin_netsummary(A2)
 ##' 
 ##' #user-specified R and subsample_sizes

@@ -1,7 +1,7 @@
 # Tests for .prob_mat_from_adj()
 
 set.seed(42)
-A      <- igraph::as_adj(igraph::sample_gnp(100, 0.1), sparse = FALSE)
+A      <- igraph::as_adjacency_matrix(igraph::sample_gnp(100, 0.1), sparse = FALSE)
 hist_A <- nethist(A, h = 10)
 
 p_mat <- .prob_mat_from_adj(A, hist_A$cluster)

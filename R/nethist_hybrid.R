@@ -84,7 +84,7 @@ hnethist.matrix <- function(A, h = NA,
   result$blockcluster <- result$details[[min_BIC_index]]$cluster
   result$thetahat <- result$details[[min_BIC_index]]$thetahat
   result$LSE <- result$details[[min_BIC_index]]$LSE
-  result$rho_hat <- result$initialrho_hat
+  result$rho_hat <- result$initial$rho_hat
   
   result <- structure(result, class= "hnethist")
   

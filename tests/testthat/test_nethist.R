@@ -2,8 +2,8 @@
 
 set.seed(42)
 G        <- igraph::sample_gnp(100, p = 0.1)
-A_dense  <- igraph::as_adj(G, sparse = FALSE)
-A_sparse <- igraph::as_adj(G)
+A_dense  <- igraph::as_adjacency_matrix(G, sparse = FALSE)
+A_sparse <- igraph::as_adjacency_matrix(G)
 h_used   <- 10
 
 ## Input validation ----

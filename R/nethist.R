@@ -17,7 +17,7 @@ nethist.igraph<-function(A, h = NA,
                          consecutive_iter_threshold = 2e4,
                          verbose = FALSE){
   args <- as.list(environment())
-  args$A <- igraph::as_adj(args$A, sparse = FALSE)
+  args$A <- igraph::as_adjacency_matrix(args$A, sparse = FALSE)
   do.call("nethist.default", args)
 }
 ##' @exportS3Method
