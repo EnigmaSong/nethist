@@ -4,7 +4,7 @@
 ##'
 ##' @param x a multinethist object from [multinethist()].
 ##' @param y a dummy variable. It does not affect to the plot.
-##' @param idx_order A numeric vector for index label order, which must be a permutation of `x$cluster`. If `NA`, it uses `1:max(x$clsuter)`. 
+##' @param idx_order A numeric vector for index label order, which must be a permutation of `x$cluster`. If `NA`, it uses `1:max(x$cluster)`. 
 ##' @param type One of `MNhist` or `prob`.
 ##' @param prob A logical variable indicating block probabilities are printed on the plot. Default is FALSE.
 ##' @param digits integer indicating the number of decimal places for probability
@@ -25,7 +25,7 @@
 ##' idx<- unique(mnhist_Ind_vil$cluster) 
 ##' plot(mnhist_Ind_vil, idx_order = idx)
 ##' 
-##' #User-speicifc bin color pallete (see [graphical parameters])
+##' #User-specific bin color pallete (see [graphical parameters])
 ##' plot(mnhist_Ind_vil,  idx_order = idx, col = colorRampPalette(colors=c("#FFFFFF","#000000"))(50))
 ##' 
 ##' #Users can print p_mat on the plot using user-specific colors
@@ -35,8 +35,7 @@
 ##' @importFrom stats heatmap
 ##' @importFrom graphics text
 ##' @rdname plot.multinethist
-##' @exportS3Method 
-##' @export
+##' @exportS3Method
 plot.multinethist <- function(x, y= NA, type = "MNhist",
                          idx_order = 1:max(x$cluster), 
                          prob = FALSE, digits = 2,

@@ -21,10 +21,12 @@
 ##' \item `normalized_LL` a normalized likelihood from the algorithm.
 ##' \item `homogeneous` a logical variable indicating homogeneous multinetwork histogram.
 ##' }
-##' @usage nethist(A, h = NA, method = "PLL", max_itr = 5e6, swap_rule = "random", 
-##' @usage         consecutive_iter_threshold = 2e4, verbose = FALSE)
-##' @usage multinethist(A, h = NA, common_f = FALSE, method = "PLL", max_itr = 5e6, 
-##' @usage              swap_rule = "random",consecutive_iter_threshold = 2e4, verbose = FALSE)
+##' @usage nethist(A, h = NA, method = "PLL", max_itr = 5e6,
+##'   swap_rule = "random", consecutive_iter_threshold = 2e4,
+##'   verbose = FALSE)
+##' @usage multinethist(A, h = NA, common_f = FALSE, method = "PLL",
+##'   max_itr = 5e6, swap_rule = "random",
+##'   consecutive_iter_threshold = 2e4, verbose = FALSE)
 ##' @details {
 ##' lth layer's multi-network histogram is defined by thetahat/rho_hat. We can plot multinetwork histogram using [plot()] and [plot3d()].
 ##' 
@@ -39,7 +41,7 @@
 ##'    #single-layer network histogram
 ##'    set.seed(42)
 ##'    data(polblog)
-##.    nethist(polblog)
+##'    nethist(polblog)
 ##'    nethist_polblog <- nethist(polblog)
 ##'    nethist_polblog_with_h <- nethist(polblog, h = 72)
 ##'    
@@ -50,9 +52,9 @@
 ##'    mnethist_Ind_Vil <- multinethist(IndianVil)
 ##' }
 ##' @seealso [plot.multinethist()], [plot.nethist()]
-##' @references Song, Y. & Olhede. S. C. (2024)
+##' @references Song, Y. & Olhede, S. C. (2026+). Graph Limits for Sparse Multilayer Networks.
 ##' @references Olhede, S. C. & Wolfe, P. J. (2014). Network Histograms and Universality of Blockmodel Approximation. Proceedings of the National Academy of Sciences, 111(41), 14722-14727. doi:10.1073/pnas.1400374111
-##' @references #' Gao, C., Lu, Y., & Zhou, H. H. (2015). Rate-Optimal Graphon Estimation. The Annals of Statistics, 43(6), 2624-2652. doi:10.1214/15-AOS1354
+##' @references Gao, C., Lu, Y., & Zhou, H. H. (2015). Rate-Optimal Graphon Estimation. The Annals of Statistics, 43(6), 2624-2652. doi:10.1214/15-AOS1354
 ##' @import Rcpp
 ##' @importFrom stats .lm.fit dist pnorm weighted.mean
 ##' @importFrom RSpectra eigs
@@ -73,7 +75,7 @@ multinethist.igraph <-  function(A, h = NA, common_f = FALSE,
                                  swap_rule = "random", 
                                  consecutive_iter_threshold = 2e4,
                                  verbose = FALSE){
-  return(multinethist.matrix(igraph::as_adjacency_matrix(A), 
+  return(multinethist.matrix(igraph::as_adjacency_matrix(A, sparse = FALSE),
                              h, common_f, method,
                              max_itr, swap_rule, 
                              consecutive_iter_threshold, verbose)) 
@@ -100,12 +102,20 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
                          consecutive_iter_threshold = 2e4,
                          verbose = FALSE){
   if(!is.array(A)) stop(paste0("A is not supported object:", class(A)))
-  if(!all(apply(A, 3, .is_undirected_simple))) stop("Network A must be an undirected simple network.")
+  n_nodes <- dim(A)[1]
+  n_layers <- dim(A)[3]
+  for(l in seq_len(n_layers)) {
+    A_l <- A[, , l]
+    if(any(diag(A_l) != 0))
+      stop(paste0("Layer ", l, ": A has self-loops. Network A must be a simple graph (no self-loops)."))
+    if(!isSymmetric(unname(A_l)))
+      stop(paste0("Layer ", l, ": A is not symmetric. Network A must be an undirected graph."))
+    if(any(A_l[A_l != 0] != 1))
+      stop(paste0("Layer ", l, ": A is not a simple graph. All non-zero entries must be 1 (binary adjacency matrix)."))
+  }
   method_char <- method
   method <- pmatch(method, c("PLL","LSE")) # PLL = 1, LSE = 2
   if(is.na(method)) stop("method must be one of the followings: PLL, LSE")
-  n_nodes <- dim(A)[1]
-  n_layers <- dim(A)[3]
   swap_rule <- pmatch(swap_rule, c("random"))
   if(is.na(swap_rule)) stop("swap_rule must be one of the followings: random")
   
@@ -137,7 +147,7 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
       LSE <- 0
       for(l in 1:n_layers){
         Log_Likelihood <- Log_Likelihood + log(1-rhoHat[l])*(n_nodes*(n_nodes-1)/2) + log(rhoHat[l]/(1-rhoHat[l]))*(sum(A[,,l])/2)
-        LSE <- sum((A[,,l]-rhoHat[l])^2)
+        LSE <- LSE + sum((A[,,l]-rhoHat[l])^2)
       }
     }
     result <- list(cluster = rep(1, n_nodes), 
@@ -188,6 +198,6 @@ multinethist.default <- function(A, h = NA, common_f = FALSE,
                                          swap_rule = "random", 
                                          consecutive_iter_threshold = 2e4,
                                          verbose = FALSE){
-  args <- ls()
+  args <- as.list(environment())
   do.call(multinethist.array, args)
 }

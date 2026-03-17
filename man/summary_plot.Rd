@@ -20,7 +20,7 @@ summary_plot(
 
 \item{covariate}{a vector for univariate covariate. If it is factor, draw a stacked barchart. If it is numeric, draw a violin plot.}
 
-\item{idx_order}{A numeric vector for index label order, which must be a permutation of \code{object$cluster}. If \code{NA}, it uses \code{1:max(object$clsuter)}.}
+\item{idx_order}{A numeric vector for index label order, which must be a permutation of \code{object$cluster}. If \code{NA}, it uses \code{1:max(object$cluster)}.}
 
 \item{main}{title of summary plot. If NA, the plot has no title.}
 
@@ -33,13 +33,14 @@ summary_plot(
 \item{position}{variables pass to \code{\link[ggplot2:geom_bar]{ggplot2::geom_bar()}}. Only used for a factor covariate.}
 }
 \value{
-a heatmap of network histogram or \code{p_mat} ordered by \code{idx_order} from \code{nethist} object.
+A \code{ggplot} object. Printed as a side effect. Returns the plot invisibly.
 }
 \description{
 Drawing a bin summary plot of covariates given an \code{multinethist} object with an user-specified order.
 }
 \details{
-... includes various \code{\link{graphical parameters}} passes to \code{\link[stats:heatmap]{stats::heatmap()}}, then \code{\link[graphics:image]{graphics::image()}}.
+When \code{covariate} is a factor, a stacked bar chart is drawn with bins ordered by \code{idx_order}.
+When \code{covariate} is numeric, a violin plot is drawn.
 }
 \examples{
 {

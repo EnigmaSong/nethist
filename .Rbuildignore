@@ -9,3 +9,8 @@
 ^LICENSE\.md$
 ^myfig.pdf$
 ^\.DS_Store$
+^data-raw$
+^\.claude$
+^data/arxiv$
+^doc$
+^Meta$

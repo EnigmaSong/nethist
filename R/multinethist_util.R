@@ -7,10 +7,7 @@ ginv <- function(x){
   return(x)
 }
 
-# checking index order vector in plot.nethist is valid or not
-.is_valid_order <- function(ind_order, ind_nethist){
-  return(setequal(ind_order, ind_nethist) & (length(ind_order)==length(ind_nethist)))
-}
+# .is_valid_order is defined in utils.R
 
 #Convert group labels (1,...,K) to (0, ..., K-1) as C++ index
 Rind_to_Cind <- function(x){

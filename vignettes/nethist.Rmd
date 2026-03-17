@@ -1,0 +1,228 @@
+---
+title: "Introduction to nethist"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to nethist}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(nethist)
+```
+
+## Overview
+
+The **nethist** package estimates *network histograms* for single-layer and multiplex (multi-layer) networks. A network histogram partitions the nodes of a network into groups (bins) such that the connectivity pattern between groups approximates the underlying graphon — the generative probability function of the network. This provides a non-parametric, interpretable summary of large network structure.
+
+The package implements the methods from:
+
+- **Single-layer**: Olhede & Wolfe (2014). *Network Histograms and Universality of Blockmodel Approximation*. PNAS, 111(41).
+- **Multi-layer**: Song & Olhede (2026+). *Graph Limits for Sparse Multilayer Networks*.
+
+The package provides:
+
+| Function | Description |
+|---|---|
+| `nethist()` | Network histogram for a single-layer network |
+| `multinethist()` | Network histogram for a multiplex network |
+| `plot()` | Heatmap of the estimated histogram |
+| `plot3d()` | 3D histogram plot for multiplex networks |
+| `summary_plot()` | Covariate distribution by estimated bin |
+| `violin_netsummary()` | Topology summary via subgraph prevalence |
+
+---
+
+## Single-Layer Network Histogram
+
+### Estimating the histogram
+
+`nethist()` accepts an adjacency matrix, a sparse `dgCMatrix`, or an `igraph` object. The bandwidth parameter `h` (number of bins) is selected automatically if not specified.
+
+```{r nethist-example, eval=FALSE}
+set.seed(42)
+data(polblog)
+
+# Automatic bandwidth selection
+nethist_polblog <- nethist(polblog)
+print(nethist_polblog)
+```
+
+The result is a `nethist` object with the following components:
+
+- `cluster`: a vector assigning each node to a bin (integer labels 1 to k)
+- `thetahat`: a k × k matrix of estimated connection probabilities between bins
+- `rho_hat`: estimated overall network density
+- `normalized_LL`: normalized profile log-likelihood at the solution
+
+For a quick example with a synthetic network:
+
+```{r nethist-fast}
+set.seed(2024)
+A_gnp <- igraph::sample_gnp(200, 0.05)
+result <- nethist(A_gnp)
+print(result)
+```
+
+### Visualising the histogram
+
+`plot()` draws a heatmap of the estimated connection probabilities. Bins are shown in the order of their label by default; you can supply a custom permutation via `idx_order`.
+
+```{r plot-nethist, fig.width=5, fig.height=5}
+plot(result)
+```
+
+To display the estimated probability values on each bin:
+
+```{r plot-nethist-prob, fig.width=5, fig.height=5}
+plot(result, type = "prob", prob = TRUE,
+     col = colorRampPalette(c("#FFFFFF", "#08306B"))(50))
+```
+
+---
+
+## Multiplex Network Histogram
+
+A *multiplex network* is a collection of networks defined on the same node set, each representing a different type of relationship (layer).
+
+### Estimating the histogram
+
+`multinethist()` accepts a three-dimensional adjacency array of size n × n × L, where L is the number of layers, or a list of `igraph` objects.
+
+```{r multinethist-example, eval=FALSE}
+set.seed(42)
+data(IndianVil)
+
+# IndianVil is a 231 x 231 x 12 adjacency array
+# representing 12 socioeconomic relationship types in an Indian village
+mnethist_result <- multinethist(IndianVil)
+print(mnethist_result)
+```
+
+The `common_f` argument controls whether a common histogram function is assumed across layers:
+
+```{r common-f, eval=FALSE}
+# Heterogeneous histogram (default): each layer has its own density
+mnethist_het <- multinethist(IndianVil, common_f = FALSE)
+
+# Homogeneous histogram: shared structure, layer-specific density
+mnethist_hom <- multinethist(IndianVil, common_f = TRUE)
+```
+
+For a fast illustrative example using synthetic data:
+
+```{r multinethist-fast}
+set.seed(2024)
+# Build a small 2-layer network
+A1 <- igraph::as_adjacency_matrix(igraph::sample_gnp(80, 0.10), sparse = FALSE)
+A2 <- igraph::as_adjacency_matrix(igraph::sample_gnp(80, 0.05), sparse = FALSE)
+A_multi <- array(c(A1, A2), dim = c(80, 80, 2))
+
+mn_result <- multinethist(A_multi)
+print(mn_result)
+```
+
+### 2D heatmap
+
+```{r plot-multinethist, fig.width=5, fig.height=5}
+plot(mn_result)
+```
+
+### 3D histogram
+
+For multiplex networks, `plot3d()` displays a three-dimensional bar chart of `thetahat` across layers.
+
+```{r plot3d, eval=FALSE}
+plot3d(mnethist_result)
+```
+
+---
+
+## Covariate Summary by Bin
+
+Once nodes are assigned to bins, it is often informative to examine how an external covariate is distributed across bins. `summary_plot()` produces:
+
+- a **stacked bar chart** for a `factor` covariate
+- a **violin plot** for a `numeric` covariate
+
+### Factor covariate (political affiliation)
+
+The `polblog` network is a hyperlink network among US political blogs. Nodes are labelled as Liberal or Conservative.
+
+```{r summary-plot-factor, eval=FALSE}
+set.seed(42)
+data(polblog)
+nethist_polblog <- nethist(polblog)
+
+political_label <- factor(
+  c(rep("Liberal", 586), rep("Conservative", 638))
+)
+
+summary_plot(nethist_polblog, covariate = political_label,
+             legend_title = "Political affiliation")
+```
+
+The bins with high within-group homogeneity will appear nearly solid in one colour, suggesting that the network histogram has recovered politically coherent communities.
+
+### Numeric covariate
+
+```{r summary-plot-numeric, fig.width=5, fig.height=4}
+set.seed(2024)
+A_gnp <- igraph::sample_gnp(200, 0.05)
+result <- nethist(A_gnp)
+
+# Node degree as a numeric covariate
+node_degree <- igraph::degree(A_gnp)
+summary_plot(result, covariate = node_degree, ylab = "Degree")
+```
+
+---
+
+## Network Topology Summary
+
+`violin_netsummary()` implements the network summary statistic of Maugis et al. (2017). It estimates the prevalence of small subgraph patterns (v-shapes, triangles, squares, …) via vertex subsampling, and draws a violin plot.
+
+This is useful for comparing the topology of an estimated histogram against the original network, or for comparing networks from different studies.
+
+```{r violin, fig.width=6, fig.height=4}
+set.seed(2024)
+A_gnp <- igraph::sample_gnp(400, 0.05)
+violin_netsummary(A_gnp)
+```
+
+The y-axis shows the prevalence (proportion of sampled subgraphs of that type), and the width of each violin reflects variability across subsamples. A roughly flat distribution indicates an Erdős–Rényi-like structure; peaked distributions suggest community or degree-heterogeneous structure.
+
+---
+
+## Supported Input Types
+
+All main functions accept three input formats:
+
+| Format | Class | Example |
+|---|---|---|
+| Dense adjacency matrix | `matrix` | `igraph::as_adjacency_matrix(g, sparse = FALSE)` |
+| Sparse adjacency matrix | `dgCMatrix` | `igraph::as_adjacency_matrix(g)` |
+| igraph object | `igraph` | `igraph::sample_gnp(200, 0.05)` |
+
+For `multinethist()`, the input can also be a 3D `array` of size n × n × L.
+
+---
+
+## References
+
+Banerjee, A., Chandrasekhar, A. G., Duflo, E., & Jackson, M. O. (2013). The diffusion of microfinance. *Science*, 341(6144), 1236498.
+
+Gao, C., Lu, Y., & Zhou, H. H. (2015). Rate-optimal graphon estimation. *The Annals of Statistics*, 43(6), 2624–2652.
+
+Maugis, P.-A. G., Priebe, C. E., Olhede, S. C., & Wolfe, P. J. (2017). Topology reveals universal features for network comparison. *arXiv:1705.05677*.
+
+Olhede, S. C. & Wolfe, P. J. (2014). Network histograms and universality of blockmodel approximation. *Proceedings of the National Academy of Sciences*, 111(41), 14722–14727.
+
+Song, Y. & Olhede, S. C. (2026+). Graph limits for sparse multilayer networks. *Preprint*.

@@ -1,4 +1,4 @@
-##' @noMd
+##' @noRd
 hnethist_kmeans <- function(nh, centers){
   vec_thetahat <- c(nh$thetahat)
   cluster <- kmeans(vec_thetahat, centers = centers)

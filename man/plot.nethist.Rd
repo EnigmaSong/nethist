@@ -21,7 +21,7 @@
 
 \item{type}{One of \code{nethist} or \code{prob}.}
 
-\item{idx_order}{A numeric vector for index label order, which must be a permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$clsuter)}.}
+\item{idx_order}{A numeric vector for index label order, which must be a permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$cluster)}.}
 
 \item{prob}{A logical variable indicating block probabilities are printed on the plot. Default is FALSE.}
 
@@ -36,7 +36,7 @@
 \item{...}{other arguments to pass to \code{\link[stats:heatmap]{stats::heatmap()}}. See details.}
 }
 \value{
-a heatmap of network histogram or \code{p_mat} ordered by \code{idx_order} from \code{nethist} object.
+Called for its side effects (plotting). Returns \code{NULL} invisibly.
 }
 \description{
 Drawing \code{\link[=heatmap]{heatmap()}} using an \code{nethist} object with an user-specified order.
@@ -56,7 +56,7 @@ plot(hist_A)
 idx<- unique(hist_A$cluster) 
 plot(hist_A, idx_order = idx)
 
-#User-speicifc bin color pallete (see [graphical parameters])
+#User-specific bin color pallete (see [graphical parameters])
 plot(hist_A,  idx_order = idx, col = colorRampPalette(colors=c("#FFFFFF","#000000"))(50))
 
 #Users can print p_mat on the plot using user-specific colors

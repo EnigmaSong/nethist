@@ -13,7 +13,7 @@
 ##' @param filename file name to save the generated figure. 
 ##' @param width a numeric value of the width of the generated figure in inch. It is only used when `save.plot = TRUE`.
 ##' @param height a numeric value of the height of the generated figure in inch. It is only used when `save.plot = TRUE`.
-##' @return 
+##' @returns
 ##' A network summary plot, and a data.frame about the networks summaries.
 ##' @details 
 ##' Vertex sampling is done by simple random sampling without replacement.
@@ -50,7 +50,8 @@
 ##' }
 ##' }
 ##' @importFrom ggtext element_markdown
-##' @import png 
+##' @importFrom ggplot2 ggplot aes geom_violin ylim ylab scale_x_discrete theme ggsave rel
+##' @importFrom rlang .data
 ##' @export
 ##' 
 violin_netsummary <- function(A,
@@ -106,11 +107,14 @@ violin_netsummary.default<- function(A,
                                      R=NA, Ns = 11, alpha = 0.05,
                                      y.max=NA, save.plot = FALSE, 
                                      filename = "myplot.pdf", width = 7, height = 5){
-  if(!.is_undirected_simple(A)) stop("Network A must be an undirected simple network.")
+  if(!is.matrix(A)) stop("A must be a matrix.")
+  if(nrow(A) != ncol(A)) stop("A must be a square matrix.")
+  if(any(diag(A) != 0)) stop("A has self-loops. Network A must be a simple graph (no self-loops).")
+  if(!isSymmetric(unname(A))) stop("A is not symmetric. Network A must be an undirected graph.")
+  if(any(A[A != 0] != 1)) stop("A is not a simple graph. All non-zero entries must be 1 (binary adjacency matrix).")
   
   if((max_cycle_order < 3)|(max_cycle_order%%1 != 0)){
     stop("order_cycle must be >= 3 integers.")
-    max_cycle_order <- 7
   }else if(max_cycle_order >7){
     message("order_cycle >7 is not implemented. Use an integer between 3 and 7.")
     max_cycle_order <- 7

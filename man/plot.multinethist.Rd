@@ -23,7 +23,7 @@
 
 \item{type}{One of \code{MNhist} or \code{prob}.}
 
-\item{idx_order}{A numeric vector for index label order, which must be a permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$clsuter)}.}
+\item{idx_order}{A numeric vector for index label order, which must be a permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$cluster)}.}
 
 \item{prob}{A logical variable indicating block probabilities are printed on the plot. Default is FALSE.}
 
@@ -54,7 +54,7 @@ mnhist_Ind_vil <- multinethist(IndianVil)
 idx<- unique(mnhist_Ind_vil$cluster) 
 plot(mnhist_Ind_vil, idx_order = idx)
 
-#User-speicifc bin color pallete (see [graphical parameters])
+#User-specific bin color pallete (see [graphical parameters])
 plot(mnhist_Ind_vil,  idx_order = idx, col = colorRampPalette(colors=c("#FFFFFF","#000000"))(50))
 
 #Users can print p_mat on the plot using user-specific colors

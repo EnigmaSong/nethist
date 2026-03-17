@@ -10,7 +10,7 @@
 #' Nodes with zero degrees across all layers were removed, reducing the total number of nodes from 241 to 231.
 #'
 #' @references Banerjee, A., Chandrasekhar, A. G., Duflo, E., & Jackson, M. O. (2013). The diffusion of microfinance. Science, 341(6144), 1236498.  
-#' @references Song, Y. & Olhede, S.C. (2024+)
+#' @references Song, Y. & Olhede, S.C. (2026+). Graph Limits for Sparse Multilayer Networks.
 #' @source 
 #'  https://doi.org/10.7910/DVN/U3BIHX
 #' @keywords datasets

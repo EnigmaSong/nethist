@@ -9,14 +9,14 @@ plot3d(x, idx_order = 1:max(x$cluster), type = "MNhist", ...)
 \arguments{
 \item{x}{a nethist object from \code{\link[=multinethist]{multinethist()}}.}
 
-\item{idx_order}{A numeric vector for index label order, which must be a permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$clsuter)}.}
+\item{idx_order}{A numeric vector for index label order, which must be a permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$cluster)}.}
 
 \item{type}{One of \code{MNhist} or \code{prob}.}
 
 \item{...}{other arguments to pass to \code{\link[plot3D:persp3D]{plot3D::hist3D()}}. See details.}
 }
 \value{
-a heatmap of network histogram or \code{thetahat} ordered by \code{idx_order} from \code{multinethist} object.
+Called for its side effects (plotting). Returns \code{NULL} invisibly.
 }
 \description{
 Drawing \code{\link[=heatmap]{heatmap()}} using an \code{multinethist} object with an user-specified order.

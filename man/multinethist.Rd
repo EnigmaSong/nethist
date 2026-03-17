@@ -5,13 +5,13 @@
 \alias{nethist}
 \title{Network histogram estimation}
 \usage{
-nethist(A, h = NA, method = "PLL", max_itr = 5e6, swap_rule = "random",
+nethist(A, h = NA, method = "PLL", max_itr = 5e6,
+  swap_rule = "random", consecutive_iter_threshold = 2e4,
+  verbose = FALSE)
 
-consecutive_iter_threshold = 2e4, verbose = FALSE)
-
-multinethist(A, h = NA, common_f = FALSE, method = "PLL", max_itr = 5e6,
-
-swap_rule = "random",consecutive_iter_threshold = 2e4, verbose = FALSE)
+multinethist(A, h = NA, common_f = FALSE, method = "PLL",
+  max_itr = 5e6, swap_rule = "random",
+  consecutive_iter_threshold = 2e4, verbose = FALSE)
 
 nethist(
   A,
@@ -70,6 +70,7 @@ Note that \code{cluster} only shows a partition of vertices, and the index label
    #single-layer network histogram
    set.seed(42)
    data(polblog)
+   nethist(polblog)
    nethist_polblog <- nethist(polblog)
    nethist_polblog_with_h <- nethist(polblog, h = 72)
    
@@ -81,11 +82,11 @@ Note that \code{cluster} only shows a partition of vertices, and the index label
 }
 }
 \references{
-Song, Y. & Olhede. S. C. (2024)
+Song, Y. & Olhede, S. C. (2026+). Graph Limits for Sparse Multilayer Networks.
 
 Olhede, S. C. & Wolfe, P. J. (2014). Network Histograms and Universality of Blockmodel Approximation. Proceedings of the National Academy of Sciences, 111(41), 14722-14727. doi:10.1073/pnas.1400374111
 
-#' Gao, C., Lu, Y., & Zhou, H. H. (2015). Rate-Optimal Graphon Estimation. The Annals of Statistics, 43(6), 2624-2652. doi:10.1214/15-AOS1354
+Gao, C., Lu, Y., & Zhou, H. H. (2015). Rate-Optimal Graphon Estimation. The Annals of Statistics, 43(6), 2624-2652. doi:10.1214/15-AOS1354
 }
 \seealso{
 \code{\link[=plot.multinethist]{plot.multinethist()}}, \code{\link[=plot.nethist]{plot.nethist()}}

@@ -12,11 +12,11 @@ kite_mn <- multinethist(kite_arr, h = 5, max_itr = 1000)
 
 ## print.nethist ----
 test_that("print.nethist does not error", {
-  expect_no_error(print(hist_G))
+  expect_no_error(capture.output(print(hist_G)))
 })
 
 test_that("print.nethist returns object invisibly", {
-  result <- withVisible(print(hist_G))
+  capture.output(result <- withVisible(print(hist_G)))
   expect_false(result$visible)
   expect_identical(result$value, hist_G)
 })
@@ -28,11 +28,11 @@ test_that("print.nethist output mentions thetahat", {
 
 ## print.multinethist ----
 test_that("print.multinethist does not error", {
-  expect_no_error(print(kite_mn))
+  expect_no_error(capture.output(print(kite_mn)))
 })
 
 test_that("print.multinethist returns object invisibly", {
-  result <- withVisible(print(kite_mn))
+  capture.output(result <- withVisible(print(kite_mn)))
   expect_false(result$visible)
   expect_identical(result$value, kite_mn)
 })

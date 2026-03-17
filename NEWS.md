@@ -1,8 +1,8 @@
-# nethist 1.0.0
+# nethist 1.0.0 (development)
 
-update: 2024/??/??
+update: 2026/03/17
 
-- Implementation of Song and Olhede (2025+) for multi-layer network histograms.
+- Implementation of Song and Olhede (2026+) for multi-layer network histograms.
 - Implementation of Gao et al. (2015) for single-layer network histograms.
 - New dataset: IndianVil
 - violin_netsummary() now uses igraph plots of v-shape and cycles for x-axis values.

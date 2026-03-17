@@ -9,3 +9,7 @@ src/*.so
 tests/testthat/Rplots.pdf
 nethist.Rproj
 nethist_devel.Rproj
+data/arxiv
+inst/doc
+/doc/
+/Meta/

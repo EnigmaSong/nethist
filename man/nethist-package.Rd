@@ -13,6 +13,7 @@ R package for network histogram estimation and additional tools. To install the 
 Useful links:
 \itemize{
   \item \url{https://enigmasong.github.io/nethist/}
+  \item Report bugs at \url{https://github.com/EnigmaSong/nethist/issues}
 }
 
 }

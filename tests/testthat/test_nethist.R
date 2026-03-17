@@ -122,5 +122,5 @@ test_that("same seed gives identical results", {
 ## Edge case: n == h ----
 test_that("n == h (single-bin) returns without error", {
   n <- igraph::vcount(G)
-  expect_no_error(nethist(G, h = n))
+  suppressMessages(expect_no_error(nethist(G, h = n)))
 })

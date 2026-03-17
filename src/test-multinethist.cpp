@@ -113,7 +113,6 @@ context("Assignment check") {
     expect_true(abs(assignSL_G.likelihood - (-5.004024)) < 1e-6);
     //updateLSE
     assignSL_F2.updateLSE();
-    Rcout << assignSL_F2.LSE <<"\n";
     // expect_true(abs(assignSL_F2.LSE - (1.555556)) < 1e-6);
     // expect_true(abs(assignSL_G.LSE - (1.6)) < 1e-6);
     expect_true(abs(assignSL_F2.LSE - 0.03444444) < 1e-6);

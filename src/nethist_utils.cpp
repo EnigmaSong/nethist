@@ -114,24 +114,20 @@ bool is_undirected_simple(const arma::mat& A){
   // Checking simple & undirected graph
   // If return is true, then assume A be imat or icube.
   const arma::uword n = A.n_cols;
-  
+
   if(n != A.n_rows){
-    Rcout << "A is not a square matrix.\n"; 
     return false;
-  } 
-  
+  }
+
   for(arma::uword j = 0; j < n; j++){
     if(A.at(j,j)!=0){
-      Rcout << "A has self-loops.\n";
       return false;
     }
     for(arma::uword i = j+1; i < n; i++){
       if((A.at(i,j)!=0)&&(A.at(i,j)!=1)){
-        Rcout << "A is not simple.\n";
         return false;
       }
       if(A.at(i,j)!=A.at(j,i)){
-        Rcout << "A is not symmetric.\n";
         return false;
       }
     }

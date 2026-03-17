@@ -1,4 +1,4 @@
-##' @noMd
+##' @noRd
 
 .oracbwplugin <- function(A,c,type, alpha,
                           rhoHat, common_f, 

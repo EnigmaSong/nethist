@@ -28,6 +28,6 @@ Nodes with zero degrees across all layers were removed, reducing the total numbe
 \references{
 Banerjee, A., Chandrasekhar, A. G., Duflo, E., & Jackson, M. O. (2013). The diffusion of microfinance. Science, 341(6144), 1236498.
 
-Song, Y. & Olhede, S.C. (2024+)
+Song, Y. & Olhede, S.C. (2026+). Graph Limits for Sparse Multilayer Networks.
 }
 \keyword{datasets}

@@ -3,7 +3,7 @@
 ##' Drawing [heatmap()] using an `nethist` object with an user-specified order.
 ##'
 ##' @param x a nethist object from [nethist()] or [multinethist()].
-##' @param idx_order A numeric vector for index label order, which must be a permutation of `x$cluster`. If `NA`, it uses `1:max(x$clsuter)`. 
+##' @param idx_order A numeric vector for index label order, which must be a permutation of `x$cluster`. If `NA`, it uses `1:max(x$cluster)`.
 ##' @param type One of `nethist` or `prob`.
 ##' @param prob A logical variable indicating block probabilities are printed on the plot. Default is FALSE.
 ##' @param digits integer indicating the number of decimal places for probability
@@ -13,8 +13,8 @@
 ##' @param ... other arguments to pass to [stats::heatmap()]. See details.
 ##' @details 
 ##' ... includes various [`graphical parameters`] passes to [stats::heatmap()], then [graphics::image()]. 
-##' @returns 
-##' a heatmap of network histogram or `p_mat` ordered by `idx_order` from ``nethist`` object.
+##' @returns
+##' Called for its side effects (plotting). Returns `NULL` invisibly.
 ##' @examples
 ##' \donttest{
 ##' set.seed(2022)
@@ -27,7 +27,7 @@
 ##' idx<- unique(hist_A$cluster) 
 ##' plot(hist_A, idx_order = idx)
 ##' 
-##' #User-speicifc bin color pallete (see [graphical parameters])
+##' #User-specific bin color pallete (see [graphical parameters])
 ##' plot(hist_A,  idx_order = idx, col = colorRampPalette(colors=c("#FFFFFF","#000000"))(50))
 ##' 
 ##' #Users can print p_mat on the plot using user-specific colors
@@ -36,8 +36,7 @@
 ##' }
 ##' @importFrom stats heatmap
 ##' @importFrom graphics text
-##' @exportS3Method 
-##' @export
+##' @exportS3Method
 plot.nethist <- function(x, type = "nethist",
                          idx_order = 1:max(x$cluster), 
                          prob = FALSE, digits = 2,
@@ -60,12 +59,13 @@ plot.nethist <- function(x, type = "nethist",
                 prob = x$thetahat[idx_order, idx_order])
   
   if(prob & (type=="prob")){
-    heatmap(mat, Rowv = NA, symm = TRUE, 
-            add.expr = {text(rep(1:k,each=k), rev(rep(1:k,k)), 
+    heatmap(mat, Rowv = NA, symm = TRUE,
+            add.expr = {text(rep(1:k,each=k), rev(rep(1:k,k)),
                              round(as.vector(mat), digits),
                              cex = prob.cex, col = prob.col)},
             ...)
   }else{
     heatmap(mat, Rowv = NA, symm = TRUE, ...)
   }
+  invisible(NULL)
 }

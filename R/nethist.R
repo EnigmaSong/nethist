@@ -27,6 +27,8 @@ nethist.matrix<-function(A, h = NA,
                          swap_rule = "random",
                          consecutive_iter_threshold = 2e4,
                          verbose = FALSE){
+  # Explicit dispatch for matrix class: passes through to nethist.default without conversion.
+  # Required so that S3 dispatch does not fall through to an unintended method when A is a matrix.
   args <- as.list(environment())
   do.call("nethist.default", args)
 }
@@ -49,7 +51,10 @@ nethist.default <- function(A, h = NA,
                             consecutive_iter_threshold = 2e4,
                             verbose = FALSE){
   if(!is.matrix(A)) stop("A must be a matrix.")
-  if(!.is_undirected_simple(A)) stop("Network A must be an undirected simple single-layer network.")
+  if(nrow(A) != ncol(A)) stop("A must be a square matrix.")
+  if(any(diag(A) != 0)) stop("A has self-loops. Network A must be a simple graph (no self-loops).")
+  if(!isSymmetric(unname(A))) stop("A is not symmetric. Network A must be an undirected graph.")
+  if(any(A[A != 0] != 1)) stop("A is not a simple graph. All non-zero entries must be 1 (binary adjacency matrix).")
   multinethist.array(array(A, dim=c(nrow(A), ncol(A), 1)), 
                      h, common_f = FALSE, method,
                      max_itr, swap_rule, 

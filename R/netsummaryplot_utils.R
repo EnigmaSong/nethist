@@ -18,13 +18,14 @@
 #' (quantifying the least-separated summary) is below `alpha / (k_max - 1)`, 
 #' or if the subsample size exceeds a threshold, the function returns the selected sizes.
 #'
-#'##' @noRd
+#' @noRd
 auto_select_subsample_sizes <- function(A, Ns, k_max, R, alpha=0.05, delta){
   n <- dim(A)[1]
-  
+
   s_star <- min(max(k_max + 1, min(floor(n/4), 3*(k_max+1))), n)/(1+delta)
   K_set <- 2:k_max
   s_max <- n
+  subsample_sizes <- round(seq(0.9, 1.1, length.out = Ns) * s_star)  # fallback: use initial s_star
   for(i in 1:ceiling(log(n)/log(1+delta))){
     s_star <- min(ceiling((1+delta)*s_star), n)
     t_k <- .net_summary_subsample_adj(A = A, subsample_sizes = s_star,

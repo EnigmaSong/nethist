@@ -4,17 +4,19 @@
 ##'
 ##' @param object a `multinethist` object from [multinethist()].
 ##' @param covariate a vector for univariate covariate. If it is factor, draw a stacked barchart. If it is numeric, draw a violin plot.
-##' @param idx_order A numeric vector for index label order, which must be a permutation of `object$cluster`. If `NA`, it uses `1:max(object$clsuter)`. 
+##' @param idx_order A numeric vector for index label order, which must be a permutation of `object$cluster`. If `NA`, it uses `1:max(object$cluster)`.
 ##' @param main title of summary plot. If NA, the plot has no title.
 ##' @param ylab label of y-axis. If NA, y-axis label is "covariate"
 ##' @param legend_title title of legend. If NA, the legend title is "covariate"
 ##' @param stat variables pass to [ggplot2::geom_bar()]. Only used for a factor covariate.
 ##' @param position variables pass to [ggplot2::geom_bar()]. Only used for a factor covariate.
-##' @details 
-##' ... includes various [`graphical parameters`] passes to [stats::heatmap()], then [graphics::image()]. 
-##' @returns 
-##' a heatmap of network histogram or `p_mat` ordered by `idx_order` from ``nethist`` object.
-##' @import ggplot2
+##' @details
+##' When `covariate` is a factor, a stacked bar chart is drawn with bins ordered by `idx_order`.
+##' When `covariate` is numeric, a violin plot is drawn.
+##' @returns
+##' A `ggplot` object. Printed as a side effect. Returns the plot invisibly.
+##' @importFrom ggplot2 ggplot aes geom_bar geom_violin labs ggtitle ylab theme element_rect element_blank
+##' @importFrom rlang .data
 ##' @examples
 ##' {
 ##' set.seed(42)
@@ -49,12 +51,14 @@ summary_plot.multinethist <- function(object, covariate,
                             ylab = NA,
                             legend_title = NA,
                             stat = "count", position = "stack"){
-  k = max(object$cluster)
+  k <- max(object$cluster)
   if(!.is_valid_order(idx_order, 1:k)){
     warning(paste0("idx_order is invalid. Set idx_order = 1:",k))
     idx_order <- 1:k
   }
-  
+  if(length(covariate) != length(object$cluster))
+    stop("Length of covariate must equal the number of nodes (length of object$cluster).")
+
   df <- data.frame(cluster = factor(object$cluster, levels = idx_order),
                    covariate = covariate)
   if(is.factor(covariate)){
@@ -75,17 +79,17 @@ summary_plot.multinethist <- function(object, covariate,
     legend.background = ggplot2::element_rect(fill='transparent'), 
     legend.box.background = ggplot2::element_rect(fill='transparent') 
   )
-  print(p)  
+  print(p)
+  invisible(p)
 }
 
 summary_covariate_factor <- function(df, legend_title, stat, position){
-  p <- ggplot2::ggplot(data=df, mapping=ggplot2::aes(x = cluster, fill = covariate)) + ggplot2::geom_bar(position = position, stat = stat)
+  p <- ggplot2::ggplot(data=df, mapping=ggplot2::aes(x = .data$cluster, fill = .data$covariate)) + ggplot2::geom_bar(position = position, stat = stat)
   if(!is.na(legend_title)) p <- p + ggplot2::labs(fill = legend_title)
   p
 }
 
 summary_covariate_numeric <- function(df){
-  p <- ggplot2::ggplot(df, ggplot2::aes(x = cluster, y = covariate)) + ggplot2::geom_violin()
+  p <- ggplot2::ggplot(df, ggplot2::aes(x = .data$cluster, y = .data$covariate)) + ggplot2::geom_violin()
+  p
 }
-
-globalVariables(c("cluster", "covariate")) ## to remove warning message (https://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when)

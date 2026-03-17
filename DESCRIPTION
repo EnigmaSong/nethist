@@ -2,7 +2,7 @@ Package: nethist
 Type: Package
 Title: Network histogram 
 Version: 1.0.0
-Date: 2025-11-12
+Date: 2026-03-06
 Authors@R: c(person("Youngseok","Song", email="youngseok.song@mail.wvu.edu", role =c("aut", "cre")), 
             person("Sofia C.","Olhede", email = "sofia.olhede@epfl.ch", role = "aut"))
 Maintainer: Youngseok Song <youngseok.song@mail.wvu.edu>
@@ -11,25 +11,29 @@ Suggests:
     testthat (>= 3.0.0),
     tinytest,
     igraphdata,
-    xml2
+    xml2,
+    knitr,
+    rmarkdown
 Encoding: UTF-8
 RoxygenNote: 7.3.3
-Imports: 
+Imports:
     Rcpp(>= 1.0.9),
     stats,
     RSpectra,
     ggplot2,
     ggtext,
     graphics,
-    png,
     reshape2,
     igraph,
-    plot3D
+    plot3D,
+    rlang
 LinkingTo: Rcpp, RcppArmadillo, testthat
 Depends: 
     R (>= 3.5.0)
 LazyData: true
 Config/testthat/edition: 3
 URL: https://enigmasong.github.io/nethist/
+BugReports: https://github.com/EnigmaSong/nethist/issues
 Roxygen: list(markdown = TRUE)
 License: MIT + file LICENSE
+VignetteBuilder: knitr
