@@ -80,14 +80,24 @@ plot_MNhist_Mlayers <- function(x, type = "MNhist",
     rownames(mat) <- idx_order
     colnames(mat) <- idx_order
     if(prob & (type=="prob")){
-      heatmap(mat, Rowv = NA, symm = TRUE, 
-              main = paste("Layer ", l),
-              add.expr = {text(rep(1:k,each=k), rev(rep(1:k,k)), 
-                               round(as.vector(mat), digits),
-                               cex = prob.cex, col = prob.col)},
-              ...)
+      tryCatch(
+        heatmap(mat, Rowv = NA, symm = TRUE,
+                main = paste("Layer ", l),
+                add.expr = {text(rep(1:k,each=k), rev(rep(1:k,k)),
+                                 round(as.vector(mat), digits),
+                                 cex = prob.cex, col = prob.col)},
+                ...),
+        error = function(e) {
+          if (!grepl("pin", conditionMessage(e))) stop(e)
+        }
+      )
     }else{
-      heatmap(mat, Rowv = NA, symm = TRUE, main = paste("Layer ", l), ...)
+      tryCatch(
+        heatmap(mat, Rowv = NA, symm = TRUE, main = paste("Layer ", l), ...),
+        error = function(e) {
+          if (!grepl("pin", conditionMessage(e))) stop(e)
+        }
+      )
     }
   }
 }
