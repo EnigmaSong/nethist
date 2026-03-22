@@ -34,15 +34,20 @@ likelihood(0)
   LSE = compute_LSE();
 }
 
-void Assignment::create_proposal_from(const Assignment& current, 
-                           const arma::icube& A, 
+void Assignment::create_proposal_from(const Assignment& current,
+                           const arma::icube& A,
                            const int& swap_rule){
   const arma::uvec swap = select_swap(current, (int)A.n_rows, swap_rule);
+  const arma::uword g1 = node_labels(swap(0));
+  const arma::uword g2 = node_labels(swap(1));
 
+  const double old_contrib = compute_affected_LL(g1, g2);
   update_thetahat(swap, A);
+  const double new_contrib = compute_affected_LL(g1, g2);
+
+  likelihood = current.likelihood + (new_contrib - old_contrib);
   swap_nodes(current, swap);
-  updateLL();
-  updateLSE();
+  // LSE not used in multilayer stopping rule; skip updateLSE()
 }
 double Assignment::compute_normalize_log_likelihood(){
   double loglik = 0.0;
@@ -130,13 +135,37 @@ void Assignment::update_thetahat(const arma::uvec& swap, const arma::icube& A){
     }
   }
 
-  estimated_theta = bin_edge_counts.each_slice()/bin_cell_counts;
+  const arma::uword K = group_size.number_group;
+  for(arma::uword l = 0; l < (arma::uword)n_layers; ++l){
+    for(arma::uword j = 0; j < K; ++j){
+      estimated_theta.at(group_node1, j, l) =
+        bin_edge_counts.at(group_node1, j, l) / bin_cell_counts.at(group_node1, j);
+      estimated_theta.at(j, group_node1, l) = estimated_theta.at(group_node1, j, l);
+      estimated_theta.at(group_node2, j, l) =
+        bin_edge_counts.at(group_node2, j, l) / bin_cell_counts.at(group_node2, j);
+      estimated_theta.at(j, group_node2, l) = estimated_theta.at(group_node2, j, l);
+    }
+  }
 }
 void Assignment::updateLL(){
   likelihood = compute_normalize_log_likelihood();
 }
 void Assignment::updateLSE(){
   LSE = compute_LSE();
+}
+double Assignment::compute_affected_LL(arma::uword g1, arma::uword g2){
+  const arma::uword K = group_size.number_group;
+  double result = 0.0;
+  for(arma::uword j = 0; j < K; ++j){
+    for(arma::uword i = j; i < K; ++i){
+      if(i != g1 && i != g2 && j != g1 && j != g2) continue;
+      for(arma::uword l = 0; l < (arma::uword)n_layers; ++l){
+        const double t = clamp_eps(estimated_theta.at(i, j, l));
+        result += (t * log(t) + (1 - t) * log(1 - t)) * bin_cell_counts.at(i, j);
+      }
+    }
+  }
+  return result;
 }
 
 // AssignCommonF class methods
@@ -207,15 +236,36 @@ void AssignCommonF::update_thetahat(const arma::uvec& swap, const arma::icube& A
     }
   }
   
-  estimated_theta = bin_edge_counts.each_slice()/bin_cell_counts;
-  get_thetahat_common_f();
-  
+  get_thetahat_common_f_partial(group_node1, group_node2);
+
 }
 
 void AssignCommonF::get_thetahat_common_f(){
   fhat_common = sum(estimated_theta, 2)/accu(rho_hat);// weighted average of \hat{f}_l with weight rho_hat(l)/sum(rho_hat).
   for(arma::uword l = 0; l < n_layers; l++){
     estimated_theta.slice(l) = fhat_common * rho_hat(l);
+  }
+}
+void AssignCommonF::get_thetahat_common_f_partial(arma::uword g1, arma::uword g2){
+  const arma::uword K = group_size.number_group;
+  const double rho_sum = accu(rho_hat);
+  for(arma::uword j = 0; j < K; ++j){
+    // Recompute fhat_common for pairs (g1,j) and (g2,j) from raw bin counts
+    double raw_g1 = 0.0, raw_g2 = 0.0;
+    for(arma::uword l = 0; l < (arma::uword)n_layers; ++l){
+      raw_g1 += bin_edge_counts.at(g1, j, l) / bin_cell_counts.at(g1, j);
+      raw_g2 += bin_edge_counts.at(g2, j, l) / bin_cell_counts.at(g2, j);
+    }
+    const double fc_g1 = raw_g1 / rho_sum;
+    const double fc_g2 = raw_g2 / rho_sum;
+    fhat_common.at(g1, j) = fc_g1;  fhat_common.at(j, g1) = fc_g1;
+    fhat_common.at(g2, j) = fc_g2;  fhat_common.at(j, g2) = fc_g2;
+    for(arma::uword l = 0; l < (arma::uword)n_layers; ++l){
+      estimated_theta.at(g1, j, l) = fc_g1 * rho_hat(l);
+      estimated_theta.at(j, g1, l) = fc_g1 * rho_hat(l);
+      estimated_theta.at(g2, j, l) = fc_g2 * rho_hat(l);
+      estimated_theta.at(j, g2, l) = fc_g2 * rho_hat(l);
+    }
   }
 }
 

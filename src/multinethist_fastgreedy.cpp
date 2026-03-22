@@ -22,15 +22,18 @@ List multinethist_fastgreedy(const arma::icube &A, const int &hbar,
   
   for(int i = 1; i < max_itr; i++){
     proposal.create_proposal_from(current, A, swap_rule);
-    if(proposal > current) current.copy_labels_theta(proposal);
+    if(proposal > current){
+      current.copy_labels_theta(proposal);
+      current.updateLL();  // Keeps current.likelihood exact after delta LL
+    }
     proposal.copy_labels_theta(current);
-    
+
     if(best_iter_LL.check_stop_rule_LL(current, consecutive_iter_threshold, normalizeC, i)){
       if(verbose) Rcout<<"total num iter = "<<i<<"\n";
       break;
     }
   }
-  
+
   if(verbose) Rcout<< "best_iter at the end="<<best_iter_LL.best_iter<<" w/ LL="<<best_iter_LL.normalized_bestLL<<"\n";
 
   return List::create(Named("ThetaHat") = current.estimated_theta,
@@ -55,17 +58,20 @@ List mnhistCommon_fastgreedy(const arma::icube &A, const int &hbar,
   
   for(int i = 1; i < max_itr; i++){
     proposal.create_proposal_from(current, A, swap_rule);
-    if(proposal > current) current.copy_labels_theta(proposal);
+    if(proposal > current){
+      current.copy_labels_theta(proposal);
+      current.updateLL();  // Keeps current.likelihood exact after delta LL
+    }
     proposal.copy_labels_theta(current);
-    
+
     if(best_iter_LL.check_stop_rule_LL(current, consecutive_iter_threshold, normalizeC, i)){
       if(verbose) Rcout<<"total num iter = "<<i<<"\n";
       break;
     }
   }
-  
+
   if(verbose) Rcout<< "best_iter at the end="<<best_iter_LL.best_iter<<" w/ LL="<<best_iter_LL.normalized_bestLL<<"\n";
-  
+
   return List::create(Named("ThetaHat") = current.estimated_theta,
                       Named("node_labels") = Cind_to_Rind(current.node_labels),
                       Named("norm_LL") = current.likelihood*normalizeC

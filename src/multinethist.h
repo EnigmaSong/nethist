@@ -130,6 +130,7 @@ public:
   virtual void update_thetahat(const arma::uvec& swap, const arma::icube& A);
   void updateLL();
   void updateLSE();
+  double compute_affected_LL(arma::uword g1, arma::uword g2);
 };
 //derived class of Assignment when f are the same for all layers
 class AssignCommonF : public Assignment {
@@ -161,6 +162,7 @@ public:
   void copy_labels_theta(const AssignCommonF& other);
   void update_thetahat(const arma::uvec& swap, const arma::icube& A) override;
   void get_thetahat_common_f();
+  void get_thetahat_common_f_partial(arma::uword g1, arma::uword g2);
 };
 //derived class of Assignment for single-layer network
 class AssignSingleLayer : public Assignment {

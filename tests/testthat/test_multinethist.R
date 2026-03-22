@@ -85,3 +85,15 @@ test_that("nethist (checking default argument)", {
 # })
 
 # Unit tests
+
+## Consistency: nethist(matrix) == multinethist(matrix) ----
+test_that("nethist and multinethist give identical results for 2D matrix input", {
+  A_kite <- kite[, , 1]
+  result_nethist <- {set.seed(42); nethist(A_kite, h = 5, max_itr = 1000)}
+  result_multi   <- {set.seed(42); multinethist(A_kite, h = 5, max_itr = 1000)}
+
+  expect_equal(result_nethist$cluster,      result_multi$cluster)
+  expect_equal(result_nethist$thetahat,     result_multi$thetahat)
+  expect_equal(result_nethist$rho_hat,      result_multi$rho_hat)
+  expect_equal(result_nethist$normalized_LL, result_multi$normalized_LL)
+})

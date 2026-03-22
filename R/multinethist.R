@@ -124,14 +124,19 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
   
   # Pick a bandwidth
   if(is.na(h)){
-    h <- .oracbwplugin(A, min(4, sqrt(n_nodes)/8), 
+    h <- .oracbwplugin(A, min(4, sqrt(n_nodes)/8),
                        'degs', 1, rhoHat, common_f, verbose)$h
     if(verbose) message(paste("Determining bandwidth from data:", round(h)))
+    h <- max(2, min(n_nodes, round(h)))
   }else{
     if(verbose) message(paste("Determining bandwidth from user input:", round(h)))
+    h_clamped <- max(2, min(n_nodes, round(h)))
+    if (h_clamped != h) {
+      warning(paste0("h was adjusted to ", h_clamped,
+                     " (original: ", h, ", valid range: [2, ", n_nodes, "])."))
+    }
+    h <- h_clamped
   }
-  
-  h <- max(2, min(n_nodes, round(h)))
   if(verbose){
     message(paste("Final bandwidth:", h))
     message(paste0('Adjacency matrix has ', n_nodes, ' rows/cols'))
