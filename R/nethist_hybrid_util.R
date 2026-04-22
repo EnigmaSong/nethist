@@ -1,3 +1,4 @@
+##' @importFrom stats kmeans
 ##' @noRd
 hnethist_kmeans <- function(nh, centers){
   vec_thetahat <- c(nh$thetahat)
@@ -18,7 +19,9 @@ hnethist_LSE <- function(thetahat, cluster_initial, A){
 }
 
 ## BIC
+## Gaussian BIC: N = n(n-1)/2 unique pairs, RSS = LSE/2 (hnethist_LSE sums
+## both (i,j) and (j,i)), penalty = s * log(N).
 hnethist_BIC <- function(nh){
-  #Need to check the implementation of BIC in Arthur's code.
-  return(- 2*log(nh$LSE) + nh$n*log(nh$s))
+  N <- nh$n * (nh$n - 1) / 2
+  return(N * log(nh$LSE / (2 * N)) + nh$s * log(N))
 }

@@ -9,56 +9,57 @@
   y = NA,
   type = "MNhist",
   idx_order = 1:max(x$cluster),
+  power = 0.25,
+  col.regions = function(n) grDevices::hcl.colors(n, palette = "Reds 3", rev = TRUE),
+  colorkey = FALSE,
   prob = FALSE,
   digits = 2,
   prob.cex = 0.1 + 0.5/log10(max(x$cluster)),
-  prob.col = "black",
+  prob.col = "white",
   ...
 )
 }
 \arguments{
 \item{x}{a multinethist object from \code{\link[=multinethist]{multinethist()}}.}
 
-\item{y}{a dummy variable. It does not affect to the plot.}
+\item{y}{A dummy variable for S3 dispatch. Never used.}
 
-\item{type}{One of \code{MNhist} or \code{prob}.}
+\item{type}{One of \code{MNhist} (default) or \code{prob}.}
 
-\item{idx_order}{A numeric vector for index label order, which must be a permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$cluster)}.}
+\item{idx_order}{A numeric vector for index label order, which must be a
+permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$cluster)}.}
 
-\item{prob}{A logical variable indicating block probabilities are printed on the plot. Default is FALSE.}
+\item{power}{A positive number for the power transform applied to the
+graphon estimate. Only used when \code{type = "MNhist"}. Default is \code{0.25}.}
 
-\item{digits}{integer indicating the number of decimal places for probability}
+\item{col.regions}{A function taking an integer \code{n} and returning \code{n}
+colors. Default is viridis via \code{\link[grDevices:palettes]{grDevices::hcl.colors()}}.}
 
-\item{prob.cex}{A numerical value of \code{cex} of probabilities.}
+\item{colorkey}{Logical. Whether to draw a color legend. Default \code{FALSE}.}
 
-\item{prob.col}{A color vector for network histogram values/probabilities on each bin.}
+\item{prob}{Logical. Whether to print block probabilities on the plot.
+Default \code{FALSE}.}
 
-\item{...}{other arguments to pass to \code{\link[stats:heatmap]{stats::heatmap()}}. See details.}
+\item{digits}{Integer. Number of decimal places for probabilities.}
+
+\item{prob.cex}{Numeric. \code{cex} for probability labels.}
+
+\item{prob.col}{Color for probability labels. Default \code{"white"}.}
+
+\item{...}{Additional arguments passed to \code{\link[lattice:levelplot]{lattice::levelplot()}}.}
 }
 \value{
-a heatmap of network histogram or \code{p_mat} ordered by \code{idx_order} from \code{nethist} object.
+Called for its side effects (plotting). Returns \code{NULL} invisibly.
 }
 \description{
-Drawing \code{\link[=heatmap]{heatmap()}} using an \code{multinethist} object with an user-specified order.
-}
-\details{
-... includes various \code{\link{graphical parameters}} passes to \code{\link[stats:heatmap]{stats::heatmap()}}, then \code{\link[graphics:image]{graphics::image()}}.
+Drawing \code{\link[lattice:levelplot]{lattice::levelplot()}} using a \code{multinethist} object.
 }
 \examples{
 \donttest{
 set.seed(42)
 data(IndianVil)
 mnhist_Ind_vil <- multinethist(IndianVil)
-
-#with user-specified order
-idx<- unique(mnhist_Ind_vil$cluster)
-plot(mnhist_Ind_vil, idx_order = idx)
-
-#User-specific bin color pallete (see [graphical parameters])
-plot(mnhist_Ind_vil,  idx_order = idx, col = colorRampPalette(colors=c("#FFFFFF","#000000"))(50))
-
-#Users can print p_mat on the plot using user-specific colors
-plot(mnhist_Ind_vil,  idx_order = idx, prob= TRUE, prob.col = "blue",
-      col = colorRampPalette(colors=c("#FFFFFF","#000000"))(50))
+plot(mnhist_Ind_vil)
+plot(mnhist_Ind_vil, power = 0.5)
 }
 }

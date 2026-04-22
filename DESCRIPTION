@@ -17,6 +17,7 @@ Suggests:
 Encoding: UTF-8
 RoxygenNote: 7.3.3
 Imports:
+    lattice,
     Rcpp(>= 1.0.9),
     stats,
     RSpectra,

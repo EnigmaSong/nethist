@@ -42,7 +42,7 @@ print.nethist <- function(x, ...){
   cat("\nAvailable components:\n", sep = "\n")
   print(names(x))
   
-  invisible(x)
+  return(invisible(x))
 }
 
 ##' @exportS3Method 
@@ -62,14 +62,14 @@ print.multinethist <- function(x, ...){
   cat("\nAvailable components:\n", sep = "\n")
   print(names(x))
   
-  invisible(x)
+  return(invisible(x))
 }
 
 
 ##' @exportS3Method 
 print.hnethist <- function(x, ...){
   cat("\nTheta_hat:\n")
-  print(x$thetahat[,,], ...)
+  print(x$thetahat, ...)
   
   cat(paste0("\nMethod: ", ifelse(x$method == "PLL", 
                                   "Profile Likelihood", 
@@ -83,5 +83,5 @@ print.hnethist <- function(x, ...){
   cat("\nAvailable components:\n", sep = "\n")
   print(names(x))
   
-  invisible(x)
+  return(invisible(x))
 }
