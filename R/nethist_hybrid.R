@@ -72,6 +72,7 @@ hnethist <- function(A, h = NA,
     result$details[[ss]]$cluster <- hnethist_kmeans(result$initial, centers = ss)
     result$details[[ss]]$thetahat <- hnethist_smoothing(result$details[[ss]]$cluster, k)
     result$details[[ss]]$LSE <- hnethist_LSE(result$details[[ss]]$thetahat, result$initial$cluster, A)
+    result$details[[ss]]$normalized_LL <- hnethist_normalized_LL(result$details[[ss]]$thetahat, result$initial$cluster, A)
     result$details[[ss]]$BIC <- hnethist_BIC(result$details[[ss]])
   }
 
@@ -85,7 +86,7 @@ hnethist <- function(A, h = NA,
       cluster       = result$initial$cluster,
       thetahat      = best$thetahat,
       rho_hat       = result$initial$rho_hat,
-      normalized_LL = result$initial$normalized_LL,
+      normalized_LL = best$normalized_LL,
       LSE           = best$LSE,
       method        = result$initial$method,
       # hnethist-specific fields

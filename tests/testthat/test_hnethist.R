@@ -100,7 +100,7 @@ test_that("print() dispatches via nethist inheritance without error", {
 test_that("hnethist_BIC returns correct Gaussian BIC value", {
   nh       <- list(n = 100L, s = 3L, LSE = 50.0)
   N        <- 100L * 99L / 2L
-  expected <- N * log(50.0 / (2 * N)) + 3L * log(N)
+  expected <- N * log(50.0 * 100L^2 / (2 * N)) + 3L * log(N)
   expect_equal(nethist:::hnethist_BIC(nh), expected)
 })
 
@@ -128,4 +128,48 @@ test_that("hnethist_LSE is 0 for perfect fit on zero matrix", {
   th_z <- matrix(0.0, 1L, 1L)
   cl_z <- rep(1L, n_s)
   expect_equal(nethist:::hnethist_LSE(th_z, cl_z, A_z), 0)
+})
+
+test_that("hnethist_LSE equals raw sum divided by n^2", {
+  n_s  <- 4L
+  A_s  <- matrix(c(0, 1, 0, 1,
+                   1, 0, 1, 0,
+                   0, 1, 0, 1,
+                   1, 0, 1, 0), n_s, n_s)
+  th_s <- matrix(c(0.2, 0.6, 0.6, 0.2), 2L, 2L)
+  cl_s <- c(1L, 2L, 1L, 2L)
+  expected <- sum((A_s - th_s[cl_s, cl_s])^2) / n_s^2
+  expect_equal(nethist:::hnethist_LSE(th_s, cl_s, A_s), expected)
+})
+
+# -- Helper: hnethist_normalized_LL ------------------------------------------
+test_that("hnethist_normalized_LL is non-positive", {
+  nll <- nethist:::hnethist_normalized_LL(result$thetahat, result$cluster, A)
+  expect_lte(nll, 0)
+})
+
+test_that("hnethist_normalized_LL equals sum(h(theta_mat)) / sum(A)", {
+  n_s  <- 4L
+  A_s  <- matrix(c(0, 1, 0, 1,
+                   1, 0, 1, 0,
+                   0, 1, 0, 1,
+                   1, 0, 1, 0), n_s, n_s)
+  th_s <- matrix(c(0.2, 0.6, 0.6, 0.2), 2L, 2L)
+  cl_s <- c(1L, 2L, 1L, 2L)
+  theta_mat <- th_s[cl_s, cl_s]
+  expected  <- sum(theta_mat * log(theta_mat) +
+                   (1 - theta_mat) * log(1 - theta_mat)) / sum(A_s)
+  expect_equal(nethist:::hnethist_normalized_LL(th_s, cl_s, A_s), expected)
+})
+
+# -- normalized_LL from best model -------------------------------------------
+test_that("normalized_LL equals best details normalized_LL", {
+  BICs <- sapply(result$details, function(x) x$BIC)
+  expect_equal(result$normalized_LL,
+               result$details[[which.min(BICs)]]$normalized_LL)
+})
+
+test_that("normalized_LL is a length-1 negative scalar", {
+  expect_length(result$normalized_LL, 1L)
+  expect_lt(result$normalized_LL, 0)
 })
