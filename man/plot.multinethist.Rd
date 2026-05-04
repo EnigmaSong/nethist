@@ -16,6 +16,8 @@
   digits = 2,
   prob.cex = 0.1 + 0.5/log10(max(x$cluster)),
   prob.col = "white",
+  layout = NULL,
+  layer_titles = NULL,
   ...
 )
 }
@@ -46,6 +48,14 @@ Default \code{FALSE}.}
 
 \item{prob.col}{Color for probability labels. Default \code{"white"}.}
 
+\item{layout}{An integer vector \code{c(nrows, ncols)} specifying the panel
+grid for multi-layer plots, following the \code{mfrow} convention. If \code{NULL}
+(default), each layer is plotted as a separate figure.}
+
+\item{layer_titles}{A character vector of length equal to the number of
+layers plotted, giving each panel's title. If \code{NULL} (default), titles
+default to \code{"Layer 1"}, \code{"Layer 2"}, etc.}
+
 \item{...}{Additional arguments passed to \code{\link[lattice:levelplot]{lattice::levelplot()}}.}
 }
 \value{
@@ -61,5 +71,7 @@ data(IndianVil)
 mnhist_Ind_vil <- multinethist(IndianVil)
 plot(mnhist_Ind_vil)
 plot(mnhist_Ind_vil, power = 0.5)
+plot(mnhist_Ind_vil, layout = c(3,4))
+plot(mnhist_Ind_vil, layer_titles = paste0("Network ", seq_along(mnhist_Ind_vil$rho_hat)))
 }
 }

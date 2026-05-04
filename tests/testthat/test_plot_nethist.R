@@ -55,3 +55,47 @@ test_that("plot.multinethist with invalid idx_order warns", {
   k_mn <- max(mnhist$cluster)
   expect_warning(plot(mnhist, idx_order = seq_len(k_mn + 1)))
 })
+
+## plot.multinethist layout validation ----
+set.seed(7)
+A3 <- array(0L, c(30, 30, 3))
+for (l in seq_len(3)) {
+  tmp <- matrix(rbinom(30 * 30, 1, 0.2), 30, 30)
+  tmp <- tmp + t(tmp); diag(tmp) <- 0L
+  A3[, , l] <- (tmp > 0L) * 1L
+}
+mnhist_multi <- multinethist(A3, h = 5, max_itr = 500)
+
+test_that("layout: wrong length errors", {
+  expect_error(plot(mnhist_multi, layout = c(3)),
+               regexp = "length-2")
+  expect_error(plot(mnhist_multi, layout = c(3, 4, 5)),
+               regexp = "length-2")
+})
+
+test_that("layout: non-positive or NA values error", {
+  expect_error(plot(mnhist_multi, layout = c(0, 4)),
+               regexp = "length-2")
+  expect_error(plot(mnhist_multi, layout = c(-1, 4)),
+               regexp = "length-2")
+  expect_error(plot(mnhist_multi, layout = c(NA, 4)),
+               regexp = "length-2")
+})
+
+test_that("layout: non-numeric errors", {
+  expect_error(plot(mnhist_multi, layout = "3x4"),
+               regexp = "length-2")
+})
+
+test_that("layout: grid too small for number of layers errors", {
+  expect_error(plot(mnhist_multi, layout = c(1, 1)),
+               regexp = "cells")
+})
+
+test_that("layout: valid grid runs without error", {
+  expect_no_error(plot(mnhist_multi, layout = c(2, 2)))
+})
+
+test_that("layout: NULL default runs without error", {
+  expect_no_error(plot(mnhist_multi))
+})

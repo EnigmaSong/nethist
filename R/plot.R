@@ -101,6 +101,12 @@ plot.nethist <- function(x, type = "nethist",
 ##' @param digits Integer. Number of decimal places for probabilities.
 ##' @param prob.cex Numeric. `cex` for probability labels.
 ##' @param prob.col Color for probability labels. Default `"white"`.
+##' @param layout An integer vector `c(nrows, ncols)` specifying the panel
+##'   grid for multi-layer plots, following the `mfrow` convention. If `NULL`
+##'   (default), each layer is plotted as a separate figure.
+##' @param layer_titles A character vector of length equal to the number of
+##'   layers plotted, giving each panel's title. If `NULL` (default), titles
+##'   default to `"Layer 1"`, `"Layer 2"`, etc.
 ##' @param ... Additional arguments passed to [lattice::levelplot()].
 ##' @returns Called for its side effects (plotting). Returns `NULL` invisibly.
 ##' @examples
@@ -110,6 +116,8 @@ plot.nethist <- function(x, type = "nethist",
 ##' mnhist_Ind_vil <- multinethist(IndianVil)
 ##' plot(mnhist_Ind_vil)
 ##' plot(mnhist_Ind_vil, power = 0.5)
+##' plot(mnhist_Ind_vil, layout = c(3,4))
+##' plot(mnhist_Ind_vil, layer_titles = paste0("Network ", seq_along(mnhist_Ind_vil$rho_hat)))
 ##' }
 ##' @importFrom lattice levelplot panel.levelplot panel.text
 ##' @rdname plot.multinethist
@@ -122,7 +130,9 @@ plot.multinethist <- function(x, y = NA, type = "MNhist",
                               colorkey = FALSE,
                               prob = FALSE, digits = 2,
                               prob.cex = 0.1 + 0.5/log10(max(x$cluster)),
-                              prob.col = "white", ...) {
+                              prob.col = "white",
+                              layout = NULL,
+                              layer_titles = NULL, ...) {
   n_layers <- ifelse(length(dim(x$thetahat)) == 2, 1, dim(x$thetahat)[3])
 
   if (n_layers == 1) {
@@ -132,7 +142,10 @@ plot.multinethist <- function(x, y = NA, type = "MNhist",
   } else {
     return(invisible(.plot_multinethist_layers(x, type, idx_order, power,
                                                col.regions, colorkey, prob,
-                                               digits, prob.cex, prob.col, ...)))
+                                               digits, prob.cex, prob.col,
+                                               layout = layout,
+                                               layer_titles = layer_titles,
+                                               ...)))
   }
 }
 
@@ -145,7 +158,9 @@ plot.multinethist <- function(x, y = NA, type = "MNhist",
                                       colorkey = FALSE,
                                       prob = FALSE, digits = 2,
                                       prob.cex = 0.1 + 0.5/log10(max(x$cluster)),
-                                      prob.col = "white", ...) {
+                                      prob.col = "white",
+                                      layout = NULL,
+                                      layer_titles = NULL, ...) {
   k <- dim(x$thetahat)[1]
   if (!(type %in% c("MNhist", "prob"))) {
     stop("type must be one of MNhist or prob.")
@@ -159,6 +174,25 @@ plot.multinethist <- function(x, y = NA, type = "MNhist",
   n_loop <- ifelse(x$homogeneous & (type == "MNhist"),
                    1L,
                    dim(x$thetahat)[3])
+
+  if (!is.null(layout)) {
+    if (!is.numeric(layout) || length(layout) != 2L || anyNA(layout) ||
+        any(layout < 1L)) {
+      stop("layout must be a length-2 integer vector of positive values.")
+    }
+    if (layout[1L] * layout[2L] < n_loop) {
+      stop(paste0("layout c(", layout[1L], ", ", layout[2L], ") has only ",
+                  layout[1L] * layout[2L], " cells but ", n_loop,
+                  " layers to plot."))
+    }
+  }
+
+  if (!is.null(layer_titles)) {
+    if (!is.character(layer_titles) || length(layer_titles) != n_loop) {
+      stop(paste0("layer_titles must be a character vector of length ", n_loop,
+                  " (number of layers to plot)."))
+    }
+  }
 
   # compute global max for a consistent color scale across layers
   all_max <- vapply(seq_len(n_loop), function(l) {
@@ -174,6 +208,20 @@ plot.multinethist <- function(x, y = NA, type = "MNhist",
     y = list(at = seq_len(k), labels = as.character(idx_order))
   )
 
+  extra <- list(...)
+
+  if (!is.null(layout)) {
+    nrows <- layout[1L]
+    ncols <- layout[2L]
+    if (!"aspect" %in% names(extra))
+      extra[["aspect"]] <- "fill"
+    if (!"par.settings" %in% names(extra))
+      extra[["par.settings"]] <- list(
+        layout.heights = list(top.padding = 0, bottom.padding = 0),
+        layout.widths  = list(left.padding = 0, right.padding = 0)
+      )
+  }
+
   for (l in seq_len(n_loop)) {
     mat <- switch(type,
       "MNhist" = (x$thetahat[idx_order, idx_order, l] / x$rho_hat[l])^power,
@@ -181,23 +229,29 @@ plot.multinethist <- function(x, y = NA, type = "MNhist",
     rownames(mat) <- as.character(idx_order)
     colnames(mat) <- as.character(idx_order)
 
+    base_args <- list(mat,
+      col.regions = col.regions, at = at_vals, colorkey = colorkey,
+      main = if (!is.null(layer_titles)) layer_titles[l] else paste("Layer", l),
+      ylim = c(k + 0.5, 0.5),
+      xlab = "", ylab = "", scales = scales_arg)
+
     if (prob && type == "prob") {
-      print(lattice::levelplot(mat,
-              col.regions = col.regions, at = at_vals, colorkey = colorkey,
-              main = paste("Layer", l),
-              ylim = c(k + 0.5, 0.5),
-              xlab = "", ylab = "", scales = scales_arg,
-              panel = function(x, y, z, ...) {
-                lattice::panel.levelplot(x, y, z, ...)
-                lattice::panel.text(x, y, labels = round(z, digits),
-                                    col = prob.col, cex = prob.cex)
-              }, ...))
+      base_args[["panel"]] <- function(x, y, z, ...) {
+        lattice::panel.levelplot(x, y, z, ...)
+        lattice::panel.text(x, y, labels = round(z, digits),
+                            col = prob.col, cex = prob.cex)
+      }
+    }
+    p <- do.call(lattice::levelplot, c(base_args, extra))
+
+    if (is.null(layout)) {
+      print(p)
     } else {
-      print(lattice::levelplot(mat,
-              col.regions = col.regions, at = at_vals, colorkey = colorkey,
-              main = paste("Layer", l),
-              ylim = c(k + 0.5, 0.5),
-              xlab = "", ylab = "", scales = scales_arg, ...))
+      col_pos <- ((l - 1L) %% ncols) + 1L
+      row_pos <- ((l - 1L) %/% ncols) + 1L
+      print(p,
+            split = c(col_pos, row_pos, ncols, nrows),
+            more  = (l < n_loop))
     }
   }
   return(invisible(NULL))

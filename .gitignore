@@ -13,3 +13,5 @@ data/arxiv
 inst/doc
 /doc/
 /Meta/
+.claude/
+.positai

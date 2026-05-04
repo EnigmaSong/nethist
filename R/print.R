@@ -37,7 +37,7 @@ print.nethist <- function(x, ...){
   
   cat(paste0("\n", ifelse(x$method == "PLL", 
                           paste("normalized likelihood:", x$normalized_LL, sep="\n"), 
-                          paste("Squared error:", x$LSE, sep = "\n")),"\n"))
+                          paste("Mean squared error:", x$LSE, sep = "\n")),"\n"))
   
   cat("\nAvailable components:\n", sep = "\n")
   print(names(x))
@@ -57,7 +57,7 @@ print.multinethist <- function(x, ...){
   
   cat(paste0("\n", ifelse(x$method == "PLL", 
                           paste("normalized likelihood:", x$normalized_LL, sep="\n"), 
-                          paste("Squared error:", x$LSE, sep = "\n")),"\n"))
+                          paste("Mean squared error:", x$LSE, sep = "\n")),"\n"))
   
   cat("\nAvailable components:\n", sep = "\n")
   print(names(x))
@@ -78,7 +78,7 @@ print.hnethist <- function(x, ...){
   
   cat(paste0("\n", ifelse(x$method == "PLL", 
                           paste("normalized likelihood:", x$normalized_LL, sep="\n"), 
-                          paste("Squared error:", x$LSE, sep = "\n")),"\n"))
+                          paste("Mean squared error:", x$LSE, sep = "\n")),"\n"))
   
   cat("\nAvailable components:\n", sep = "\n")
   print(names(x))
