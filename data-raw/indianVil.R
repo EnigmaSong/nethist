@@ -1,7 +1,8 @@
 # Original Source: https://doi.org/10.7910/DVN/U3BIHX
 # From the source, we only use Village No. 40.
 files_adj_mats <- list.files(path = "data-raw", full.names = TRUE)
-layer_names <- c("give advice",
+layer_names <- c("Borrow money",
+                 "give advice",
                  "help decision",
                  "kero rice come",
                  "kero rice go",
@@ -20,8 +21,8 @@ nets <- vector("list", length(files_HH_networks))
 for(i in 1:length(files_HH_networks)){
   print(files_HH_networks[i])
   loaded_adj_mat <- as.matrix(read.csv(files_HH_networks[i], header = FALSE))
-  nets[[i]] <- igraph::graph_from_adjacency_matrix(loaded_adj_mat, 
-                                                mode = "undirected", diag = FALSE)
+  nets[[i]] <- igraph::graph_from_adjacency_matrix(loaded_adj_mat,
+                                                mode = "max", diag = FALSE)
 }
 #Covert list to array
 n_nodes <- igraph::vcount(nets[[1]])
@@ -33,6 +34,7 @@ for(l in 1:12){
 glob_deg_net_array <- rowSums(IndianVil)
 zero_deg_nodes <- which(glob_deg_net_array==0)
 IndianVil <- IndianVil[-zero_deg_nodes,-zero_deg_nodes,]
+dimnames(IndianVil)[[3]] <- layer_names
 
 usethis::use_data(IndianVil, overwrite = TRUE)
 
