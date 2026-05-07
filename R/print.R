@@ -1,15 +1,15 @@
 ##' Print Network histogram type objects
 ##'
-##' Printing ``nethist", ``multinethist", and ``hnethist" 
+##' Printing ``nethist", ``multinethist", and ``hnethist"
 ##'
 ##' @param x one of ``nethist", ``multinethist", and ``hnethist" objects.
 ##' @param ... see print()
-##' @details 
-##' ... 
-##' @returns 
+##' @details
+##' ...
+##' @returns
 ##' Prints the objects
 ##' \itemize{
-##' \item `thetahat' a probability array from multinetwork histogram ordered by cluster labels. 
+##' \item `thetahat' a probability array from multinetwork histogram ordered by cluster labels.
 ##' }
 ##' @examples
 ##' \dontrun{
@@ -23,65 +23,40 @@
 ##' }
 ##' @importFrom stats heatmap
 ##' @importFrom graphics text
+##' @noRd
 
-##' @exportS3Method 
-print.nethist <- function(x, ...){
-  
-  cat("\nthetahat:\n")
-  print(x$thetahat, ...)
-  
-  cat(paste0("\nMethod: ", ifelse(x$method == "PLL", 
-                                   "Profile Likelihood", 
-                                   "Least Squared Error"),
+.print_nethist_footer <- function(x) {
+  cat(paste0("\nMethod: ", ifelse(x$method == "PLL",
+                                  "Profile Likelihood",
+                                  "Least Squared Error"),
              "\n"))
-  
-  cat(paste0("\n", ifelse(x$method == "PLL", 
-                          paste("normalized likelihood:", x$normalized_LL, sep="\n"), 
-                          paste("Mean squared error:", x$LSE, sep = "\n")),"\n"))
-  
+  cat(paste0("\n", ifelse(x$method == "PLL",
+                          paste("normalized likelihood:", x$normalized_LL, sep = "\n"),
+                          paste("Mean squared error:", x$MSE, sep = "\n")), "\n"))
   cat("\nAvailable components:\n", sep = "\n")
   print(names(x))
-  
+}
+
+##' @exportS3Method
+print.nethist <- function(x, ...){
+  cat("\nthetahat:\n")
+  print(x$thetahat, ...)
+  .print_nethist_footer(x)
   return(invisible(x))
 }
 
-##' @exportS3Method 
+##' @exportS3Method
 print.multinethist <- function(x, ...){
   cat("\nTheta_hat:\n")
   print(x$thetahat[,,], ...)
-  
-  cat(paste0("\nMethod: ", ifelse(x$method == "PLL", 
-                                  "Profile Likelihood", 
-                                  "Least Squared Error"),
-             "\n"))
-  
-  cat(paste0("\n", ifelse(x$method == "PLL", 
-                          paste("normalized likelihood:", x$normalized_LL, sep="\n"), 
-                          paste("Mean squared error:", x$LSE, sep = "\n")),"\n"))
-  
-  cat("\nAvailable components:\n", sep = "\n")
-  print(names(x))
-  
+  .print_nethist_footer(x)
   return(invisible(x))
 }
 
-
-##' @exportS3Method 
+##' @exportS3Method
 print.hnethist <- function(x, ...){
   cat("\nTheta_hat:\n")
   print(x$thetahat, ...)
-  
-  cat(paste0("\nMethod: ", ifelse(x$method == "PLL", 
-                                  "Profile Likelihood", 
-                                  "Least Squared Error"),
-             "\n"))
-  
-  cat(paste0("\n", ifelse(x$method == "PLL", 
-                          paste("normalized likelihood:", x$normalized_LL, sep="\n"), 
-                          paste("Mean squared error:", x$LSE, sep = "\n")),"\n"))
-  
-  cat("\nAvailable components:\n", sep = "\n")
-  print(names(x))
-  
+  .print_nethist_footer(x)
   return(invisible(x))
 }

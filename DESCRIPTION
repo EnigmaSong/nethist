@@ -7,13 +7,14 @@ Authors@R: c(person("Youngseok","Song", email="youngseok.song@mail.wvu.edu", rol
             person("Sofia C.","Olhede", email = "sofia.olhede@epfl.ch", role = "aut"))
 Maintainer: Youngseok Song <youngseok.song@mail.wvu.edu>
 Description: R package for network histogram estimation and additional tools. To install the package from source, you need C++ and Fortran (due to RSpectra) compilers.
-Suggests: 
+Suggests:
     testthat (>= 3.0.0),
     tinytest,
     igraphdata,
     xml2,
     knitr,
-    rmarkdown
+    rmarkdown,
+    Matrix
 Encoding: UTF-8
 RoxygenNote: 7.3.3
 Imports:

@@ -83,7 +83,7 @@ To display the estimated probability values on each bin:
 
 ```{r plot-nethist-prob, fig.width=5, fig.height=5}
 plot(result, type = "prob", prob = TRUE,
-     col = colorRampPalette(c("#FFFFFF", "#08306B"))(50))
+     col.regions = colorRampPalette(c("#FFFFFF", "#08306B"))(50))
 ```
 
 ---
