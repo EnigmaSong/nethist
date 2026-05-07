@@ -30,12 +30,12 @@ A list of class \code{c("hnethist", "nethist")} with the following fields:
 \item \code{thetahat} a k-by-k probability matrix of the selected hybrid model, where k is the number of nethist blocks.
 \item \code{rho_hat} estimated sparsity parameter from the initial nethist fit.
 \item \code{normalized_LL} normalized log-likelihood from the initial nethist fit.
-\item \code{LSE} least squared error of the selected model.
+\item \code{MSE} mean squared error of the selected model.
 \item \code{method} loss function used (\code{"LSE"} or \code{"PLL"}).
 \item \code{blockcluster} a \code{kmeans} object describing how the k-by-k blocks were merged into \code{s} shapes.
 \item \code{BIC} BIC value of the selected model.
 \item \code{s} number of distinct shapes in the selected model.
-\item \code{details} list of length \code{s_max}, one entry per candidate model, each containing \code{s}, \code{cluster}, \code{thetahat}, \code{LSE}, and \code{BIC}.
+\item \code{details} list of length \code{s_max}, one entry per candidate model, each containing \code{s}, \code{cluster}, \code{thetahat}, \code{MSE}, and \code{BIC}.
 \item \code{initial} the nethist object used as the starting point for block clustering.
 }
 }

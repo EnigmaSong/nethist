@@ -45,7 +45,7 @@ test_that("class is c('hnethist', 'nethist')", {
 test_that("all required fields exist", {
   expect_named(
     result,
-    c("cluster", "thetahat", "rho_hat", "normalized_LL", "LSE", "method",
+    c("cluster", "thetahat", "rho_hat", "normalized_LL", "MSE", "method",
       "blockcluster", "BIC", "s", "details", "initial"),
     ignore.order = TRUE
   )
@@ -78,7 +78,7 @@ test_that("initial field is a nethist object", {
 test_that("selected model minimizes BIC over all candidates", {
   BICs <- sapply(result$details, function(x) x$BIC)
   expect_equal(result$BIC, min(BICs))
-  expect_equal(result$LSE, result$details[[which.min(BICs)]]$LSE)
+  expect_equal(result$MSE, result$details[[which.min(BICs)]]$MSE)
 })
 
 test_that("s is a positive integer-valued scalar", {
@@ -98,20 +98,20 @@ test_that("print() dispatches via nethist inheritance without error", {
 
 # -- Helper: hnethist_BIC ----------------------------------------------------
 test_that("hnethist_BIC returns correct Gaussian BIC value", {
-  nh       <- list(n = 100L, s = 3L, LSE = 50.0)
+  nh       <- list(n = 100L, s = 3L, MSE = 50.0)
   N        <- 100L * 99L / 2L
   expected <- N * log(50.0 * 100L^2 / (2 * N)) + 3L * log(N)
   expect_equal(nethist:::hnethist_BIC(nh), expected)
 })
 
-test_that("hnethist_BIC penalty increases with s given same LSE", {
-  make_nh <- function(s) list(n = 100L, s = s, LSE = 50.0)
+test_that("hnethist_BIC penalty increases with s given same MSE", {
+  make_nh <- function(s) list(n = 100L, s = s, MSE = 50.0)
   expect_lt(nethist:::hnethist_BIC(make_nh(1L)),
             nethist:::hnethist_BIC(make_nh(5L)))
 })
 
-test_that("hnethist_BIC decreases with smaller LSE given same s", {
-  make_nh <- function(lse) list(n = 100L, s = 3L, LSE = lse)
+test_that("hnethist_BIC decreases with smaller MSE given same s", {
+  make_nh <- function(mse) list(n = 100L, s = 3L, MSE = mse)
   expect_gt(nethist:::hnethist_BIC(make_nh(100.0)),
             nethist:::hnethist_BIC(make_nh(10.0)))
 })

@@ -159,7 +159,7 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
                    thetahat =  rhoHat,
                    rho_hat = rhoHat,
                    normalized_LL = Log_Likelihood/(sum(A)/2),
-                   LSE = LSE/n_nodes^2,
+                   MSE = LSE/n_nodes^2,
                    method = method_char,
                    homogeneous = common_f)
     result <- structure(result, class= ifelse(n_layers > 1, "multinethist", "nethist"))
@@ -189,7 +189,7 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
                  thetahat =  res$ThetaHat,
                  rho_hat = rhoHat,
                  normalized_LL = res$norm_LL,
-                 LSE = res$LSE,
+                 MSE = res$LSE,
                  method = method_char,
                  homogeneous = common_f)
   result <- structure(result, class= ifelse(n_layers > 1, "multinethist", "nethist"))

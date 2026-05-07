@@ -16,12 +16,12 @@
 ##' \item `thetahat` a k-by-k probability matrix of the selected hybrid model, where k is the number of nethist blocks.
 ##' \item `rho_hat` estimated sparsity parameter from the initial nethist fit.
 ##' \item `normalized_LL` normalized log-likelihood from the initial nethist fit.
-##' \item `LSE` least squared error of the selected model.
+##' \item `MSE` mean squared error of the selected model.
 ##' \item `method` loss function used (`"LSE"` or `"PLL"`).
 ##' \item `blockcluster` a `kmeans` object describing how the k-by-k blocks were merged into `s` shapes.
 ##' \item `BIC` BIC value of the selected model.
 ##' \item `s` number of distinct shapes in the selected model.
-##' \item `details` list of length `s_max`, one entry per candidate model, each containing `s`, `cluster`, `thetahat`, `LSE`, and `BIC`.
+##' \item `details` list of length `s_max`, one entry per candidate model, each containing `s`, `cluster`, `thetahat`, `MSE`, and `BIC`.
 ##' \item `initial` the nethist object used as the starting point for block clustering.
 ##' }
 ##' @usage hnethist(A, h = NA, method = "LSE", max_itr = 5e6, swap_rule = "random",
@@ -71,7 +71,7 @@ hnethist <- function(A, h = NA,
     result$details[[ss]]$s <- ss
     result$details[[ss]]$cluster <- hnethist_kmeans(result$initial, centers = ss)
     result$details[[ss]]$thetahat <- hnethist_smoothing(result$details[[ss]]$cluster, k)
-    result$details[[ss]]$LSE <- hnethist_LSE(result$details[[ss]]$thetahat, result$initial$cluster, A)
+    result$details[[ss]]$MSE <- hnethist_LSE(result$details[[ss]]$thetahat, result$initial$cluster, A)
     result$details[[ss]]$normalized_LL <- hnethist_normalized_LL(result$details[[ss]]$thetahat, result$initial$cluster, A)
     result$details[[ss]]$BIC <- hnethist_BIC(result$details[[ss]])
   }
@@ -87,7 +87,7 @@ hnethist <- function(A, h = NA,
       thetahat      = best$thetahat,
       rho_hat       = result$initial$rho_hat,
       normalized_LL = best$normalized_LL,
-      LSE           = best$LSE,
+      MSE           = best$MSE,
       method        = result$initial$method,
       # hnethist-specific fields
       blockcluster  = best$cluster,

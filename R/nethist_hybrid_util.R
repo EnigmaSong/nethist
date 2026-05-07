@@ -31,5 +31,5 @@ hnethist_normalized_LL <- function(thetahat, cluster_initial, A) {
 ## sums both (i,j) and (j,i) then divides by n^2), penalty = s * log(N).
 hnethist_BIC <- function(nh){
   N <- nh$n * (nh$n - 1) / 2
-  return(N * log(nh$LSE * nh$n^2 / (2 * N)) + nh$s * log(N))
+  return(N * log(nh$MSE * nh$n^2 / (2 * N)) + nh$s * log(N))
 }
