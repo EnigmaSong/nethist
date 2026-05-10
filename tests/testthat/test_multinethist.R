@@ -107,12 +107,16 @@ test_that("network input gives identical result to matrix (single layer)", {
                {set.seed(1L); multinethist(A,     h = 5L, max_itr = 1000L)})
 })
 
-test_that("list of matrices gives identical result to array", {
+test_that("list of plain matrices errors (vertex ordering unverifiable)", {
   A1 <- array_mnet[, , 1L]
   A2 <- array_mnet[, , 2L]
-  ref <- array(c(A1, A2), dim = c(nrow(A1), ncol(A1), 2L))
-  expect_equal({set.seed(1L); multinethist(list(A1, A2), h = 10L, max_itr = 1000L)},
-               {set.seed(1L); multinethist(ref,          h = 10L, max_itr = 1000L)})
+  expect_error(multinethist(list(A1, A2), h = 10L), regexp = "plain matrix")
+})
+
+test_that("list of dgCMatrix errors (vertex ordering unverifiable)", {
+  A1 <- Matrix::Matrix(array_mnet[, , 1L], sparse = TRUE)
+  A2 <- Matrix::Matrix(array_mnet[, , 2L], sparse = TRUE)
+  expect_error(multinethist(list(A1, A2), h = 10L), regexp = "plain matrix")
 })
 
 test_that("list of igraph gives identical result to array", {

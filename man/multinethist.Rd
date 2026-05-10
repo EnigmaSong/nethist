@@ -24,7 +24,26 @@ nethist(
 )
 }
 \arguments{
-\item{A}{An adjacency array or list of igraph object. It must be an undirected and simple graph.}
+\item{A}{Adjacency data for one or more network layers. Accepted formats:
+\itemize{
+\item \strong{Single-layer}: a \code{matrix}, \code{igraph} object, or
+\code{network} object.
+\item \strong{Multilayer}: a 3D \code{array} of dimension
+\eqn{n \times n \times L}; a \code{list} of \code{igraph} or
+\code{network} objects (all sharing a common vertex set); or a
+\code{combined_networks} object from \code{ergm.multi::Networks()}.
+}
+Plain \code{matrix} or sparse \code{Matrix} elements inside a list are
+not accepted because vertex ordering across layers cannot be verified.
+Use a 3D array instead.
+
+When a list of \code{igraph} or \code{network} objects is supplied,
+vertex names are used to align layers if present (via
+\code{igraph::vertex_attr(g, "name")} or
+\code{network::network.vertex.names()}). If vertex names are absent,
+positional correspondence is assumed: vertex \eqn{i} in each layer is
+treated as the same node. All layers must have the same number of
+vertices, and when names are present they must form the same set.}
 
 \item{h}{A bandwidth parameter. If \code{NA}, selecting bandwidth by Olhede and Wolfe (2014). If specified, the user input value is used.}
 

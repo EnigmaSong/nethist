@@ -3,7 +3,26 @@
 ##' Estimating network histogram for multiplex networks and returning the indices of partitions.
 ##'
 ##' @name multinethist
-##' @param A An adjacency array or list of igraph object. It must be an undirected and simple graph.
+##' @param A Adjacency data for one or more network layers. Accepted formats:
+##'   \itemize{
+##'     \item \strong{Single-layer}: a \code{matrix}, \code{igraph} object, or
+##'       \code{network} object.
+##'     \item \strong{Multilayer}: a 3D \code{array} of dimension
+##'       \eqn{n \times n \times L}; a \code{list} of \code{igraph} or
+##'       \code{network} objects (all sharing a common vertex set); or a
+##'       \code{combined_networks} object from \code{ergm.multi::Networks()}.
+##'   }
+##'   Plain \code{matrix} or sparse \code{Matrix} elements inside a list are
+##'   not accepted because vertex ordering across layers cannot be verified.
+##'   Use a 3D array instead.
+##'
+##'   When a list of \code{igraph} or \code{network} objects is supplied,
+##'   vertex names are used to align layers if present (via
+##'   \code{igraph::vertex_attr(g, "name")} or
+##'   \code{network::network.vertex.names()}). If vertex names are absent,
+##'   positional correspondence is assumed: vertex \eqn{i} in each layer is
+##'   treated as the same node. All layers must have the same number of
+##'   vertices, and when names are present they must form the same set.
 ##' @param h A bandwidth parameter. If `NA`, selecting bandwidth by Olhede and Wolfe (2014). If specified, the user input value is used.
 ##' @param common_f a logical variable indicating assume the common network histogram function for all layers.
 ##' @param method Type of loss functions for network histogram. It must be one of `PLL` (default) or `LSE`. `LSE` is implemented only for single-layer network histogram. See details
@@ -123,14 +142,14 @@ multinethist.list <- function(A, h = NA, common_f = FALSE,
     if (inherits(el, "combined_networks")) {
       stop(sprintf(
         "Layer %d is a combined_networks object. Unnest it first.", l))
+    } else if (is.matrix(el) || (isS4(el) && methods::is(el, "Matrix"))) {
+      stop(sprintf(paste0(
+        "Layer %d is a plain matrix. Vertex ordering cannot be verified ",
+        "across layers. Use a 3D array instead."), l))
     } else if (inherits(el, "igraph")) {
       igraph::as_adjacency_matrix(el, sparse = FALSE)
     } else if (inherits(el, "network")) {
       as.matrix(el, matrix.type = "adjacency")
-    } else if (inherits(el, "dgCMatrix")) {
-      as.matrix(el)
-    } else if (is.matrix(el)) {
-      el
     } else {
       stop(sprintf("Layer %d has unsupported class: %s.", l, class(el)[1L]))
     }
