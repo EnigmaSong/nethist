@@ -176,3 +176,19 @@ test_that("complete graph runs without error and rho_hat is close to 1", {
 test_that("numeric method argument triggers error", {
   expect_error(nethist(G, h = h_used, method = 123))
 })
+
+## network input ----
+test_that("network input gives identical result to matrix", {
+  skip_if_not_installed("network")
+  A_net <- network::as.network(A_dense, directed = FALSE)
+  expect_equal({set.seed(1L); nethist(A_net,   h = h_used)},
+               {set.seed(1L); nethist(A_dense, h = h_used)})
+})
+
+test_that("combined_networks input errors with redirect to multinethist", {
+  skip_if_not_installed("network")
+  skip_if_not_installed("ergm.multi")
+  net  <- network::as.network(A_dense, directed = FALSE)
+  nets <- ergm.multi::Networks(list(net, net))
+  expect_error(nethist(nets, h = h_used), regexp = "multinethist")
+})

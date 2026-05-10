@@ -14,7 +14,8 @@ Suggests:
     xml2,
     knitr,
     rmarkdown,
-    Matrix
+    Matrix,
+    network
 Encoding: UTF-8
 RoxygenNote: 7.3.3
 Imports:

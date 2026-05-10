@@ -32,18 +32,38 @@ nethist.matrix<-function(A, h = NA,
   args <- as.list(environment())
   do.call("nethist.default", args)
 }
-##' @exportS3Method 
-nethist.dgCMatrix<-function(A, h = NA, 
+##' @exportS3Method
+nethist.dgCMatrix<-function(A, h = NA,
                             method = "PLL",
                             max_itr = 5e6,
-                            swap_rule = "random", 
+                            swap_rule = "random",
                             consecutive_iter_threshold = 2e4,
                             verbose = FALSE){
   args <- as.list(environment())
   args$A <- as.matrix(args$A)
   do.call("nethist.default", args)
 }
-##' @exportS3Method 
+##' @exportS3Method
+nethist.combined_networks <- function(A, h = NA,
+                                      method = "PLL",
+                                      max_itr = 5e6,
+                                      swap_rule = "random",
+                                      consecutive_iter_threshold = 2e4,
+                                      verbose = FALSE) {
+  stop("A is a combined_networks (multilayer) object. Use multinethist() instead.")
+}
+##' @exportS3Method
+nethist.network <- function(A, h = NA,
+                            method = "PLL",
+                            max_itr = 5e6,
+                            swap_rule = "random",
+                            consecutive_iter_threshold = 2e4,
+                            verbose = FALSE) {
+  args <- as.list(environment())
+  args$A <- as.matrix(args$A, matrix.type = "adjacency")
+  do.call("nethist.default", args)
+}
+##' @exportS3Method
 nethist.default <- function(A, h = NA, 
                             method = "PLL",
                             max_itr = 5e6,

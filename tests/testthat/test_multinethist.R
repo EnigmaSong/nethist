@@ -97,3 +97,71 @@ test_that("nethist and multinethist give identical results for 2D matrix input",
   expect_equal(result_nethist$rho_hat,      result_multi$rho_hat)
   expect_equal(result_nethist$normalized_LL, result_multi$normalized_LL)
 })
+
+## network / list / combined_networks input ----
+test_that("network input gives identical result to matrix (single layer)", {
+  skip_if_not_installed("network")
+  A <- kite[, , 1L]
+  A_net <- network::as.network(A, directed = FALSE)
+  expect_equal({set.seed(1L); multinethist(A_net, h = 5L, max_itr = 1000L)},
+               {set.seed(1L); multinethist(A,     h = 5L, max_itr = 1000L)})
+})
+
+test_that("list of matrices gives identical result to array", {
+  A1 <- array_mnet[, , 1L]
+  A2 <- array_mnet[, , 2L]
+  ref <- array(c(A1, A2), dim = c(nrow(A1), ncol(A1), 2L))
+  expect_equal({set.seed(1L); multinethist(list(A1, A2), h = 10L, max_itr = 1000L)},
+               {set.seed(1L); multinethist(ref,          h = 10L, max_itr = 1000L)})
+})
+
+test_that("list of igraph gives identical result to array", {
+  skip_if_not_installed("igraph")
+  A1 <- array_mnet[, , 1L]
+  A2 <- array_mnet[, , 2L]
+  g1 <- igraph::graph_from_adjacency_matrix(A1, mode = "undirected", diag = FALSE)
+  g2 <- igraph::graph_from_adjacency_matrix(A2, mode = "undirected", diag = FALSE)
+  ref <- array(c(A1, A2), dim = c(nrow(A1), ncol(A1), 2L))
+  expect_equal({set.seed(1L); multinethist(list(g1, g2), h = 10L, max_itr = 1000L)},
+               {set.seed(1L); multinethist(ref,          h = 10L, max_itr = 1000L)})
+})
+
+test_that("list of network gives identical result to array", {
+  skip_if_not_installed("network")
+  A1 <- array_mnet[, , 1L]
+  A2 <- array_mnet[, , 2L]
+  n1 <- network::as.network(A1, directed = FALSE)
+  n2 <- network::as.network(A2, directed = FALSE)
+  ref <- array(c(A1, A2), dim = c(nrow(A1), ncol(A1), 2L))
+  expect_equal({set.seed(1L); multinethist(list(n1, n2), h = 10L, max_itr = 1000L)},
+               {set.seed(1L); multinethist(ref,          h = 10L, max_itr = 1000L)})
+})
+
+test_that("combined_networks gives identical result to array", {
+  skip_if_not_installed("network")
+  skip_if_not_installed("ergm.multi")
+  A1 <- array_mnet[, , 1L]
+  A2 <- array_mnet[, , 2L]
+  n1   <- network::as.network(A1, directed = FALSE)
+  n2   <- network::as.network(A2, directed = FALSE)
+  nets <- ergm.multi::Networks(list(n1, n2))
+  ref  <- array(c(A1, A2), dim = c(nrow(A1), ncol(A1), 2L))
+  expect_equal({set.seed(1L); multinethist(nets, h = 10L, max_itr = 1000L)},
+               {set.seed(1L); multinethist(ref,  h = 10L, max_itr = 1000L)})
+})
+
+test_that("vertex count mismatch in list errors", {
+  A1 <- array_mnet[, , 1L]
+  A2 <- array_mnet[seq_len(nrow(A1) - 1L), seq_len(nrow(A1) - 1L), 1L]
+  expect_error(multinethist(list(A1, A2), h = 10L))
+})
+
+test_that("combined_networks element inside list errors", {
+  skip_if_not_installed("network")
+  skip_if_not_installed("ergm.multi")
+  A1   <- array_mnet[, , 1L]
+  n1   <- network::as.network(A1, directed = FALSE)
+  nets <- ergm.multi::Networks(list(n1, n1))
+  expect_error(multinethist(list(nets, nets), h = 10L),
+               regexp = "combined_networks")
+})

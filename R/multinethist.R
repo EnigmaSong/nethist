@@ -82,10 +82,95 @@ multinethist.igraph <-  function(A, h = NA, common_f = FALSE,
 }
 
 ##' @exportS3Method
-multinethist.matrix <-  function(A, h = NA, common_f = FALSE, 
+multinethist.network <- function(A, h = NA, common_f = FALSE,
                                  method = "PLL",
                                  max_itr = 5e6,
-                                 swap_rule = "random", 
+                                 swap_rule = "random",
+                                 consecutive_iter_threshold = 2e4,
+                                 verbose = FALSE) {
+  return(multinethist.matrix(as.matrix(A, matrix.type = "adjacency"),
+                             h, common_f, method,
+                             max_itr, swap_rule,
+                             consecutive_iter_threshold, verbose))
+}
+
+##' @exportS3Method
+multinethist.combined_networks <- function(A, h = NA, common_f = FALSE,
+                                           method = "PLL",
+                                           max_itr = 5e6,
+                                           swap_rule = "random",
+                                           consecutive_iter_threshold = 2e4,
+                                           verbose = FALSE) {
+  layer_id <- network::get.vertex.attribute(A, ".NetworkID")
+  layers   <- sort(unique(layer_id))
+  M        <- as.matrix(A, matrix.type = "adjacency")
+  mats     <- lapply(layers, function(l) M[layer_id == l, layer_id == l])
+  arr      <- .adj_list_to_array(mats)
+  return(multinethist.array(arr, h, common_f, method, max_itr, swap_rule,
+                            consecutive_iter_threshold, verbose))
+}
+
+##' @exportS3Method
+multinethist.list <- function(A, h = NA, common_f = FALSE,
+                              method = "PLL",
+                              max_itr = 5e6,
+                              swap_rule = "random",
+                              consecutive_iter_threshold = 2e4,
+                              verbose = FALSE) {
+  if (length(A) == 0L) stop("A must be a non-empty list.")
+  mats <- lapply(seq_along(A), function(l) {
+    el <- A[[l]]
+    if (inherits(el, "combined_networks")) {
+      stop(sprintf(
+        "Layer %d is a combined_networks object. Unnest it first.", l))
+    } else if (inherits(el, "igraph")) {
+      igraph::as_adjacency_matrix(el, sparse = FALSE)
+    } else if (inherits(el, "network")) {
+      as.matrix(el, matrix.type = "adjacency")
+    } else if (inherits(el, "dgCMatrix")) {
+      as.matrix(el)
+    } else if (is.matrix(el)) {
+      el
+    } else {
+      stop(sprintf("Layer %d has unsupported class: %s.", l, class(el)[1L]))
+    }
+  })
+  arr <- .adj_list_to_array(mats)
+  return(multinethist.array(arr, h, common_f, method, max_itr, swap_rule,
+                            consecutive_iter_threshold, verbose))
+}
+
+# Helper: align a list of adjacency matrices by rownames and stack into array.
+# Matrices with identical rownames (including positional "1","2",...) are
+# accepted as-is; differing orders are permuted to match the first layer.
+# Mismatched vertex sets raise an error.
+.adj_list_to_array <- function(mats) {
+  L    <- length(mats)
+  dims <- vapply(mats, nrow, integer(1L))
+  if (length(unique(dims)) > 1L)
+    stop("All layers must have the same number of vertices.")
+  n   <- dims[1L]
+  ref <- rownames(mats[[1L]])
+  for (l in seq_len(L)[-1L]) {
+    cur <- rownames(mats[[l]])
+    if (is.null(ref) || is.null(cur)) next   # no names: positional
+    if (!setequal(cur, ref))
+      stop(sprintf("Layer %d has different vertex names from layer 1.", l))
+    if (!identical(cur, ref)) {
+      perm       <- match(ref, cur)
+      mats[[l]]  <- mats[[l]][perm, perm]
+    }
+  }
+  arr <- array(0L, dim = c(n, n, L))
+  for (l in seq_len(L)) arr[, , l] <- mats[[l]]
+  return(arr)
+}
+
+##' @exportS3Method
+multinethist.matrix <-  function(A, h = NA, common_f = FALSE,
+                                 method = "PLL",
+                                 max_itr = 5e6,
+                                 swap_rule = "random",
                                  consecutive_iter_threshold = 2e4,
                                  verbose = FALSE){
   return(multinethist.array(array(A, dim=c(nrow(A), ncol(A), 1)), 
