@@ -7,7 +7,7 @@ using namespace Rcpp;
 arma::uvec select_swap(const Assignment& assignment, 
                        const int& n_node,
                        const int& swap_rule){
-  //Current: only uniform random sample is implemented.
+  // Current: only single_random (one pair, uniform random) is implemented.
   const arma::uword selected_node1 = sample_node_by_swap_rule(n_node, swap_rule); 
   const int label1 = assignment.node_labels.at(selected_node1); 
   arma::uword selected_node2 = sample_node_by_swap_rule(n_node, swap_rule); 
@@ -27,7 +27,7 @@ arma::uvec select_swap(const Assignment& assignment,
 }
 arma::uword sample_node_by_swap_rule(const int& n_node, const int& swap_rule){
   switch(swap_rule){ 
-  case 1: // uniform random sample (equivalent to sample.int() in R)
+  case 1: // single_random: one pair drawn uniformly at random
     return as<arma::uword>(wrap(sample(n_node, 1, false) - 1));
   }
   return 0;

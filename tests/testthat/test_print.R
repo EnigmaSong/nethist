@@ -8,7 +8,7 @@ data(kite, package = "igraphdata")
 kite_mat <- igraph::as_adjacency_matrix(igraph::upgrade_graph(kite), sparse = FALSE)
 kite_arr <- array(kite_mat, dim = c(10, 10, 1))
 set.seed(42)
-kite_mn <- multinethist(kite_arr, h = 5, max_itr = 1000)
+kite_mn <- multinethist(kite_arr, h = 5, control = nethist_control(max_itr = 1000))
 
 ## print.nethist ----
 test_that("print.nethist does not error", {

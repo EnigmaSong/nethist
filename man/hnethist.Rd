@@ -4,23 +4,20 @@
 \alias{hnethist}
 \title{Hybrid Network histogram estimation}
 \usage{
-hnethist(A, h = NA, method = "LSE", max_itr = 5e6, swap_rule = "random",
-                consecutive_iter_threshold = 2e4, verbose = FALSE)
+hnethist(A, h = NA, method = "LSE", control = nethist_control(), ...)
 }
 \arguments{
 \item{A}{An adjacency matrix or an igraph object. It must be an undirected and simple graph.}
 
-\item{h}{A bandwidth parameter. If \code{NA}, selecting bandwidth by Olhede and Wolfe (2014). If specified, the user input value is used.}
+\item{h}{A bandwidth parameter. If \code{NA}, the bandwidth is selected by Olhede and Wolfe (2014). If specified, the user-supplied value is used.}
 
-\item{method}{Type of loss functions for network histogram. It must be one of \code{LSE} (default) and \code{PLL} for single-layer hybrid network histogram. See details}
+\item{method}{Type of loss function for network histogram. Must be one of \code{LSE} (default) or \code{PLL} for single-layer hybrid network histogram. See Details.}
 
-\item{max_itr}{an integer for number of maximum iteration for greedy search.}
+\item{control}{A control object from \code{\link{nethist_control}}. Governs
+\code{max_itr}, \code{greedy_swap_rule}, \code{greedy_stop_threshold},
+and \code{verbose}.}
 
-\item{swap_rule}{string of swap node selection methods. only "random" implemented. See details.}
-
-\item{consecutive_iter_threshold}{an integer for stopping criterion. If the log-likelihood does not improve for the last \code{consecutive_iter_threshold} iterations, stop the algorithm.}
-
-\item{verbose}{logical value indicating whether verbose output is generated.}
+\item{...}{Currently unused.}
 }
 \value{
 A list of class \code{c("hnethist", "nethist")} with the following fields:

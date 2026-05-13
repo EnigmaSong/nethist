@@ -5,23 +5,10 @@
 \alias{nethist}
 \title{Network histogram estimation}
 \usage{
-nethist(A, h = NA, method = "PLL", max_itr = 5e6,
-  swap_rule = "random", consecutive_iter_threshold = 2e4,
-  verbose = FALSE)
-
 multinethist(A, h = NA, common_f = FALSE, method = "PLL",
-  max_itr = 5e6, swap_rule = "random",
-  consecutive_iter_threshold = 2e4, verbose = FALSE)
+  control = nethist_control(), ...)
 
-nethist(
-  A,
-  h = NA,
-  method = "PLL",
-  max_itr = 5e+06,
-  swap_rule = "random",
-  consecutive_iter_threshold = 20000,
-  verbose = FALSE
-)
+nethist(A, h = NA, method = "PLL", control = nethist_control(), ...)
 }
 \arguments{
 \item{A}{Adjacency data for one or more network layers. Accepted formats:
@@ -45,22 +32,22 @@ positional correspondence is assumed: vertex \eqn{i} in each layer is
 treated as the same node. All layers must have the same number of
 vertices, and when names are present they must form the same set.}
 
-\item{h}{A bandwidth parameter. If \code{NA}, selecting bandwidth by Olhede and Wolfe (2014). If specified, the user input value is used.}
+\item{h}{A bandwidth parameter. If \code{NA}, the bandwidth is selected by Olhede and Wolfe (2014). If specified, the user-supplied value is used.}
 
-\item{common_f}{a logical variable indicating assume the common network histogram function for all layers.}
+\item{common_f}{A logical; if \code{TRUE}, assumes a common network histogram function for all layers.}
 
-\item{method}{Type of loss functions for network histogram. It must be one of \code{PLL} (default) or \code{LSE}. \code{LSE} is implemented only for single-layer network histogram. See details}
+\item{method}{Type of loss function for network histogram. Must be one of \code{PLL} (default) or \code{LSE}. \code{LSE} is implemented only for single-layer networks. See Details.}
 
-\item{max_itr}{an integer for number of maximum iteration for greedy search.}
+\item{control}{A control object from \code{\link{nethist_control}}. Governs
+\code{max_itr}, \code{greedy_swap_rule}, \code{greedy_stop_threshold},
+and \code{verbose}.}
 
-\item{swap_rule}{string of swap node selection methods. only "random" implemented. See details.}
-
-\item{consecutive_iter_threshold}{an integer for stopping criterion. If the log-likelihood does not improve for the last \code{consecutive_iter_threshold} iterations, stop the algorithm.}
-
-\item{verbose}{logical value indicating whether verbose output is generated.}
+\item{...}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Pass \code{max_itr},
+\code{greedy_swap_rule}, \code{greedy_stop_threshold}, or \code{verbose}
+via \code{control = nethist_control(...)} instead.}
 }
 \value{
-If number of layer is greater than 1, it returns an object of class \code{multinethist}:
+If the number of layers is greater than 1, it returns an object of class \code{multinethist}:
 
 \itemize{
 \item \code{cluster} a vector of partition indices.
@@ -75,13 +62,13 @@ Estimating network histogram for multiplex networks and returning the indices of
 }
 \details{
 {
-lth layer's multi-network histogram is defined by thetahat/rho_hat. We can plot multinetwork histogram using \code{\link[=plot]{plot()}} and \code{\link[=plot3d]{plot3d()}}.
+The \eqn{l}th layer's multi-network histogram is defined by thetahat/rho_hat. The multinetwork histogram can be plotted using \code{\link[=plot]{plot()}} and \code{\link[=plot3d]{plot3d()}}.
 
-If the number of layer is 1, then it calls single-layer network histogram. See. nethist() in nethist package.
+If the number of layers is 1, multinethist() fits a single-layer network histogram, equivalent to nethist().
 
 \code{method} is only used for single-layer networks. \code{method = "PLL"} is for Olhede and Wolfe (2014), and \code{method = "LSE"} is for Gao et al. (2015).
 
-Note that \code{cluster} only shows a partition of vertices, and the index labels is not an ordered variable. For example, nodes in cluster 1 do not have to more similar to nodes in cluster 2 than nodes in cluster 10. Hence, users would use a user-specified order in \code{\link[=plot.multinethist]{plot.multinethist()}}.
+Note that \code{cluster} only shows a partition of vertices, and the index labels are not ordered. For example, nodes in cluster 1 do not have to be more similar to nodes in cluster 2 than to nodes in cluster 10. Hence, users may specify a custom order in \code{\link[=plot.multinethist]{plot.multinethist()}}.
 }
 }
 \examples{
@@ -92,7 +79,7 @@ Note that \code{cluster} only shows a partition of vertices, and the index label
    nethist(polblog)
    nethist_polblog <- nethist(polblog)
    nethist_polblog_with_h <- nethist(polblog, h = 72)
-   
+
    #multi-network histogram
    set.seed(42)
    data(IndianVil)
@@ -108,5 +95,5 @@ Olhede, S. C. & Wolfe, P. J. (2014). Network Histograms and Universality of Bloc
 Gao, C., Lu, Y., & Zhou, H. H. (2015). Rate-Optimal Graphon Estimation. The Annals of Statistics, 43(6), 2624-2652. doi:10.1214/15-AOS1354
 }
 \seealso{
-\code{\link[=plot.multinethist]{plot.multinethist()}}, \code{\link[=plot.nethist]{plot.nethist()}}
+\code{\link[=plot.multinethist]{plot.multinethist()}}, \code{\link[=plot.nethist]{plot.nethist()}}, \code{\link[=nethist_control]{nethist_control()}}
 }

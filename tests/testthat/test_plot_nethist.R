@@ -40,7 +40,7 @@ set.seed(42)
 data(kite, package = "igraphdata")
 kite_mat <- igraph::as_adjacency_matrix(igraph::upgrade_graph(kite), sparse = FALSE)
 kite_arr <- array(kite_mat, dim = c(10, 10, 1))
-mnhist   <- multinethist(kite_arr, h = 5, max_itr = 1000)
+mnhist   <- multinethist(kite_arr, h = 5, control = nethist_control(max_itr = 1000))
 
 test_that("plot.multinethist with default arguments", {
   expect_no_error(plot(mnhist))
@@ -64,7 +64,7 @@ for (l in seq_len(3)) {
   tmp <- tmp + t(tmp); diag(tmp) <- 0L
   A3[, , l] <- (tmp > 0L) * 1L
 }
-mnhist_multi <- multinethist(A3, h = 5, max_itr = 500)
+mnhist_multi <- multinethist(A3, h = 5, control = nethist_control(max_itr = 500))
 
 test_that("layout: wrong length errors", {
   expect_error(plot(mnhist_multi, layout = c(3)),

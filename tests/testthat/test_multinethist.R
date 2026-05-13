@@ -60,28 +60,28 @@ test_that("A is not supported object", {
 
 ### Checking default value in argument ----
 test_that("multinethist (one layer, both PLL/LSE)", {
-  expect_no_error(multinethist(kite,h=5, max_itr = 1000))
-  expect_no_error(multinethist(kite,h=5, method = "LSE", max_itr = 1000))
+  expect_no_error(multinethist(kite,h=5, control = nethist_control(max_itr = 1000)))
+  expect_no_error(multinethist(kite,h=5, method = "LSE", control = nethist_control(max_itr = 1000)))
 })
 
 test_that("multinethist (general/homogeneous, 5-layers)", {
-  expect_no_error(multinethist(array_mnet, max_itr = 1000))
-  expect_no_error(multinethist(array_mnet,common_f=TRUE, max_itr = 1000))
+  expect_no_error(multinethist(array_mnet, control = nethist_control(max_itr = 1000)))
+  expect_no_error(multinethist(array_mnet,common_f=TRUE, control = nethist_control(max_itr = 1000)))
 })
 
 test_that("multinethist (general/homogeneous, 5-layers w/ different sparsity)", {
-  expect_no_error(multinethist(array_mnet_diffrho, max_itr = 1000))
-  expect_no_error(multinethist(array_mnet_diffrho,common_f=TRUE, max_itr = 1000))
+  expect_no_error(multinethist(array_mnet_diffrho, control = nethist_control(max_itr = 1000)))
+  expect_no_error(multinethist(array_mnet_diffrho,common_f=TRUE, control = nethist_control(max_itr = 1000)))
 })
 
 test_that("nethist (checking default argument)", {
-  expect_equal({set.seed(42); multinethist(kite,h=5, max_itr = 1000)},
-               {set.seed(42); multinethist(kite,h=5, method = "PLL", max_itr = 1000)})
+  expect_equal({set.seed(42); multinethist(kite,h=5, control = nethist_control(max_itr = 1000))},
+               {set.seed(42); multinethist(kite,h=5, method = "PLL", control = nethist_control(max_itr = 1000))})
 })
 
 
 # test_that("No infinite loop", {
-#   expect_no_error(multinethist(kite,h=10, max_itr = 1000))
+#   expect_no_error(multinethist(kite,h=10, control = nethist_control(max_itr = 1000)))
 # })
 
 # Unit tests
@@ -89,8 +89,8 @@ test_that("nethist (checking default argument)", {
 ## Consistency: nethist(matrix) == multinethist(matrix) ----
 test_that("nethist and multinethist give identical results for 2D matrix input", {
   A_kite <- kite[, , 1]
-  result_nethist <- {set.seed(42); nethist(A_kite, h = 5, max_itr = 1000)}
-  result_multi   <- {set.seed(42); multinethist(A_kite, h = 5, max_itr = 1000)}
+  result_nethist <- {set.seed(42); nethist(A_kite, h = 5, control = nethist_control(max_itr = 1000))}
+  result_multi   <- {set.seed(42); multinethist(A_kite, h = 5, control = nethist_control(max_itr = 1000))}
 
   expect_equal(result_nethist$cluster,      result_multi$cluster)
   expect_equal(result_nethist$thetahat,     result_multi$thetahat)
@@ -103,8 +103,8 @@ test_that("network input gives identical result to matrix (single layer)", {
   skip_if_not_installed("network")
   A <- kite[, , 1L]
   A_net <- network::as.network(A, directed = FALSE)
-  expect_equal({set.seed(1L); multinethist(A_net, h = 5L, max_itr = 1000L)},
-               {set.seed(1L); multinethist(A,     h = 5L, max_itr = 1000L)})
+  expect_equal({set.seed(1L); multinethist(A_net, h = 5L, control = nethist_control(max_itr = 1000L))},
+               {set.seed(1L); multinethist(A,     h = 5L, control = nethist_control(max_itr = 1000L))})
 })
 
 test_that("list of plain matrices errors (vertex ordering unverifiable)", {
@@ -126,8 +126,8 @@ test_that("list of igraph gives identical result to array", {
   g1 <- igraph::graph_from_adjacency_matrix(A1, mode = "undirected", diag = FALSE)
   g2 <- igraph::graph_from_adjacency_matrix(A2, mode = "undirected", diag = FALSE)
   ref <- array(c(A1, A2), dim = c(nrow(A1), ncol(A1), 2L))
-  expect_equal({set.seed(1L); multinethist(list(g1, g2), h = 10L, max_itr = 1000L)},
-               {set.seed(1L); multinethist(ref,          h = 10L, max_itr = 1000L)})
+  expect_equal({set.seed(1L); multinethist(list(g1, g2), h = 10L, control = nethist_control(max_itr = 1000L))},
+               {set.seed(1L); multinethist(ref,          h = 10L, control = nethist_control(max_itr = 1000L))})
 })
 
 test_that("list of network gives identical result to array", {
@@ -137,8 +137,8 @@ test_that("list of network gives identical result to array", {
   n1 <- network::as.network(A1, directed = FALSE)
   n2 <- network::as.network(A2, directed = FALSE)
   ref <- array(c(A1, A2), dim = c(nrow(A1), ncol(A1), 2L))
-  expect_equal({set.seed(1L); multinethist(list(n1, n2), h = 10L, max_itr = 1000L)},
-               {set.seed(1L); multinethist(ref,          h = 10L, max_itr = 1000L)})
+  expect_equal({set.seed(1L); multinethist(list(n1, n2), h = 10L, control = nethist_control(max_itr = 1000L))},
+               {set.seed(1L); multinethist(ref,          h = 10L, control = nethist_control(max_itr = 1000L))})
 })
 
 test_that("combined_networks gives identical result to array", {
@@ -150,8 +150,8 @@ test_that("combined_networks gives identical result to array", {
   n2   <- network::as.network(A2, directed = FALSE)
   nets <- ergm.multi::Networks(list(n1, n2))
   ref  <- array(c(A1, A2), dim = c(nrow(A1), ncol(A1), 2L))
-  expect_equal({set.seed(1L); multinethist(nets, h = 10L, max_itr = 1000L)},
-               {set.seed(1L); multinethist(ref,  h = 10L, max_itr = 1000L)})
+  expect_equal({set.seed(1L); multinethist(nets, h = 10L, control = nethist_control(max_itr = 1000L))},
+               {set.seed(1L); multinethist(ref,  h = 10L, control = nethist_control(max_itr = 1000L))})
 })
 
 test_that("vertex count mismatch in list errors", {
