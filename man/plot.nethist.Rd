@@ -22,7 +22,8 @@
 \arguments{
 \item{x}{a nethist object from \code{\link[=nethist]{nethist()}}.}
 
-\item{type}{One of \code{nethist} (default) or \code{prob}.}
+\item{type}{One of \code{nethist} (default) or \code{prob}. \code{"pmat"} is a deprecated
+alias for \code{"prob"}.}
 
 \item{idx_order}{A numeric vector for index label order, which must be a
 permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$cluster)}.}
