@@ -19,7 +19,8 @@
 #' or if the subsample size exceeds a threshold, the function returns the selected sizes.
 #'
 #' @noRd
-auto_select_subsample_sizes <- function(A, Ns, k_max, R, alpha=0.05, delta){
+auto_select_subsample_sizes <- function(A, Ns, k_max, R, alpha=0.05, delta,
+                                       max_subsample_size){
   n <- dim(A)[1]
 
   s_star <- min(max(k_max + 1, min(floor(n/4), 3*(k_max+1))), n)/(1+delta)
@@ -41,14 +42,14 @@ auto_select_subsample_sizes <- function(A, Ns, k_max, R, alpha=0.05, delta){
     p <- max(p_k[K_set-1]) #quantify least-separated summary
     
     if((p <= alpha/(k_max-1))|(s_star >= s_max)){
-      if(s_max == floor(0.8*n)){
+      s_max_target <- min(floor(0.8*n), max_subsample_size)
+      if(s_max == s_max_target){
         subsample_sizes <- round(seq(0.9,1.1, length.out = Ns)*s_star)
-        #Reset and halt
         return(subsample_sizes)
       }
       s_star <- min(max(k_max + 1, min(floor(n/4), 3*(k_max+1))), n)/(1+delta)
       K_set <- K_set[p_k < 1/2] #ignore all-zero summaries
-      s_max <- floor(0.8*n) #restrict maximum subgraph size
+      s_max <- s_max_target #restrict maximum subgraph size
     }
   }
   

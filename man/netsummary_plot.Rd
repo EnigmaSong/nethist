@@ -9,43 +9,50 @@ netsummary_plot(
   A,
   subsample_sizes = NA,
   max_cycle_order = 4,
-  R = NA,
-  Ns = 11,
+  n_rep = NA,
+  n_subsample_sizes = 11,
   alpha = 0.05,
-  y.max = NA,
-  save.plot = FALSE,
+  y_max = NA,
+  save_plot = FALSE,
   filename = "myplot.pdf",
   width = 7,
-  height = 5
+  height = 5,
+  max_subsample_size = 250,
+  ...
 )
 
 violin_netsummary(A, ...)
 }
 \arguments{
-\item{A}{an adjacency matrix or igraph object to draw a network summary plot. It must be an undirected and simple graph.}
+\item{A}{an adjacency matrix, igraph object, or network object to draw a network summary plot. It must be an undirected and simple graph.}
 
-\item{subsample_sizes}{a numeric vector of node subsample sizes. If \code{NA}, a length \code{Ns} vector is obtained from the automatic subsample size selection.}
+\item{subsample_sizes}{a numeric vector of node subsample sizes. If \code{NA}, the subsample size is selected automatically.}
 
 \item{max_cycle_order}{an integer value of the maximum cycle size. Must be \verb{>=3} and \verb{<=7}.}
 
-\item{R}{an integer value of subsampling replication. If \code{NA}, \code{R} is automatically selected by \code{alpha}.}
+\item{n_rep}{an integer value of subsampling replication. If \code{NA}, \code{n_rep} is automatically selected by \code{alpha}.}
 
-\item{Ns}{number of different subsample sizes. It is only used when \code{subsample_sizes = NA}, that is, when automatic subsample size selection is used.}
+\item{n_subsample_sizes}{number of different subsample sizes for automatic selection. It is only used when \code{subsample_sizes = NA}.}
 
-\item{alpha}{a pre-specified level used in determining \code{R} and \code{subsample_sizes} when they are not specified. It must be in (0,1). Default is 0.05. Smaller \code{alpha} gives larger \code{R} and \code{subsample_sizes}.}
+\item{alpha}{a pre-specified level used in determining \code{n_rep} and \code{subsample_sizes} when they are not specified. It must be in (0,1). Default is 0.05. Smaller \code{alpha} gives larger \code{n_rep} and \code{subsample_sizes}.}
 
-\item{y.max}{Upper limit of y-axis of the plot. Must be 0 < \code{y.max} <= 1. If \code{NA}, the upper limit is automatically selected.}
+\item{y_max}{Upper limit of y-axis of the plot. Must be 0 < \code{y_max} <= 1. If \code{NA}, the upper limit is automatically selected.}
 
-\item{save.plot}{A logical indicating whether to save the generated figure. If \code{TRUE}, the plot is saved via \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} using the specified file name. Otherwise, the plot is displayed.}
+\item{save_plot}{A logical indicating whether to save the generated figure. If \code{TRUE}, the plot is saved via \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} using the specified file name. Otherwise, the plot is displayed.}
 
 \item{filename}{file name to save the generated figure.}
 
-\item{width}{a numeric value of the width of the generated figure in inch. It is only used when \code{save.plot = TRUE}.}
+\item{width}{a numeric value of the width of the generated figure in inch. It is only used when \code{save_plot = TRUE}.}
 
-\item{height}{a numeric value of the height of the generated figure in inch. It is only used when \code{save.plot = TRUE}.}
+\item{height}{a numeric value of the height of the generated figure in inch. It is only used when \code{save_plot = TRUE}.}
+
+\item{max_subsample_size}{integer. Upper bound on the automatically selected subsample size. Larger values improve statistical accuracy but increase computation time. Default is 250.}
+
+\item{...}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Pass \code{R}, \code{Ns}, \code{y.max}, or \code{save.plot} via the renamed arguments \code{n_rep}, \code{n_subsample_sizes}, \code{y_max}, and \code{save_plot} instead.}
 }
 \value{
-A network summary plot and a data frame of network summary statistics.
+A \code{ggplot} object. Printed as a side effect when \code{save_plot = FALSE}.
+Returns the plot invisibly when \code{save_plot = TRUE}.
 }
 \description{
 Draw a network summary plot proposed by Maugis et al. (2017). To count k-cycles, Alon et al. (1997) is used.
@@ -53,7 +60,14 @@ Draw a network summary plot proposed by Maugis et al. (2017). To count k-cycles,
 \details{
 Vertex sampling is done by simple random sampling without replacement.
 
-The following matrix classes are supported: \link[base:matrix]{base::matrix}, \link[Matrix:dgCMatrix-class]{Matrix::dgCMatrix}
+The automatically selected subsample size is capped at \code{max_subsample_size}
+to limit computation time.
+
+Each violin shows the distribution of the subsampled statistic, and a dot
+marks the mean.
+
+The following input classes are supported: \link[base:matrix]{base::matrix},
+\link[Matrix:dgCMatrix-class]{Matrix::dgCMatrix}, \link[igraph:aaa-igraph-package]{igraph::igraph}, \link[network:network]{network::network}.
 }
 \examples{
 {
@@ -72,15 +86,22 @@ netsummary_plot(A2)
 A2 <- igraph::as_adjacency_matrix(A, sparse = FALSE)
 netsummary_plot(A2)
 
-#user-specified R and subsample_sizes
-netsummary_plot(A, R = 500, subsample_sizes = 150)
+#user-specified n_rep and subsample_sizes
+netsummary_plot(A, n_rep = 500, subsample_sizes = 150)
 
 #user-specified alpha
 netsummary_plot(A, alpha = 0.1)
 
+#network object
+A3 <- network::as.network(igraph::as_adjacency_matrix(A, sparse = FALSE))
+netsummary_plot(A3)
+
+#user-specified max_subsample_size
+netsummary_plot(A, max_subsample_size = 100)
+
 #saving the plot with user-specified file name
 \dontrun{
-netsummary_plot(A, save.plot = TRUE, filename = "myfig.pdf")
+netsummary_plot(A, save_plot = TRUE, filename = "myfig.pdf")
 }
 }
 }
