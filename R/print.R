@@ -1,30 +1,4 @@
-##' Print Network histogram type objects
-##'
-##' Printing ``nethist", ``multinethist", and ``hnethist"
-##'
-##' @param x one of ``nethist", ``multinethist", and ``hnethist" objects.
-##' @param ... see print()
-##' @details
-##' ...
-##' @returns
-##' Prints the objects
-##' \itemize{
-##' \item `thetahat' a probability array from multinetwork histogram ordered by cluster labels.
-##' }
-##' @examples
-##' \dontrun{
-##'    set.seed(42)
-##'    nethist_polblog <- nethist(polblog)
-##'    nethist_polblog #print(nethist_polblog)
-##'
-##'    set.seed(42)
-##'    mnethist_Ind_Vil <- multinethist(IndianVil)
-##'    mnethist_Ind_Vil #print(mnethist_Ind_Vil)
-##' }
-##' @importFrom stats heatmap
-##' @importFrom graphics text
 ##' @noRd
-
 .print_nethist_footer <- function(x) {
   cat(paste0("\nMethod: ", ifelse(x$method == "PLL",
                                   "Profile Likelihood",
@@ -37,6 +11,21 @@
   print(names(x))
 }
 
+##' Print nethist objects
+##'
+##' Prints the estimated probability matrix and model summary for
+##' \code{nethist}, \code{multinethist}, and \code{hnethist} objects.
+##'
+##' @param x a \code{nethist}, \code{multinethist}, or \code{hnethist} object.
+##' @param ... additional arguments passed to [print()].
+##' @returns The input object, invisibly.
+##' @examples
+##' \donttest{
+##' set.seed(42)
+##' data(polblog)
+##' fit <- suppressMessages(nethist(polblog))
+##' print(fit)
+##' }
 ##' @exportS3Method
 print.nethist <- function(x, ...){
   cat("\nthetahat:\n")
@@ -45,6 +34,7 @@ print.nethist <- function(x, ...){
   return(invisible(x))
 }
 
+##' @rdname print.nethist
 ##' @exportS3Method
 print.multinethist <- function(x, ...){
   cat("\nTheta_hat:\n")
@@ -53,10 +43,13 @@ print.multinethist <- function(x, ...){
   return(invisible(x))
 }
 
+##' @rdname print.nethist
 ##' @exportS3Method
 print.hnethist <- function(x, ...){
   cat("\nTheta_hat:\n")
   print(x$thetahat, ...)
+  cat(paste0("\nSelected shapes: ", x$s,
+             " (BIC: ", round(x$BIC, 4), ")\n"))
   .print_nethist_footer(x)
   return(invisible(x))
 }

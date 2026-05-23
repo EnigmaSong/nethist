@@ -1,3 +1,40 @@
+##' Plot an hnethist object
+##'
+##' Plots a heatmap or a BIC curve for an `hnethist` object.
+##'
+##' @param x an `hnethist` object from [hnethist()].
+##' @param type One of `nethist` (default), `prob`, or `BIC`. When
+##'   `type = "BIC"`, plots BIC values against the number of shapes `s`. The
+##'   selected model is marked with a dashed vertical line, and the rightmost
+##'   point (largest `s`, corresponding to the initial nethist fit) is labelled.
+##'   `type = "bic"` is also accepted.
+##' @param ... Additional arguments passed to [plot()] when `type = "BIC"`, or
+##'   to [plot.nethist()] otherwise.
+##' @returns Called for its side effects (plotting). Returns `NULL` invisibly.
+##' @seealso [plot.nethist()], [hnethist()]
+##' @examples
+##' \donttest{
+##' set.seed(2022)
+##' A <- igraph::as_adjacency_matrix(
+##'   igraph::sample_gnp(100, 0.3), sparse = FALSE)
+##' fit <- suppressMessages(hnethist(A))
+##' plot(fit)
+##' plot(fit, type = "BIC")
+##' }
+##' @importFrom graphics abline text
+##' @exportS3Method
+plot.hnethist <- function(x, type = "nethist", ...) {
+  if (tolower(type) == "bic") {
+    s_vals   <- sapply(x$details, function(d) d$s)
+    bic_vals <- sapply(x$details, function(d) d$BIC)
+    plot(s_vals, bic_vals, type = "b", xlab = "s", ylab = "BIC", ...)
+    abline(v = x$s, lty = 2)
+    text(max(s_vals), bic_vals[which.max(s_vals)], "initial", pos = 2)
+    return(invisible(NULL))
+  }
+  plot.nethist(x, type = type, ...)
+}
+
 ##' Network histogram plot
 ##'
 ##' Drawing [lattice::levelplot()] using a `nethist` object.
@@ -5,7 +42,8 @@
 ##' @param x a nethist object from [nethist()].
 ##' @param idx_order A numeric vector for index label order, which must be a
 ##'   permutation of `x$cluster`. If `NA`, it uses `1:max(x$cluster)`.
-##' @param type One of `nethist` (default) or `prob`.
+##' @param type One of `nethist` (default) or `prob`. `"pmat"` is a deprecated
+##'   alias for `"prob"`.
 ##' @param power A positive number for the power transform applied to the
 ##'   graphon estimate. Only used when `type = "nethist"`. Default is `0.25`.
 ##' @param col.regions A function taking an integer `n` and returning `n`
@@ -90,9 +128,10 @@ plot.nethist <- function(x, type = "nethist",
 ##' @param y A dummy variable for S3 dispatch. Never used.
 ##' @param idx_order A numeric vector for index label order, which must be a
 ##'   permutation of `x$cluster`. If `NA`, it uses `1:max(x$cluster)`.
-##' @param type One of `MNhist` (default) or `prob`.
+##' @param type One of `nethist` (default) or `prob`. `"MNhist"` is a deprecated
+##'   alias for `"nethist"`.
 ##' @param power A positive number for the power transform applied to the
-##'   graphon estimate. Only used when `type = "MNhist"`. Default is `0.25`.
+##'   graphon estimate. Only used when `type = "nethist"`. Default is `0.25`.
 ##' @param col.regions A function taking an integer `n` and returning `n`
 ##'   colors. Default is viridis via [grDevices::hcl.colors()].
 ##' @param colorkey Logical. Whether to draw a color legend. Default `FALSE`.
@@ -122,7 +161,7 @@ plot.nethist <- function(x, type = "nethist",
 ##' @importFrom lattice levelplot panel.levelplot panel.text
 ##' @rdname plot.multinethist
 ##' @exportS3Method
-plot.multinethist <- function(x, y = NA, type = "MNhist",
+plot.multinethist <- function(x, y = NA, type = "nethist",
                               idx_order = 1:max(x$cluster),
                               power = 0.25,
                               col.regions = function(n)
@@ -133,6 +172,11 @@ plot.multinethist <- function(x, y = NA, type = "MNhist",
                               prob.col = "white",
                               layout = NULL,
                               layer_titles = NULL, ...) {
+  if (type == "MNhist") {
+    warning("type = \"MNhist\" is deprecated. Use type = \"nethist\" instead.",
+            call. = FALSE)
+    type <- "nethist"
+  }
   n_layers <- ifelse(length(dim(x$thetahat)) == 2, 1, dim(x$thetahat)[3])
 
   if (n_layers == 1) {
@@ -149,7 +193,7 @@ plot.multinethist <- function(x, y = NA, type = "MNhist",
   }
 }
 
-.plot_multinethist_layers <- function(x, type = "MNhist",
+.plot_multinethist_layers <- function(x, type = "nethist",
                                       idx_order = 1:max(x$cluster),
                                       power = 0.25,
                                       col.regions = function(n)
@@ -162,16 +206,16 @@ plot.multinethist <- function(x, y = NA, type = "MNhist",
                                       layout = NULL,
                                       layer_titles = NULL, ...) {
   k <- dim(x$thetahat)[1]
-  if (!(type %in% c("MNhist", "prob"))) {
-    stop("type must be one of MNhist or prob.")
+  if (!(type %in% c("nethist", "prob"))) {
+    stop("type must be one of nethist or prob.")
   }
   if (!.is_valid_order(idx_order, 1:k)) {
     warning(paste0("idx_order is invalid. Set idx_order = 1:", k))
     idx_order <- 1:k
   }
 
-  # homogeneous MNhist: only the first layer is shown
-  n_loop <- ifelse(x$homogeneous & (type == "MNhist"),
+  # homogeneous case: only the first layer is shown
+  n_loop <- ifelse(x$homogeneous & (type == "nethist"),
                    1L,
                    dim(x$thetahat)[3])
 
@@ -197,7 +241,7 @@ plot.multinethist <- function(x, y = NA, type = "MNhist",
   # compute global max for a consistent color scale across layers
   all_max <- vapply(seq_len(n_loop), function(l) {
     mat_l <- switch(type,
-      "MNhist" = (x$thetahat[idx_order, idx_order, l] / x$rho_hat[l])^power,
+      "nethist" = (x$thetahat[idx_order, idx_order, l] / x$rho_hat[l])^power,
       "prob"   =  x$thetahat[idx_order, idx_order, l])
     max(mat_l)
   }, numeric(1L))
@@ -224,7 +268,7 @@ plot.multinethist <- function(x, y = NA, type = "MNhist",
 
   for (l in seq_len(n_loop)) {
     mat <- switch(type,
-      "MNhist" = (x$thetahat[idx_order, idx_order, l] / x$rho_hat[l])^power,
+      "nethist" = (x$thetahat[idx_order, idx_order, l] / x$rho_hat[l])^power,
       "prob"   =  x$thetahat[idx_order, idx_order, l])
     rownames(mat) <- as.character(idx_order)
     colnames(mat) <- as.character(idx_order)

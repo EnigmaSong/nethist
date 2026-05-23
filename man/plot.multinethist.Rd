@@ -7,7 +7,7 @@
 \method{plot}{multinethist}(
   x,
   y = NA,
-  type = "MNhist",
+  type = "nethist",
   idx_order = 1:max(x$cluster),
   power = 0.25,
   col.regions = function(n) grDevices::hcl.colors(n, palette = "Reds 3", rev = TRUE),
@@ -26,13 +26,14 @@
 
 \item{y}{A dummy variable for S3 dispatch. Never used.}
 
-\item{type}{One of \code{MNhist} (default) or \code{prob}.}
+\item{type}{One of \code{nethist} (default) or \code{prob}. \code{"MNhist"} is a deprecated
+alias for \code{"nethist"}.}
 
 \item{idx_order}{A numeric vector for index label order, which must be a
 permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$cluster)}.}
 
 \item{power}{A positive number for the power transform applied to the
-graphon estimate. Only used when \code{type = "MNhist"}. Default is \code{0.25}.}
+graphon estimate. Only used when \code{type = "nethist"}. Default is \code{0.25}.}
 
 \item{col.regions}{A function taking an integer \code{n} and returning \code{n}
 colors. Default is viridis via \code{\link[grDevices:palettes]{grDevices::hcl.colors()}}.}

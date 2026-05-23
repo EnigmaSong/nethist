@@ -14,11 +14,11 @@
 ##'   implemented.
 ##' @param greedy_stop_threshold integer. Early stopping criterion for the
 ##'   greedy search; the algorithm terminates if the objective has not improved
-##'   for this many consecutive iterations. Default is 20{,}000.
+##'   for this many consecutive iterations. Default is 20,000.
 ##' @param verbose logical. Print progress messages during fitting.
 ##' @param ... Accepts deprecated argument names \code{swap_rule} and
 ##'   \code{consecutive_iter_threshold} with a warning.
-##' @return An object of class \code{"nethist_control"}.
+##' @returns An object of class \code{"nethist_control"}.
 ##' @examples
 ##' # default control object
 ##' ctrl <- nethist_control()
@@ -83,6 +83,8 @@ nethist_control <- function(
   )
 }
 
+##' @rdname nethist_control
+##' @param x a \code{nethist_control} object.
 ##' @exportS3Method
 print.nethist_control <- function(x, ...) {
   cat("nethist control parameters:\n")

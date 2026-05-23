@@ -2,6 +2,7 @@
 % Please edit documentation in R/nethist_control.R
 \name{nethist_control}
 \alias{nethist_control}
+\alias{print.nethist_control}
 \title{Control parameters for network histogram algorithms}
 \usage{
 nethist_control(
@@ -12,6 +13,8 @@ nethist_control(
   verbose = FALSE,
   ...
 )
+
+\method{print}{nethist_control}(x, ...)
 }
 \arguments{
 \item{algorithm}{character. Optimization algorithm. Currently only
@@ -28,12 +31,14 @@ implemented.}
 
 \item{greedy_stop_threshold}{integer. Early stopping criterion for the
 greedy search; the algorithm terminates if the objective has not improved
-for this many consecutive iterations. Default is 20{,}000.}
+for this many consecutive iterations. Default is 20,000.}
 
 \item{verbose}{logical. Print progress messages during fitting.}
 
 \item{...}{Accepts deprecated argument names \code{swap_rule} and
 \code{consecutive_iter_threshold} with a warning.}
+
+\item{x}{a \code{nethist_control} object.}
 }
 \value{
 An object of class \code{"nethist_control"}.

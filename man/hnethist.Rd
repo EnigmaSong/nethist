@@ -32,7 +32,7 @@ A list of class \code{c("hnethist", "nethist")} with the following fields:
 \item \code{blockcluster} a \code{kmeans} object describing how the k-by-k blocks were merged into \code{s} shapes.
 \item \code{BIC} BIC value of the selected model.
 \item \code{s} number of distinct shapes in the selected model.
-\item \code{details} list of length \code{s_max}, one entry per candidate model, each containing \code{s}, \code{cluster}, \code{thetahat}, \code{MSE}, and \code{BIC}.
+\item \code{details} list of all candidate models, one entry per number of shapes from 1 up to the maximum considered, each containing \code{s}, \code{cluster}, \code{thetahat}, \code{MSE}, and \code{BIC}.
 \item \code{initial} the nethist object used as the starting point for block clustering.
 }
 }
@@ -47,5 +47,5 @@ The original reference provided theoretical guarantees for LSE, but we also allo
 }
 }
 \references{
-Verdeyme, A. & Olhede. S. C. (2024). Hybrid of Node and Link Communities for Graphon Estimation. arXiv:2401.05088
+Verdeyme, A. & Olhede, S. C. (2024). Hybrid of Node and Link Communities for Graphon Estimation. arXiv:2401.05088
 }

@@ -65,8 +65,9 @@ test_that("cluster length equals n", {
 
 test_that("details length equals s_max", {
   k     <- length(unique(result$initial$cluster))
-  s_max <- min(k * (k - 1L) / 2L,
-               length(unique(c(result$initial$thetahat))))
+  th    <- result$initial$thetahat
+  s_max <- min(k * (k + 1L) / 2L,
+               length(unique(th[upper.tri(th, diag = TRUE)])))
   expect_length(result$details, s_max)
 })
 
@@ -87,33 +88,52 @@ test_that("s is a positive integer-valued scalar", {
   expect_equal(result$s, as.integer(result$s))
 })
 
-# -- S3 method inheritance ---------------------------------------------------
-test_that("plot() dispatches via nethist inheritance without error", {
+# -- plot.hnethist -----------------------------------------------------------
+test_that("plot(result) draws heatmap without error", {
   expect_no_error(plot(result))
 })
 
+test_that("plot(result, type='BIC') runs without error", {
+  expect_no_error(plot(result, type = "BIC"))
+})
+
+test_that("plot(result, type='bic') accepts lowercase", {
+  expect_no_error(plot(result, type = "bic"))
+})
+
+test_that("plot(result, type='BIC') returns NULL invisibly", {
+  expect_null(plot(result, type = "BIC"))
+})
+
+test_that("plot(result, type='invalid') raises error", {
+  expect_error(plot(result, type = "invalid"))
+})
+
+# -- print -------------------------------------------------------------------
 test_that("print() dispatches via nethist inheritance without error", {
   expect_no_error(print(result))
 })
 
 # -- Helper: hnethist_BIC ----------------------------------------------------
-test_that("hnethist_BIC returns correct Gaussian BIC value", {
-  nh       <- list(n = 100L, s = 3L, MSE = 50.0)
+test_that("hnethist_BIC returns correct Bernoulli BIC value", {
+  nh       <- list(n = 100L, s = 3L)
+  ll       <- -500.0
   N        <- 100L * 99L / 2L
-  expected <- N * log(50.0 * 100L^2 / (2 * N)) + 3L * log(N)
-  expect_equal(nethist:::hnethist_BIC(nh), expected)
+  expected <- -2 * ll + 3L * log(N)
+  expect_equal(nethist:::hnethist_BIC(nh, ll), expected)
 })
 
-test_that("hnethist_BIC penalty increases with s given same MSE", {
-  make_nh <- function(s) list(n = 100L, s = s, MSE = 50.0)
-  expect_lt(nethist:::hnethist_BIC(make_nh(1L)),
-            nethist:::hnethist_BIC(make_nh(5L)))
+test_that("hnethist_BIC penalty increases with s given same ll", {
+  make_nh <- function(s) list(n = 100L, s = s)
+  ll <- -500.0
+  expect_lt(nethist:::hnethist_BIC(make_nh(1L), ll),
+            nethist:::hnethist_BIC(make_nh(5L), ll))
 })
 
-test_that("hnethist_BIC decreases with smaller MSE given same s", {
-  make_nh <- function(mse) list(n = 100L, s = 3L, MSE = mse)
-  expect_gt(nethist:::hnethist_BIC(make_nh(100.0)),
-            nethist:::hnethist_BIC(make_nh(10.0)))
+test_that("hnethist_BIC decreases with better ll given same s", {
+  nh <- list(n = 100L, s = 3L)
+  expect_gt(nethist:::hnethist_BIC(nh, -1000.0),
+            nethist:::hnethist_BIC(nh, -100.0))
 })
 
 # -- Helper: hnethist_LSE ----------------------------------------------------
@@ -148,7 +168,7 @@ test_that("hnethist_normalized_LL is non-positive", {
   expect_lte(nll, 0)
 })
 
-test_that("hnethist_normalized_LL equals sum(h(theta_mat)) / sum(A)", {
+test_that("hnethist_normalized_LL equals Bernoulli LL / sum(A)", {
   n_s  <- 4L
   A_s  <- matrix(c(0, 1, 0, 1,
                    1, 0, 1, 0,
@@ -157,13 +177,14 @@ test_that("hnethist_normalized_LL equals sum(h(theta_mat)) / sum(A)", {
   th_s <- matrix(c(0.2, 0.6, 0.6, 0.2), 2L, 2L)
   cl_s <- c(1L, 2L, 1L, 2L)
   theta_mat <- th_s[cl_s, cl_s]
-  expected  <- sum(theta_mat * log(theta_mat) +
-                   (1 - theta_mat) * log(1 - theta_mat)) / sum(A_s)
+  upper     <- upper.tri(A_s)
+  expected  <- sum(A_s[upper] * log(theta_mat[upper]) +
+                   (1 - A_s[upper]) * log(1 - theta_mat[upper])) / sum(A_s)
   expect_equal(nethist:::hnethist_normalized_LL(th_s, cl_s, A_s), expected)
 })
 
 # -- normalized_LL from best model -------------------------------------------
-test_that("normalized_LL equals best details normalized_LL", {
+test_that("normalized_LL equals best details LL", {
   BICs <- sapply(result$details, function(x) x$BIC)
   expect_equal(result$normalized_LL,
                result$details[[which.min(BICs)]]$normalized_LL)
