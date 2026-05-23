@@ -13,24 +13,12 @@
     .Call(`_nethist_mnhistCommon_fastgreedy`, A, hbar, inputLabelVec, max_itr, swap_rule, consecutive_iter_threshold, verbose)
 }
 
-.multinethist_sa <- function(A, hbar, inputLabelVec, max_itr, alpha, T_min, swap_rule, verbose) {
-    .Call(`_nethist_multinethist_sa`, A, hbar, inputLabelVec, max_itr, alpha, T_min, swap_rule, verbose)
-}
-
-.mnhistCommon_sa <- function(A, hbar, inputLabelVec, max_itr, alpha, T_min, swap_rule, verbose) {
-    .Call(`_nethist_mnhistCommon_sa`, A, hbar, inputLabelVec, max_itr, alpha, T_min, swap_rule, verbose)
-}
-
 .net_summary_subsample_adj <- function(A, subsample_sizes, max_cycle_order, R) {
     .Call(`_nethist_net_summary_subsample_adj`, A, subsample_sizes, max_cycle_order, R)
 }
 
 .nethist_fastgreedy <- function(A, hbar, inputLabelVec, method, max_itr, swap_rule, consecutive_iter_threshold, verbose) {
     .Call(`_nethist_nethist_fastgreedy`, A, hbar, inputLabelVec, method, max_itr, swap_rule, consecutive_iter_threshold, verbose)
-}
-
-.nethist_sa <- function(A, hbar, inputLabelVec, max_itr, alpha, T_min, swap_rule, verbose) {
-    .Call(`_nethist_nethist_sa`, A, hbar, inputLabelVec, max_itr, alpha, T_min, swap_rule, verbose)
 }
 
 .ffct <- function(n, k) {

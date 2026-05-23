@@ -57,42 +57,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// multinethist_sa
-List multinethist_sa(const arma::icube& A, const int& hbar, const arma::uvec& inputLabelVec, const int& max_itr, const double& alpha, const double& T_min, const int& swap_rule, const bool& verbose);
-RcppExport SEXP _nethist_multinethist_sa(SEXP ASEXP, SEXP hbarSEXP, SEXP inputLabelVecSEXP, SEXP max_itrSEXP, SEXP alphaSEXP, SEXP T_minSEXP, SEXP swap_ruleSEXP, SEXP verboseSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::icube& >::type A(ASEXP);
-    Rcpp::traits::input_parameter< const int& >::type hbar(hbarSEXP);
-    Rcpp::traits::input_parameter< const arma::uvec& >::type inputLabelVec(inputLabelVecSEXP);
-    Rcpp::traits::input_parameter< const int& >::type max_itr(max_itrSEXP);
-    Rcpp::traits::input_parameter< const double& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< const double& >::type T_min(T_minSEXP);
-    Rcpp::traits::input_parameter< const int& >::type swap_rule(swap_ruleSEXP);
-    Rcpp::traits::input_parameter< const bool& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(multinethist_sa(A, hbar, inputLabelVec, max_itr, alpha, T_min, swap_rule, verbose));
-    return rcpp_result_gen;
-END_RCPP
-}
-// mnhistCommon_sa
-List mnhistCommon_sa(const arma::icube& A, const int& hbar, const arma::uvec& inputLabelVec, const int& max_itr, const double& alpha, const double& T_min, const int& swap_rule, const bool& verbose);
-RcppExport SEXP _nethist_mnhistCommon_sa(SEXP ASEXP, SEXP hbarSEXP, SEXP inputLabelVecSEXP, SEXP max_itrSEXP, SEXP alphaSEXP, SEXP T_minSEXP, SEXP swap_ruleSEXP, SEXP verboseSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::icube& >::type A(ASEXP);
-    Rcpp::traits::input_parameter< const int& >::type hbar(hbarSEXP);
-    Rcpp::traits::input_parameter< const arma::uvec& >::type inputLabelVec(inputLabelVecSEXP);
-    Rcpp::traits::input_parameter< const int& >::type max_itr(max_itrSEXP);
-    Rcpp::traits::input_parameter< const double& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< const double& >::type T_min(T_minSEXP);
-    Rcpp::traits::input_parameter< const int& >::type swap_rule(swap_ruleSEXP);
-    Rcpp::traits::input_parameter< const bool& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(mnhistCommon_sa(A, hbar, inputLabelVec, max_itr, alpha, T_min, swap_rule, verbose));
-    return rcpp_result_gen;
-END_RCPP
-}
 // net_summary_subsample_adj
 arma::mat net_summary_subsample_adj(const arma::mat& A, const arma::vec& subsample_sizes, int max_cycle_order, int R);
 RcppExport SEXP _nethist_net_summary_subsample_adj(SEXP ASEXP, SEXP subsample_sizesSEXP, SEXP max_cycle_orderSEXP, SEXP RSEXP) {
@@ -122,24 +86,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int& >::type consecutive_iter_threshold(consecutive_iter_thresholdSEXP);
     Rcpp::traits::input_parameter< const bool& >::type verbose(verboseSEXP);
     rcpp_result_gen = Rcpp::wrap(nethist_fastgreedy(A, hbar, inputLabelVec, method, max_itr, swap_rule, consecutive_iter_threshold, verbose));
-    return rcpp_result_gen;
-END_RCPP
-}
-// nethist_sa
-List nethist_sa(const arma::imat& A, const int& hbar, const arma::uvec& inputLabelVec, const int& max_itr, const double& alpha, const double& T_min, const int& swap_rule, const bool& verbose);
-RcppExport SEXP _nethist_nethist_sa(SEXP ASEXP, SEXP hbarSEXP, SEXP inputLabelVecSEXP, SEXP max_itrSEXP, SEXP alphaSEXP, SEXP T_minSEXP, SEXP swap_ruleSEXP, SEXP verboseSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::imat& >::type A(ASEXP);
-    Rcpp::traits::input_parameter< const int& >::type hbar(hbarSEXP);
-    Rcpp::traits::input_parameter< const arma::uvec& >::type inputLabelVec(inputLabelVecSEXP);
-    Rcpp::traits::input_parameter< const int& >::type max_itr(max_itrSEXP);
-    Rcpp::traits::input_parameter< const double& >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< const double& >::type T_min(T_minSEXP);
-    Rcpp::traits::input_parameter< const int& >::type swap_rule(swap_ruleSEXP);
-    Rcpp::traits::input_parameter< const bool& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(nethist_sa(A, hbar, inputLabelVec, max_itr, alpha, T_min, swap_rule, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -184,11 +130,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nethist_count_k_cycle", (DL_FUNC) &_nethist_count_k_cycle, 2},
     {"_nethist_multinethist_fastgreedy", (DL_FUNC) &_nethist_multinethist_fastgreedy, 7},
     {"_nethist_mnhistCommon_fastgreedy", (DL_FUNC) &_nethist_mnhistCommon_fastgreedy, 7},
-    {"_nethist_multinethist_sa", (DL_FUNC) &_nethist_multinethist_sa, 8},
-    {"_nethist_mnhistCommon_sa", (DL_FUNC) &_nethist_mnhistCommon_sa, 8},
     {"_nethist_net_summary_subsample_adj", (DL_FUNC) &_nethist_net_summary_subsample_adj, 4},
     {"_nethist_nethist_fastgreedy", (DL_FUNC) &_nethist_nethist_fastgreedy, 8},
-    {"_nethist_nethist_sa", (DL_FUNC) &_nethist_nethist_sa, 8},
     {"_nethist_ffct", (DL_FUNC) &_nethist_ffct, 2},
     {"_nethist_hamming_dist_adj_mat", (DL_FUNC) &_nethist_hamming_dist_adj_mat, 1},
     {"_nethist_is_undirected_simple", (DL_FUNC) &_nethist_is_undirected_simple, 1},

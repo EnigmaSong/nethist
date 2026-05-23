@@ -10,6 +10,7 @@
 ##' @param legend_title title of legend. If NA, the legend title is "covariate"
 ##' @param stat variables pass to [ggplot2::geom_bar()]. Only used for a factor covariate.
 ##' @param position variables pass to [ggplot2::geom_bar()]. Only used for a factor covariate.
+##' @param ... currently unused.
 ##' @details
 ##' When `covariate` is a factor, a stacked bar chart is drawn with bins ordered by `idx_order`.
 ##' When `covariate` is numeric, a violin plot is drawn.

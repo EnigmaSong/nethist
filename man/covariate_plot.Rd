@@ -34,6 +34,8 @@ summary_plot(object, covariate, ...)
 \item{stat}{variables pass to \code{\link[ggplot2:geom_bar]{ggplot2::geom_bar()}}. Only used for a factor covariate.}
 
 \item{position}{variables pass to \code{\link[ggplot2:geom_bar]{ggplot2::geom_bar()}}. Only used for a factor covariate.}
+
+\item{...}{currently unused.}
 }
 \value{
 A \code{ggplot} object. Printed as a side effect. Returns the plot invisibly.

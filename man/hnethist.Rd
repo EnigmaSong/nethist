@@ -32,7 +32,7 @@ A list of class \code{c("hnethist", "nethist")} with the following fields:
 \item \code{blockcluster} a \code{kmeans} object describing how the k-by-k blocks were merged into \code{s} shapes.
 \item \code{BIC} BIC value of the selected model.
 \item \code{s} number of distinct shapes in the selected model.
-\item \code{details} list of all candidate models, one entry per number of shapes from 1 up to the maximum considered, each containing \code{s}, \code{cluster}, \code{thetahat}, \code{MSE}, and \code{BIC}.
+\item \code{details} list of all candidate models, one entry per number of shapes from 1 up to the maximum considered, each containing \code{s}, \code{blockcluster}, \code{thetahat}, \code{MSE}, \code{normalized_LL}, and \code{BIC}.
 \item \code{initial} the nethist object used as the starting point for block clustering.
 }
 }
