@@ -16,7 +16,7 @@ representing socio-economic networks at the individual level for village ID 40.
 }
 \details{
 The array represents the socio-economic relationships of individuals from Village ID 40.
-Nodes with zero degrees across all layers were removed, reducing the total number of nodes from 241 to 231.
+Vertices with zero degrees across all layers were removed, reducing the total number of vertices from 241 to 231.
 }
 \examples{
 

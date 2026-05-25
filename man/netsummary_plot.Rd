@@ -26,7 +26,7 @@ violin_netsummary(A, ...)
 \arguments{
 \item{A}{an adjacency matrix, igraph object, or network object to draw a network summary plot. It must be an undirected and simple graph.}
 
-\item{subsample_sizes}{a numeric vector of node subsample sizes. If \code{NA}, the subsample size is selected automatically.}
+\item{subsample_sizes}{a numeric vector of vertex subsample sizes. If \code{NA}, the subsample size is selected automatically.}
 
 \item{max_cycle_order}{an integer value of the maximum cycle size. Must be \verb{>=3} and \verb{<=7}.}
 

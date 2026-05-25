@@ -3,7 +3,7 @@
 ##' Draw a network summary plot proposed by Maugis et al. (2017). To count k-cycles, Alon et al. (1997) is used.
 ##'
 ##' @param A an adjacency matrix, igraph object, or network object to draw a network summary plot. It must be an undirected and simple graph.
-##' @param subsample_sizes a numeric vector of node subsample sizes. If `NA`, the subsample size is selected automatically.
+##' @param subsample_sizes a numeric vector of vertex subsample sizes. If `NA`, the subsample size is selected automatically.
 ##' @param max_cycle_order an integer value of the maximum cycle size. Must be `>=3` and `<=7`.
 ##' @param n_rep an integer value of subsampling replication. If `NA`, `n_rep` is automatically selected by `alpha`.
 ##' @param n_subsample_sizes number of different subsample sizes for automatic selection. It is only used when `subsample_sizes = NA`.

@@ -60,7 +60,7 @@ covariate_plot.multinethist <- function(object, covariate,
     idx_order <- 1:k
   }
   if (length(covariate) != length(object$cluster))
-    stop("Length of covariate must equal the number of nodes (length of object$cluster).")
+    stop("Length of covariate must equal the number of vertices (length of object$cluster).")
   
   df <- data.frame(cluster   = factor(object$cluster, levels = idx_order),
                    covariate = covariate)

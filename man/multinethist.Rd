@@ -26,7 +26,7 @@ vertex names are used to align layers if present (via
 \code{igraph::vertex_attr(g, "name")} or
 \code{network::network.vertex.names()}). If vertex names are absent,
 positional correspondence is assumed: vertex \eqn{i} in each layer is
-treated as the same node. All layers must have the same number of
+treated as the same vertex. All layers must have the same number of
 vertices, and when names are present they must form the same set.}
 
 \item{h}{A bandwidth parameter. If \code{NA}, the bandwidth is selected by Olhede and Wolfe (2014). If specified, the user-supplied value is used.}
@@ -63,7 +63,7 @@ If the number of layers is 1, multinethist() fits a single-layer network histogr
 
 \code{method} is only used for single-layer networks. \code{method = "PLL"} is for Olhede and Wolfe (2014), and \code{method = "LSE"} is for Gao et al. (2015).
 
-Note that \code{cluster} only shows a partition of vertices, and the index labels are not ordered. For example, nodes in cluster 1 do not have to be more similar to nodes in cluster 2 than to nodes in cluster 10. Hence, users may specify a custom order in \code{\link[=plot.multinethist]{plot.multinethist()}}.
+Note that \code{cluster} only shows a partition of vertices, and the index labels are not ordered. For example, vertices in cluster 1 do not have to be more similar to vertices in cluster 2 than to vertices in cluster 10. Hence, users may specify a custom order in \code{\link[=plot.multinethist]{plot.multinethist()}}.
 }
 }
 \examples{

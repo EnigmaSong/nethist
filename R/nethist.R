@@ -31,8 +31,8 @@
 ##' \code{method = "PLL"} is for Olhede and Wolfe (2014).
 ##' \code{method = "LSE"} is for Gao et al. (2015).
 ##'
-##' Note that \code{cluster} labels are not ordered: nodes in cluster 1 are not
-##' necessarily more similar to cluster 2 than to cluster 10. Users may specify
+##' Note that \code{cluster} labels are not ordered: vertices in cluster 1 are
+##' not necessarily more similar to cluster 2 than to cluster 10. Users may specify
 ##' a custom display order in \code{\link{plot.nethist}}.
 ##' @examples
 ##' \donttest{

@@ -23,7 +23,7 @@ and \code{verbose}.}
 A list of class \code{c("hnethist", "nethist")} with the following fields:
 
 \itemize{
-\item \code{cluster} an integer vector of length n with node-level block assignments from the initial nethist fit.
+\item \code{cluster} an integer vector of length n with vertex-level block assignments from the initial nethist fit.
 \item \code{thetahat} a k-by-k probability matrix of the selected hybrid model, where k is the number of nethist blocks.
 \item \code{rho_hat} estimated sparsity parameter from the initial nethist fit.
 \item \code{normalized_LL} normalized log-likelihood from the initial nethist fit.

@@ -21,7 +21,7 @@
 ##'   \code{igraph::vertex_attr(g, "name")} or
 ##'   \code{network::network.vertex.names()}). If vertex names are absent,
 ##'   positional correspondence is assumed: vertex \eqn{i} in each layer is
-##'   treated as the same node. All layers must have the same number of
+##'   treated as the same vertex. All layers must have the same number of
 ##'   vertices, and when names are present they must form the same set.
 ##' @param h A bandwidth parameter. If `NA`, the bandwidth is selected by Olhede and Wolfe (2014). If specified, the user-supplied value is used.
 ##' @param common_f A logical; if `TRUE`, assumes a common network histogram function for all layers.
@@ -49,7 +49,7 @@
 ##'
 ##' `method` is only used for single-layer networks. `method = "PLL"` is for Olhede and Wolfe (2014), and `method = "LSE"` is for Gao et al. (2015).
 ##'
-##' Note that `cluster` only shows a partition of vertices, and the index labels are not ordered. For example, nodes in cluster 1 do not have to be more similar to nodes in cluster 2 than to nodes in cluster 10. Hence, users may specify a custom order in [plot.multinethist()].
+##' Note that `cluster` only shows a partition of vertices, and the index labels are not ordered. For example, vertices in cluster 1 do not have to be more similar to vertices in cluster 2 than to vertices in cluster 10. Hence, users may specify a custom order in [plot.multinethist()].
 ##' }
 ##' @examples
 ##' \donttest{
@@ -217,7 +217,7 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
   }
 
   if (n_nodes == h) {
-    message(paste("Bandwidth h=", h, "and number of nodes=", n_nodes,
+    message(paste("Bandwidth h=", h, "and number of vertices=", n_nodes,
                   "are equal. Return theta_hat = rho_n", sep = " "))
     if (n_layers == 1) {
       Log_Likelihood <- log(1 - rhoHat) * (n_nodes * (n_nodes - 1) / 2) +
