@@ -2,6 +2,8 @@
 
 S3method(covariate_plot,multinethist)
 S3method(covariate_plot,nethist)
+S3method(fitted,multinethist)
+S3method(fitted,nethist)
 S3method(multinethist,array)
 S3method(multinethist,combined_networks)
 S3method(multinethist,default)
