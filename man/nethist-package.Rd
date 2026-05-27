@@ -22,6 +22,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Youngseok Song \email{youngseok.song@mail.wvu.edu}
   \item Sofia C. Olhede \email{sofia.olhede@epfl.ch}
 }
 

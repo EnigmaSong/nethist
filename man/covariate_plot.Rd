@@ -10,6 +10,7 @@ covariate_plot(
   covariate,
   idx_order = 1:max(object$cluster),
   main = NA,
+  xlab = NULL,
   ylab = NA,
   legend_title = NA,
   stat = "count",
@@ -26,6 +27,8 @@ summary_plot(object, covariate, ...)
 \item{idx_order}{A numeric vector for index label order, which must be a permutation of \code{object$cluster}. If \code{NA}, it uses \code{1:max(object$cluster)}.}
 
 \item{main}{title of summary plot. If NA, the plot has no title.}
+
+\item{xlab}{label of x-axis. If \code{NULL}, no label is shown.}
 
 \item{ylab}{label of y-axis. If NA, y-axis label is "covariate"}
 

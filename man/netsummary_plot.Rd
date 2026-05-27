@@ -67,7 +67,7 @@ Each violin shows the distribution of the subsampled statistic, and a dot
 marks the mean.
 
 The following input classes are supported: \link[base:matrix]{base::matrix},
-\link[Matrix:dgCMatrix-class]{Matrix::dgCMatrix}, \link[igraph:aaa-igraph-package]{igraph::igraph}, \link[network:network]{network::network}.
+\link[Matrix:dgCMatrix-class]{Matrix::dgCMatrix}, \link[igraph:igraph]{igraph::igraph}, \link[network:network]{network::network}.
 }
 \examples{
 {

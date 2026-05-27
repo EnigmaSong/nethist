@@ -6,6 +6,7 @@
 ##' @param covariate a vector for univariate covariate. If it is a factor, a stacked bar chart is drawn. If it is numeric, a violin plot is drawn.
 ##' @param idx_order A numeric vector for index label order, which must be a permutation of `object$cluster`. If `NA`, it uses `1:max(object$cluster)`.
 ##' @param main title of summary plot. If NA, the plot has no title.
+##' @param xlab label of x-axis. If `NULL`, no label is shown.
 ##' @param ylab label of y-axis. If NA, y-axis label is "covariate"
 ##' @param legend_title title of legend. If NA, the legend title is "covariate"
 ##' @param stat variables pass to [ggplot2::geom_bar()]. Only used for a factor covariate.
@@ -16,7 +17,7 @@
 ##' When `covariate` is numeric, a violin plot is drawn.
 ##' @returns
 ##' A `ggplot` object. Printed as a side effect. Returns the plot invisibly.
-##' @importFrom ggplot2 ggplot aes geom_bar geom_violin labs ggtitle ylab theme element_rect element_blank
+##' @importFrom ggplot2 ggplot aes geom_bar geom_violin labs ggtitle xlab ylab theme element_rect element_blank
 ##' @importFrom rlang .data
 ##' @examples
 ##' {
@@ -30,6 +31,7 @@
 covariate_plot <- function(object, covariate,
                            idx_order = 1:max(object$cluster),
                            main = NA,
+                           xlab = NULL,
                            ylab = NA,
                            legend_title = NA,
                            stat = "count", position = "stack") {
@@ -40,17 +42,19 @@ covariate_plot <- function(object, covariate,
 covariate_plot.nethist <- function(object, covariate,
                                    idx_order = 1:max(object$cluster),
                                    main = NA,
+                                   xlab = NULL,
                                    ylab = NA,
                                    legend_title = NA,
                                    stat = "count", position = "stack") {
-  return(covariate_plot.multinethist(object, covariate, idx_order, main, ylab,
-                                     legend_title, stat, position))
+  return(covariate_plot.multinethist(object, covariate, idx_order, main, xlab,
+                                     ylab, legend_title, stat, position))
 }
 
 ##' @exportS3Method
 covariate_plot.multinethist <- function(object, covariate,
                                         idx_order = 1:max(object$cluster),
                                         main = NA,
+                                        xlab = NULL,
                                         ylab = NA,
                                         legend_title = NA,
                                         stat = "count", position = "stack") {
@@ -73,6 +77,7 @@ covariate_plot.multinethist <- function(object, covariate,
   }
   
   if (!is.na(main)) p <- p + ggplot2::ggtitle(main)
+  p <- p + ggplot2::xlab(xlab)
   if (!is.na(ylab)) p <- p + ggplot2::ylab(ylab)
   p <- p + ggplot2::theme(
     panel.background      = ggplot2::element_rect(fill = "transparent"),

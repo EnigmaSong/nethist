@@ -19,7 +19,6 @@ Suggests:
     ergm.multi,
     lifecycle
 Encoding: UTF-8
-RoxygenNote: 7.3.3
 Imports:
     lattice,
     methods,
@@ -43,3 +42,4 @@ BugReports: https://github.com/EnigmaSong/nethist/issues
 Roxygen: list(markdown = TRUE)
 License: MIT + file LICENSE
 VignetteBuilder: knitr
+Config/roxygen2/version: 8.0.0

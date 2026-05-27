@@ -36,7 +36,7 @@ permutation of \code{x$cluster}. If \code{NA}, it uses \code{1:max(x$cluster)}.}
 graphon estimate. Only used when \code{type = "nethist"}. Default is \code{0.25}.}
 
 \item{col.regions}{A function taking an integer \code{n} and returning \code{n}
-colors. Default is viridis via \code{\link[grDevices:palettes]{grDevices::hcl.colors()}}.}
+colors. Default is viridis via \code{\link[grDevices:hcl.colors]{grDevices::hcl.colors()}}.}
 
 \item{colorkey}{Logical. Whether to draw a color legend. Default \code{FALSE}.}
 

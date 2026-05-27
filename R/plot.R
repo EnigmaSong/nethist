@@ -273,9 +273,11 @@ plot.multinethist <- function(x, y = NA, type = "nethist",
     rownames(mat) <- as.character(idx_order)
     colnames(mat) <- as.character(idx_order)
 
+    default_title <- if (x$homogeneous && type == "nethist") NULL
+                     else paste("Layer", l)
     base_args <- list(mat,
       col.regions = col.regions, at = at_vals, colorkey = colorkey,
-      main = if (!is.null(layer_titles)) layer_titles[l] else paste("Layer", l),
+      main = if (!is.null(layer_titles)) layer_titles[l] else default_title,
       ylim = c(k + 0.5, 0.5),
       xlab = "", ylab = "", scales = scales_arg)
 
