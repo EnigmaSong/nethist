@@ -20,7 +20,7 @@
 ##' @importFrom ggplot2 ggplot aes geom_bar geom_violin labs ggtitle xlab ylab theme element_rect element_blank
 ##' @importFrom rlang .data
 ##' @examples
-##' {
+##' \donttest{
 ##' set.seed(42)
 ##' data(polblog)
 ##' nethist_polblog <- multinethist(polblog)

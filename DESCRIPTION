@@ -1,12 +1,20 @@
 Package: nethist
 Type: Package
-Title: Network histogram 
+Title: Network Histograms
 Version: 1.0.0
 Date: 2026-08-04
-Authors@R: c(person("Youngseok","Song", email="youngseok.song@mail.wvu.edu", role =c("aut", "cre")), 
+Authors@R: c(person("Youngseok","Song", email="youngseok.song@mail.wvu.edu", role =c("aut", "cre")),
             person("Sofia C.","Olhede", email = "sofia.olhede@epfl.ch", role = "aut"))
 Maintainer: Youngseok Song <youngseok.song@mail.wvu.edu>
-Description: R package for network histogram estimation and additional tools. To install the package from source, you need C++ and Fortran (due to RSpectra) compilers.
+Description: Estimates network histograms, a blockmodel approximation to the
+    graphon underlying a network's connectivity pattern, for single-layer and
+    multilayer networks. Implements the profile-likelihood method of Olhede
+    and Wolfe (2014) and the least-squares method of Gao, Lu, and Zhou
+    (2015) for single-layer networks, and the multilayer extension of Song
+    and Olhede (2026+), plus tools for bandwidth selection, diagnostic
+    plots, and covariate visualization.
+SystemRequirements: Fortran compiler (for linking LAPACK/BLAS via
+    'RcppArmadillo')
 Suggests:
     testthat (>= 3.0.0),
     tinytest,

@@ -51,7 +51,7 @@ When \code{covariate} is a factor, a stacked bar chart is drawn with bins ordere
 When \code{covariate} is numeric, a violin plot is drawn.
 }
 \examples{
-{
+\donttest{
 set.seed(42)
 data(polblog)
 nethist_polblog <- multinethist(polblog)

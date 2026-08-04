@@ -7,15 +7,19 @@
 
 [![R-CMD-check](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
-The goal of *nethist* is to estimate graphons by *network histogram*
-(Wolfe and Olhede 2013; Olhede and Wolfe 2014). It also provides extra
-tools for summary violin plot for networks (Maugis, Olhede, and Wolfe
-2017) and visualizing network histogram. Use undirected and simple
-graphs with no self-loops (either igraph or matrix) as inputs for the
-functions in this package.
+The goal of *nethist* is to estimate network histograms, a blockmodel
+approximation to the graphon (Wolfe and Olhede 2013) underlying a
+network’s connectivity pattern, for single-layer and multilayer
+networks. It implements the profile-likelihood method of Olhede and
+Wolfe (2014) and the least-squares method of Gao, Lu, and Zhou (2015)
+for single-layer networks, and the multilayer extension of Song and
+Olhede (2026), plus tools for bandwidth selection, diagnostic plots, and
+covariate visualization. Use undirected and simple graphs with no
+self-loops (either igraph or matrix) as inputs for the functions in this
+package.
 
 To install the package from source, you need C++ and Fortran compilers.
 
@@ -41,7 +45,13 @@ library(nethist)
 
 We use *polblog* dataset in the package for our examples.
 
-<img src="man/figures/README-summary-1.png" width="100%" />
+    #> Warning: `as_adj()` was deprecated in igraph 2.1.0.
+    #> ℹ Please use `as_adjacency_matrix()` instead.
+    #> This warning is displayed once per session.
+    #> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+    #> generated.
+
+<img src="man/figures/README-summary-1.png" alt="" width="100%" />
 
 We can estimate a network histogram from the political blog data and
 plot it.
@@ -53,7 +63,7 @@ hist_polblog <- nethist(polblog, h = 72) #using user-specified bin size.
 plot(hist_polblog)
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+<img src="man/figures/README-example-1.png" alt="" width="100%" />
 
 ### Plotting option
 
@@ -65,21 +75,20 @@ You can use a user-specified indices for plots. Here is an example:
 
 ``` r
 print(ind) 
-#>  [1] 17 10 13  7 12  4  8  5  1  2  6  3  9 15 11 14 16
+#>  [1] 14 12 10  7 16  4  5  8  2  1  3  6 15  9 11 13 17
 ## Users can specify the index order of heatmap
 plot(hist_polblog, idx_order = ind)
 ```
 
-<img src="man/figures/README-example2-1.png" width="100%" />
+<img src="man/figures/README-example2-1.png" alt="" width="100%" />
 
 ``` r
-
 ## Users can specify the color palette
 library(RColorBrewer)
-plot(hist_polblog,  idx_order = ind, col = brewer.pal(9, "Greys"))
+plot(hist_polblog,  idx_order = ind, col.regions = brewer.pal(9, "Greys"))
 ```
 
-<img src="man/figures/README-example2-2.png" width="100%" />
+<img src="man/figures/README-example2-2.png" alt="" width="100%" />
 
 You can display the estimated block probabilities by setting
 `type = prob` and `prob=TRUE`.
@@ -87,44 +96,97 @@ You can display the estimated block probabilities by setting
 ``` r
 ## Users can specify the color palette 
 plot(hist_polblog, idx_order = ind, type = "prob", prob= TRUE, prob.col = "blue",
-     col = colorRampPalette(colors=c("#FFFFFF","#000000"))(200))
+     col.regions = colorRampPalette(colors=c("#FFFFFF","#000000"))(200))
 ```
 
-<img src="man/figures/README-example3-1.png" width="100%" />
+<img src="man/figures/README-example3-1.png" alt="" width="100%" />
 
 ### others
 
 There are more types of plots in `nethist` package.
 
-### Summary violin plot
+### Multilayer network histogram
 
-If you want to check network summary violin plot of the data set:
+`multinethist()` extends the same estimation to multilayer networks.
+Here we use the first two layers of the *IndianVil* dataset, a
+socio-economic network with 12 layers.
+
+``` r
+data(IndianVil)
+set.seed(42)
+hist_indianvil <- multinethist(IndianVil[, , 1:2], h = 20L)
+plot(hist_indianvil)
+```
+
+<img src="man/figures/README-multinethist_example-1.png" alt="" width="100%" /><img src="man/figures/README-multinethist_example-2.png" alt="" width="100%" />
+
+`fitted()` extracts a submatrix of the fitted graphon for one or more
+layers.
+
+``` r
+fitted(hist_indianvil, set1 = 1:10, set2 = 1:10, layer = 1)
+#>           [,1]     [,2]     [,3]     [,4]      [,5]      [,6]      [,7]
+#>  [1,] 8.510526 5.053125 1.155000 0.144375  0.866250  0.866250  0.866250
+#>  [2,] 5.053125 0.000000 1.010625 0.577500  0.000000  0.000000  0.000000
+#>  [3,] 1.155000 1.010625 6.990789 1.732500  3.176250  3.176250  3.176250
+#>  [4,] 0.144375 0.577500 1.732500 6.686842  0.000000  0.000000  0.000000
+#>  [5,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263
+#>  [6,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263
+#>  [7,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263
+#>  [8,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263
+#>  [9,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263
+#> [10,] 0.000000 0.000000 4.331250 0.000000  0.144375  0.144375  0.144375
+#>            [,8]      [,9]    [,10]
+#>  [1,]  0.866250  0.866250 0.000000
+#>  [2,]  0.000000  0.000000 0.000000
+#>  [3,]  3.176250  3.176250 4.331250
+#>  [4,]  0.000000  0.000000 0.000000
+#>  [5,] 10.030263 10.030263 0.144375
+#>  [6,] 10.030263 10.030263 0.144375
+#>  [7,] 10.030263 10.030263 0.144375
+#>  [8,] 10.030263 10.030263 0.144375
+#>  [9,] 10.030263 10.030263 0.144375
+#> [10,]  0.144375  0.144375 0.000000
+```
+
+### Network topology summary
+
+If you want to check the network topology summary plot of the data set
+(Maugis, Olhede, and Wolfe 2017):
 
 ``` r
 #User-specified subsample size.
-violin_netsummary(polblog, max_cycle_order = 7, subsample_sizes = 250) 
-#> Use R= 697
+netsummary_plot(polblog, max_cycle_order = 7, subsample_sizes = 250)
+#> Use n_rep = 697
 ```
 
-<img src="man/figures/README-example4-1.png" width="100%" />
+<img src="man/figures/README-example4-1.png" alt="" width="100%" />
 
 ``` r
 #Auto-selected subsample size.
-violin_netsummary(polblog, max_cycle_order = 7) 
-#> Use R= 697
+netsummary_plot(polblog, max_cycle_order = 7)
+#> Use n_rep = 697
 ```
 
-<img src="man/figures/README-example4-2.png" width="100%" />
+<img src="man/figures/README-example4-2.png" alt="" width="100%" />
 
 ## Reference
 
 <div id="refs" class="references csl-bib-body hanging-indent">
 
+<div id="ref-gao2015Rate" class="csl-entry">
+
+Gao, Chao, Yu Lu, and Harrison H. Zhou. 2015. “Rate-Optimal Graphon
+Estimation.” *The Annals of Statistics* 43 (6): 2624–52.
+<https://doi.org/10.1214/15-AOS1354>.
+
+</div>
+
 <div id="ref-maugis2017Topology" class="csl-entry">
 
 Maugis, Pierre-André G., Sofia C. Olhede, and Patrick J. Wolfe. 2017.
 “Topology Reveals Universal Features for Network Comparison.”
-*arXiv:1705.05677*, May. <http://arxiv.org/abs/1705.05677>.
+*arXiv:1705.05677*, May. <https://arxiv.org/abs/1705.05677>.
 
 </div>
 
@@ -137,11 +199,18 @@ Academy of Sciences* 111 (41): 14722–27.
 
 </div>
 
+<div id="ref-song2026Graph" class="csl-entry">
+
+Song, Youngseok, and Sofia C. Olhede. 2026. “Graph Limits for Sparse
+Multilayer Networks.”
+
+</div>
+
 <div id="ref-wolfe2013Nonparametric" class="csl-entry">
 
 Wolfe, Patrick J., and Sofia C. Olhede. 2013. “Nonparametric Graphon
 Estimation.” *arXiv:1309.5936*, September.
-<http://arxiv.org/abs/1309.5936>.
+<https://arxiv.org/abs/1309.5936>.
 
 </div>
 

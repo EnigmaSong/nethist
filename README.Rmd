@@ -18,10 +18,10 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml)
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
-The goal of *nethist* is to estimate graphons by *network histogram* [@wolfe2013Nonparametric; @olhede2014Network]. It also provides extra tools for summary violin plot for networks [@maugis2017Topology] and visualizing network histogram. Use undirected and simple graphs with no self-loops (either igraph or matrix) as inputs for the functions in this package.
+The goal of *nethist* is to estimate network histograms, a blockmodel approximation to the graphon [@wolfe2013Nonparametric] underlying a network's connectivity pattern, for single-layer and multilayer networks. It implements the profile-likelihood method of @olhede2014Network and the least-squares method of @gao2015Rate for single-layer networks, and the multilayer extension of @song2026Graph, plus tools for bandwidth selection, diagnostic plots, and covariate visualization. Use undirected and simple graphs with no self-loops (either igraph or matrix) as inputs for the functions in this package.
 
 To install the package from source, you need C++ and Fortran compilers.
 
@@ -70,8 +70,8 @@ liberal_ind <- which(ratio_liberal>=0.5)
 conserv_ind <- which(ratio_liberal<0.5)
 
 #Order by cross-party connection
-liberal_cp_con <- rowSums(hist_polblog$p_mat[liberal_ind,conserv_ind])
-conserv_cp_con <- colSums(hist_polblog$p_mat[liberal_ind,conserv_ind])
+liberal_cp_con <- rowSums(hist_polblog$thetahat[liberal_ind,conserv_ind])
+conserv_cp_con <- colSums(hist_polblog$thetahat[liberal_ind,conserv_ind])
 
 ind <- c(rev(liberal_ind[order(liberal_cp_con,decreasing=TRUE)]),
          conserv_ind[order(conserv_cp_con,decreasing=TRUE)],use.names=FALSE);
@@ -89,28 +89,46 @@ plot(hist_polblog, idx_order = ind)
 
 ## Users can specify the color palette
 library(RColorBrewer)
-plot(hist_polblog,  idx_order = ind, col = brewer.pal(9, "Greys"))
+plot(hist_polblog,  idx_order = ind, col.regions = brewer.pal(9, "Greys"))
 ```
 
 You can display the estimated block probabilities by setting `type = prob` and `prob=TRUE`.
 ```{r example3}
 ## Users can specify the color palette 
 plot(hist_polblog, idx_order = ind, type = "prob", prob= TRUE, prob.col = "blue",
-     col = colorRampPalette(colors=c("#FFFFFF","#000000"))(200))
+     col.regions = colorRampPalette(colors=c("#FFFFFF","#000000"))(200))
 ```
 
 ### others
 
-There are more types of plots in `nethist` package. 
+There are more types of plots in `nethist` package.
 
-### Summary violin plot
+### Multilayer network histogram
 
-If you want to check network summary violin plot of the data set:
+`multinethist()` extends the same estimation to multilayer networks. Here we
+use the first two layers of the *IndianVil* dataset, a socio-economic network
+with 12 layers.
+```{r multinethist_example}
+data(IndianVil)
+set.seed(42)
+hist_indianvil <- multinethist(IndianVil[, , 1:2], h = 20L)
+plot(hist_indianvil)
+```
+
+`fitted()` extracts a submatrix of the fitted graphon for one or more layers.
+```{r fitted_example}
+fitted(hist_indianvil, set1 = 1:10, set2 = 1:10, layer = 1)
+```
+
+### Network topology summary
+
+If you want to check the network topology summary plot of the data set
+[@maugis2017Topology]:
 ```{r example4}
 #User-specified subsample size.
-violin_netsummary(polblog, max_cycle_order = 7, subsample_sizes = 250) 
+netsummary_plot(polblog, max_cycle_order = 7, subsample_sizes = 250)
 #Auto-selected subsample size.
-violin_netsummary(polblog, max_cycle_order = 7) 
+netsummary_plot(polblog, max_cycle_order = 7)
 ```
 
 ## Reference

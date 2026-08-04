@@ -39,7 +39,8 @@
 ##' #igraph object
 ##' A <- igraph::sample_gnp(n, 0.05)
 ##' netsummary_plot(A)
-##'
+##' }
+##' \donttest{
 ##' #sparse adjacency matrix
 ##' A2 <- igraph::as_adjacency_matrix(A)
 ##' netsummary_plot(A2)
@@ -62,9 +63,8 @@
 ##' netsummary_plot(A, max_subsample_size = 100)
 ##'
 ##' #saving the plot with user-specified file name
-##' \dontrun{
-##' netsummary_plot(A, save_plot = TRUE, filename = "myfig.pdf")
-##' }
+##' netsummary_plot(A, save_plot = TRUE,
+##'                 filename = file.path(tempdir(), "myfig.pdf"))
 ##' }
 ##' @importFrom ggtext element_markdown
 ##' @importFrom ggplot2 ggplot aes geom_violin stat_summary ylim ylab scale_x_discrete theme ggsave rel
