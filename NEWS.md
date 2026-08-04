@@ -1,11 +1,42 @@
-# nethist 1.0.0 (development)
+# nethist 1.0.0
 
-update: 2026/03/17
+update: 2026/08/04
 
-- Implementation of Song and Olhede (2026+) for multi-layer network histograms.
-- Implementation of Gao et al. (2015) for single-layer network histograms.
-- New dataset: IndianVil
-- violin_netsummary() now uses igraph plots of v-shape and cycles for x-axis values.
+### New features
+
+-   `multinethist()`
+    -   New implementation of Song and Olhede (2026+) for multi-layer
+        network histogram estimation.
+    -   `common_f` option assumes a common graphon across layers.
+    -   Accepts a wider range of inputs: 3D array, list of `igraph`/`network`
+        objects, and `ergm.multi::combined_networks` object.
+-   `nethist()`
+    -   New `method = "LSE"` option, implementing Gao et al. (2015) for
+        single-layer network histograms.
+    -   Now implemented as a single-layer wrapper around `multinethist()`.
+-   `hnethist()`: new hybrid network histogram method for shape-based model
+    selection.
+-   `fitted()`: new S3 method for `nethist` and `multinethist` objects.
+-   New dataset: `IndianVil`, a multilayer network.
+
+### Renamed functions
+
+-   `summary()` -> `covariate_plot()`
+-   `violin_netsummary()` -> `netsummary_plot()`
+
+### Bug fixes
+
+-   `netsummary_plot()` (formerly `violin_netsummary()`): return 0 instead of
+    NaN when a subsampled network is empty.
+
+### Other changes
+
+-   `netsummary_plot()`: x-axis values are now shown as igraph plots of
+    v-shapes and cycles instead of labels.
+-   Renamed output field `LSE` to `MSE` in `nethist`/`multinethist` objects.
+-   Documentation terminology unified from "node" to "vertex".
+-   `multinethist()`: reject plain `matrix`/`Matrix` elements in list input,
+    since vertex ordering across layers cannot be verified.
 
 # nethist 0.2.4
 
