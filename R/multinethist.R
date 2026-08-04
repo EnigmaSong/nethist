@@ -35,10 +35,11 @@
 ##'
 ##' \itemize{
 ##' \item `cluster` a vector of partition indices.
-##' \item `thetahat` a probability array from multinetwork histogram ordered by cluster labels.
+##' \item `thetahat` a probability array from multinetwork histogram ordered by group labels.
 ##' \item `rho_hat` a vector of estimated sparsity parameters.
 ##' \item `normalized_LL` a normalized likelihood from the algorithm.
 ##' \item `homogeneous` a logical variable indicating homogeneous multinetwork histogram.
+##' \item `h` bandwidth used for estimation.
 ##' }
 ##' @usage multinethist(A, h = NA, common_f = FALSE, method = "PLL",
 ##'   control = nethist_control(), ...)
@@ -216,9 +217,10 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
     message(paste0('Adjacency matrix has ', n_nodes, ' rows/cols'))
   }
 
-  if (n_nodes == h) {
-    message(paste("Bandwidth h=", h, "and number of vertices=", n_nodes,
-                  "are equal. Return theta_hat = rho_n", sep = " "))
+  if (n_nodes < 2 * h) {
+    warning(paste0("Bandwidth h=", h, " exceeds half the number of ",
+                   "vertices n=", n_nodes, "; only one block is possible. ",
+                   "Returning theta_hat = rho_hat."))
     if (n_layers == 1) {
       Log_Likelihood <- log(1 - rhoHat) * (n_nodes * (n_nodes - 1) / 2) +
         log(rhoHat / (1 - rhoHat)) * (sum(A) / 2)
@@ -239,7 +241,8 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
                    normalized_LL = Log_Likelihood / (sum(A) / 2),
                    MSE           = LSE / n_nodes^2,
                    method        = method_char,
-                   homogeneous   = common_f)
+                   homogeneous   = common_f,
+                   h             = h)
     result <- structure(result,
                         class = ifelse(n_layers > 1, "multinethist", "nethist"))
     return(result)
@@ -278,7 +281,8 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
                  normalized_LL = res$norm_LL,
                  MSE           = res$LSE,
                  method        = method_char,
-                 homogeneous   = common_f)
+                 homogeneous   = common_f,
+                 h             = h)
   result <- structure(result,
                       class = ifelse(n_layers > 1, "multinethist", "nethist"))
   return(result)

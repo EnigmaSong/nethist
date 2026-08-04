@@ -35,6 +35,10 @@ test_that("plot.nethist with invalid type errors", {
   expect_error(plot(hist_G, type = "invalid"))
 })
 
+test_that("plot.nethist with custom at scale runs without error", {
+  expect_no_error(plot(hist_G, at = seq(0, 1, length.out = 20)))
+})
+
 ## plot.multinethist ----
 set.seed(42)
 data(kite, package = "igraphdata")
@@ -98,4 +102,12 @@ test_that("layout: valid grid runs without error", {
 
 test_that("layout: NULL default runs without error", {
   expect_no_error(plot(mnhist_multi))
+})
+
+test_that("plot.multinethist single-layer with custom at runs without error", {
+  expect_no_error(plot(mnhist, at = seq(0, 1, length.out = 20)))
+})
+
+test_that("plot.multinethist multilayer with custom at runs without error", {
+  expect_no_error(plot(mnhist_multi, at = seq(0, 1, length.out = 20)))
 })

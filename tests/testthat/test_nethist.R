@@ -50,7 +50,7 @@ test_that("return class is nethist", {
 test_that("required fields present", {
   expect_named(hist_G,
                c("cluster", "thetahat", "rho_hat", "normalized_LL",
-                 "MSE", "method"),
+                 "MSE", "method", "h"),
                ignore.order = TRUE)
 })
 

@@ -46,7 +46,7 @@ test_that("all required fields exist", {
   expect_named(
     result,
     c("cluster", "thetahat", "rho_hat", "normalized_LL", "MSE", "method",
-      "blockcluster", "BIC", "s", "details", "initial"),
+      "h", "blockcluster", "BIC", "s", "details", "initial"),
     ignore.order = TRUE
   )
 })
@@ -107,6 +107,10 @@ test_that("plot(result, type='BIC') returns NULL invisibly", {
 
 test_that("plot(result, type='invalid') raises error", {
   expect_error(plot(result, type = "invalid"))
+})
+
+test_that("plot(result, at = ...) runs without error", {
+  expect_no_error(plot(result, at = seq(0, 1, length.out = 20)))
 })
 
 # -- print -------------------------------------------------------------------
