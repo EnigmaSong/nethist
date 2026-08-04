@@ -29,7 +29,10 @@ likelihood(0)
   bin_cell_counts = group_size.group_number*group_size.group_number.t();
   bin_cell_counts.diag() = (group_size.group_number-1)%group_size.group_number/2;
   
-  estimated_theta = bin_edge_counts.each_slice()/bin_cell_counts;
+  estimated_theta.set_size(arma::size(bin_edge_counts));
+  for(arma::uword l = 0; l < n_layers; l++){
+    estimated_theta.slice(l) = bin_edge_counts.slice(l) / bin_cell_counts;
+  }
   likelihood = compute_normalize_log_likelihood();
   LSE = compute_LSE();
 }
