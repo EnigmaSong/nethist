@@ -29,6 +29,7 @@ A list of class \code{c("hnethist", "nethist")} with the following fields:
 \item \code{normalized_LL} normalized log-likelihood from the initial nethist fit.
 \item \code{MSE} mean squared error of the selected model.
 \item \code{method} loss function used (\code{"LSE"} or \code{"PLL"}).
+\item \code{h} bandwidth used for the initial nethist fit.
 \item \code{blockcluster} a \code{kmeans} object describing how the k-by-k blocks were merged into \code{s} shapes.
 \item \code{BIC} BIC value of the selected model.
 \item \code{s} number of distinct shapes in the selected model.

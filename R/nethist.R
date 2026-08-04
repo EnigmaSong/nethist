@@ -21,11 +21,12 @@
 ##'   \item \code{cluster} an integer vector of length \eqn{n} with block
 ##'     assignments.
 ##'   \item \code{thetahat} a \eqn{k \times k} probability matrix ordered by
-##'     block labels.
+##'     group labels.
 ##'   \item \code{rho_hat} estimated sparsity parameter.
 ##'   \item \code{normalized_LL} normalized log-likelihood.
 ##'   \item \code{MSE} mean squared error.
 ##'   \item \code{method} loss function used (\code{"PLL"} or \code{"LSE"}).
+##'   \item \code{h} bandwidth used for estimation.
 ##' }
 ##' @details
 ##' \code{method = "PLL"} is for Olhede and Wolfe (2014).

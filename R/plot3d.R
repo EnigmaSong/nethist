@@ -1,47 +1,86 @@
-##' Multinetwork histogram 3D plot
+##' 3D histogram plot for nethist objects
 ##'
-##' Drawing [heatmap()] using an `multinethist` object with an user-specified order.
+##' Drawing [plot3D::hist3D()] using a `nethist`, `multinethist`, or `hnethist`
+##' object with a user-specified order.
 ##'
-##' @param x a nethist object from [multinethist()].
-##' @param idx_order A numeric vector for index label order, which must be a permutation of `x$cluster`. If `NA`, it uses `1:max(x$cluster)`. 
-##' @param type One of `MNhist` or `prob`.
-##' @param ... other arguments to pass to [plot3D::hist3D()]. See details.
-##' @details 
-##' ... includes various [`graphical parameters`] passes to [plot3D::hist3D()], then [graphics::image()]. 
-##' @returns
-##' Called for its side effects (plotting). Returns `NULL` invisibly.
+##' @param x a `nethist`, `multinethist`, or `hnethist` object.
+##' @param idx_order A numeric vector for index label order, which must be a
+##'   permutation of `x$cluster`. If `NA`, it uses `1:max(x$cluster)`.
+##' @param type One of `"nethist"` (default) or `"prob"`. `"MNhist"` is a
+##'   deprecated alias for `"nethist"`.
+##' @param ... Other arguments passed to [plot3D::hist3D()].
+##' @returns Called for its side effects (plotting). Returns `NULL` invisibly.
 ##' @examples
 ##' \donttest{
 ##' set.seed(42)
 ##' data(IndianVil)
 ##' mnhist_Ind_vil <- multinethist(IndianVil)
 ##' plot3d(mnhist_Ind_vil)
+##'
+##' data(polblog)
+##' fit <- nethist(polblog)
+##' plot3d(fit)
 ##' }
 ##' @importFrom plot3D hist3D
-##' @rdname plot3d.multinethist
 ##' @export
-plot3d <- function(x, idx_order = 1:max(x$cluster), 
-                   type = "MNhist",
-                   ...){
+plot3d <- function(x, idx_order = 1:max(x$cluster),
+                   type = "nethist",
+                   ...) {
   UseMethod("plot3d")
 }
-##' @exportS3Method 
-plot3d.multinethist <- function(x, 
-                           idx_order = 1:max(x$cluster), 
-                           type = "MNhist",
-                           ...){
-  k<-max(x$cluster)
-  
-  if(!.is_valid_order(idx_order, 1:k)){
-    warning(paste0("idx_order is invalid. Set idx_order = 1:",k))
+
+##' @rdname plot3d
+##' @exportS3Method
+plot3d.nethist <- function(x,
+                           idx_order = 1:max(x$cluster),
+                           type = "nethist",
+                           ...) {
+  k <- max(x$cluster)
+  if (!.is_valid_order(idx_order, 1:k)) {
+    warning(paste0("idx_order is invalid. Set idx_order = 1:", k))
     idx_order <- 1:k
   }
-  
-  n_loop <- ifelse((x$homogeneous)&(type=="MNhist"), 1, dim(x$thetahat)[3])
-  for(l in 1:n_loop){
-    mat <- x$thetahat[idx_order, idx_order, l]/x$rho_hat[l]
+  mat <- switch(type,
+    nethist = x$thetahat[idx_order, idx_order] / x$rho_hat,
+    prob    = x$thetahat[idx_order, idx_order],
+    stop("type must be one of nethist or prob."))
+  hist3D(z = mat, ...)
+  return(invisible(NULL))
+}
 
-    hist3D(z=mat, main = paste("Layer", l),...)
+##' @rdname plot3d
+##' @exportS3Method
+plot3d.hnethist <- function(x,
+                            idx_order = 1:max(x$cluster),
+                            type = "nethist",
+                            ...) {
+  plot3d.nethist(x, idx_order = idx_order, type = type, ...)
+}
+
+##' @rdname plot3d
+##' @exportS3Method
+plot3d.multinethist <- function(x,
+                                idx_order = 1:max(x$cluster),
+                                type = "nethist",
+                                ...) {
+  if (type == "MNhist") {
+    warning("type = \"MNhist\" is deprecated. Use type = \"nethist\" instead.",
+            call. = FALSE)
+    type <- "nethist"
   }
-  invisible(NULL)
+  k <- max(x$cluster)
+  if (!.is_valid_order(idx_order, 1:k)) {
+    warning(paste0("idx_order is invalid. Set idx_order = 1:", k))
+    idx_order <- 1:k
+  }
+  n_loop <- ifelse(x$homogeneous & (type == "nethist"), 1,
+                   dim(x$thetahat)[3])
+  for (l in seq_len(n_loop)) {
+    mat <- switch(type,
+      nethist = x$thetahat[idx_order, idx_order, l] / x$rho_hat[l],
+      prob    = x$thetahat[idx_order, idx_order, l],
+      stop("type must be one of nethist or prob."))
+    hist3D(z = mat, main = paste("Layer", l), ...)
+  }
+  return(invisible(NULL))
 }

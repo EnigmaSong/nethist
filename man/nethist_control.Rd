@@ -24,7 +24,7 @@ nethist_control(
 \eqn{5 \times 10^6}.}
 
 \item{greedy_swap_rule}{character. Vertex-pair selection rule for the greedy
-search. At each iteration, two vertices are drawn and their block labels
+search. At each iteration, two vertices are drawn and their group labels
 are swapped if the move improves the objective. Currently only
 \code{"single_random"} (one pair drawn uniformly at random) is
 implemented.}

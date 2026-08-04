@@ -18,6 +18,7 @@
   prob.col = "white",
   layout = NULL,
   layer_titles = NULL,
+  at = NULL,
   ...
 )
 }
@@ -56,6 +57,11 @@ grid for multi-layer plots, following the \code{mfrow} convention. If \code{NULL
 \item{layer_titles}{A character vector of length equal to the number of
 layers plotted, giving each panel's title. If \code{NULL} (default), titles
 default to \code{"Layer 1"}, \code{"Layer 2"}, etc.}
+
+\item{at}{A numeric vector of breakpoints for the color scale. If \code{NULL}
+(default), breakpoints are computed automatically from the data range.
+Specify a fixed vector to compare plots from different fits on a common
+scale.}
 
 \item{...}{Additional arguments passed to \code{\link[lattice:levelplot]{lattice::levelplot()}}.}
 }

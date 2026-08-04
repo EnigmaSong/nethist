@@ -4,7 +4,7 @@
 \alias{plot.hnethist}
 \title{Plot an hnethist object}
 \usage{
-\method{plot}{hnethist}(x, type = "nethist", ...)
+\method{plot}{hnethist}(x, type = "nethist", at = NULL, ...)
 }
 \arguments{
 \item{x}{an \code{hnethist} object from \code{\link[=hnethist]{hnethist()}}.}
@@ -14,6 +14,9 @@
 selected model is marked with a dashed vertical line, and the rightmost
 point (largest \code{s}, corresponding to the initial nethist fit) is labelled.
 \code{type = "bic"} is also accepted.}
+
+\item{at}{A numeric vector of breakpoints for the color scale. Passed to
+\code{\link[=plot.nethist]{plot.nethist()}}. See \code{\link[=plot.nethist]{plot.nethist()}} for details.}
 
 \item{...}{Additional arguments passed to \code{\link[=plot]{plot()}} when \code{type = "BIC"}, or
 to \code{\link[=plot.nethist]{plot.nethist()}} otherwise.}

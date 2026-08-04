@@ -18,6 +18,7 @@
 ##' \item `normalized_LL` normalized log-likelihood from the initial nethist fit.
 ##' \item `MSE` mean squared error of the selected model.
 ##' \item `method` loss function used (`"LSE"` or `"PLL"`).
+##' \item `h` bandwidth used for the initial nethist fit.
 ##' \item `blockcluster` a `kmeans` object describing how the k-by-k blocks were merged into `s` shapes.
 ##' \item `BIC` BIC value of the selected model.
 ##' \item `s` number of distinct shapes in the selected model.
@@ -90,6 +91,7 @@ hnethist <- function(A, h = NA,
       normalized_LL = best$normalized_LL,
       MSE           = best$MSE,
       method        = result$initial$method,
+      h             = result$initial$h,
       # hnethist-specific fields
       blockcluster  = best$blockcluster,
       BIC           = best$BIC,

@@ -8,6 +8,8 @@
 ##'   selected model is marked with a dashed vertical line, and the rightmost
 ##'   point (largest `s`, corresponding to the initial nethist fit) is labelled.
 ##'   `type = "bic"` is also accepted.
+##' @param at A numeric vector of breakpoints for the color scale. Passed to
+##'   [plot.nethist()]. See [plot.nethist()] for details.
 ##' @param ... Additional arguments passed to [plot()] when `type = "BIC"`, or
 ##'   to [plot.nethist()] otherwise.
 ##' @returns Called for its side effects (plotting). Returns `NULL` invisibly.
@@ -23,7 +25,7 @@
 ##' }
 ##' @importFrom graphics abline text
 ##' @exportS3Method
-plot.hnethist <- function(x, type = "nethist", ...) {
+plot.hnethist <- function(x, type = "nethist", at = NULL, ...) {
   if (tolower(type) == "bic") {
     s_vals   <- sapply(x$details, function(d) d$s)
     bic_vals <- sapply(x$details, function(d) d$BIC)
@@ -32,7 +34,7 @@ plot.hnethist <- function(x, type = "nethist", ...) {
     text(max(s_vals), bic_vals[which.max(s_vals)], "initial", pos = 2)
     return(invisible(NULL))
   }
-  plot.nethist(x, type = type, ...)
+  plot.nethist(x, type = type, at = at, ...)
 }
 
 ##' Network histogram plot
@@ -54,6 +56,10 @@ plot.hnethist <- function(x, type = "nethist", ...) {
 ##' @param digits Integer. Number of decimal places for probabilities.
 ##' @param prob.cex Numeric. `cex` for probability labels.
 ##' @param prob.col Color for probability labels. Default `"white"`.
+##' @param at A numeric vector of breakpoints for the color scale. If `NULL`
+##'   (default), breakpoints are computed automatically from the data range.
+##'   Specify a fixed vector to compare plots from different fits on a common
+##'   scale.
 ##' @param y A dummy variable for S3 dispatch. Never used.
 ##' @param ... Additional arguments passed to [lattice::levelplot()].
 ##' @returns Called for its side effects (plotting). Returns `NULL` invisibly.
@@ -76,7 +82,7 @@ plot.nethist <- function(x, type = "nethist",
                          colorkey = FALSE,
                          prob = FALSE, digits = 2,
                          prob.cex = 0.1 + 0.5/log10(max(x$cluster)),
-                         prob.col = "white", y = NA, ...) {
+                         prob.col = "white", at = NULL, y = NA, ...) {
   k <- max(x$cluster)
   if (!(type %in% c("nethist", "prob", "pmat"))) {
     stop("type must be one of nethist or prob.")
@@ -94,7 +100,7 @@ plot.nethist <- function(x, type = "nethist",
   rownames(mat) <- as.character(idx_order)
   colnames(mat) <- as.character(idx_order)
 
-  at_vals    <- seq(0, max(mat), length.out = 20)
+  at_vals    <- if (is.null(at)) seq(0, max(mat), length.out = 20) else at
   scales_arg <- list(
     x = list(at = seq_len(k), labels = as.character(idx_order)),
     y = list(at = seq_len(k), labels = as.character(idx_order))
@@ -146,6 +152,10 @@ plot.nethist <- function(x, type = "nethist",
 ##' @param layer_titles A character vector of length equal to the number of
 ##'   layers plotted, giving each panel's title. If `NULL` (default), titles
 ##'   default to `"Layer 1"`, `"Layer 2"`, etc.
+##' @param at A numeric vector of breakpoints for the color scale. If `NULL`
+##'   (default), breakpoints are computed automatically from the data range.
+##'   Specify a fixed vector to compare plots from different fits on a common
+##'   scale.
 ##' @param ... Additional arguments passed to [lattice::levelplot()].
 ##' @returns Called for its side effects (plotting). Returns `NULL` invisibly.
 ##' @examples
@@ -171,7 +181,8 @@ plot.multinethist <- function(x, y = NA, type = "nethist",
                               prob.cex = 0.1 + 0.5/log10(max(x$cluster)),
                               prob.col = "white",
                               layout = NULL,
-                              layer_titles = NULL, ...) {
+                              layer_titles = NULL,
+                              at = NULL, ...) {
   if (type == "MNhist") {
     warning("type = \"MNhist\" is deprecated. Use type = \"nethist\" instead.",
             call. = FALSE)
@@ -182,14 +193,14 @@ plot.multinethist <- function(x, y = NA, type = "nethist",
   if (n_layers == 1) {
     return(invisible(plot.nethist(x, type, idx_order, power, col.regions,
                                   colorkey, prob, digits, prob.cex, prob.col,
-                                  y = y, ...)))
+                                  at = at, y = y, ...)))
   } else {
     return(invisible(.plot_multinethist_layers(x, type, idx_order, power,
                                                col.regions, colorkey, prob,
                                                digits, prob.cex, prob.col,
                                                layout = layout,
                                                layer_titles = layer_titles,
-                                               ...)))
+                                               at = at, ...)))
   }
 }
 
@@ -204,7 +215,8 @@ plot.multinethist <- function(x, y = NA, type = "nethist",
                                       prob.cex = 0.1 + 0.5/log10(max(x$cluster)),
                                       prob.col = "white",
                                       layout = NULL,
-                                      layer_titles = NULL, ...) {
+                                      layer_titles = NULL,
+                                      at = NULL, ...) {
   k <- dim(x$thetahat)[1]
   if (!(type %in% c("nethist", "prob"))) {
     stop("type must be one of nethist or prob.")
@@ -245,7 +257,7 @@ plot.multinethist <- function(x, y = NA, type = "nethist",
       "prob"   =  x$thetahat[idx_order, idx_order, l])
     max(mat_l)
   }, numeric(1L))
-  at_vals <- seq(0, max(all_max), length.out = 20)
+  at_vals <- if (is.null(at)) seq(0, max(all_max), length.out = 20) else at
 
   scales_arg <- list(
     x = list(at = seq_len(k), labels = as.character(idx_order)),

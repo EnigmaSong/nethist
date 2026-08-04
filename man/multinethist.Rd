@@ -46,10 +46,11 @@ If the number of layers is greater than 1, it returns an object of class \code{m
 
 \itemize{
 \item \code{cluster} a vector of partition indices.
-\item \code{thetahat} a probability array from multinetwork histogram ordered by cluster labels.
+\item \code{thetahat} a probability array from multinetwork histogram ordered by group labels.
 \item \code{rho_hat} a vector of estimated sparsity parameters.
 \item \code{normalized_LL} a normalized likelihood from the algorithm.
 \item \code{homogeneous} a logical variable indicating homogeneous multinetwork histogram.
+\item \code{h} bandwidth used for estimation.
 }
 }
 \description{

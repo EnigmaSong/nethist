@@ -15,6 +15,7 @@
   digits = 2,
   prob.cex = 0.1 + 0.5/log10(max(x$cluster)),
   prob.col = "white",
+  at = NULL,
   y = NA,
   ...
 )
@@ -44,6 +45,11 @@ Default \code{FALSE}.}
 \item{prob.cex}{Numeric. \code{cex} for probability labels.}
 
 \item{prob.col}{Color for probability labels. Default \code{"white"}.}
+
+\item{at}{A numeric vector of breakpoints for the color scale. If \code{NULL}
+(default), breakpoints are computed automatically from the data range.
+Specify a fixed vector to compare plots from different fits on a common
+scale.}
 
 \item{y}{A dummy variable for S3 dispatch. Never used.}
 

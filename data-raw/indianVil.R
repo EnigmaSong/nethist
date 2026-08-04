@@ -1,7 +1,7 @@
 # Original Source: https://doi.org/10.7910/DVN/U3BIHX
 # From the source, we only use Village No. 40.
 files_adj_mats <- list.files(path = "data-raw", full.names = TRUE)
-layer_names <- c("Borrow money",
+layer_names <- c("borrow money",
                  "give advice",
                  "help decision",
                  "kero rice come",
