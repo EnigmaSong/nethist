@@ -2,7 +2,7 @@ Package: nethist
 Type: Package
 Title: Network Histograms
 Version: 1.0.0
-Date: 2026-08-16
+Date: 2026-08-17
 Authors@R: c(person("Youngseok","Song", email="youngseok.song@mail.wvu.edu", role =c("aut", "cre")),
             person("Sofia C.","Olhede", email = "sofia.olhede@epfl.ch", role = "aut"))
 Maintainer: Youngseok Song <youngseok.song@mail.wvu.edu>
