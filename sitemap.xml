@@ -1,48 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://enigmasong.github.io/nethist/404.html</loc>
-  </url>
-  <url>
-    <loc>https://enigmasong.github.io/nethist/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://enigmasong.github.io/nethist/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://enigmasong.github.io/nethist/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://enigmasong.github.io/nethist/index.html</loc>
-  </url>
-  <url>
-    <loc>https://enigmasong.github.io/nethist/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://enigmasong.github.io/nethist/reference/dot-prob_mat_from_adj.html</loc>
-  </url>
-  <url>
-    <loc>https://enigmasong.github.io/nethist/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://enigmasong.github.io/nethist/reference/nethist-package.html</loc>
-  </url>
-  <url>
-    <loc>https://enigmasong.github.io/nethist/reference/nethist.html</loc>
-  </url>
-  <url>
-    <loc>https://enigmasong.github.io/nethist/reference/plot.nethist.html</loc>
-  </url>
-  <url>
-    <loc>https://enigmasong.github.io/nethist/reference/polblog.html</loc>
-  </url>
-  <url>
-    <loc>https://enigmasong.github.io/nethist/reference/polblog_edgelist.html</loc>
-  </url>
-  <url>
-    <loc>https://enigmasong.github.io/nethist/reference/summary_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://enigmasong.github.io/nethist/reference/violin_netsummary.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://enigmasong.github.io/nethist/404.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/LICENSE-text.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/LICENSE.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/articles/example.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/articles/index.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/authors.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/index.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/news/index.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/IndianVil.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/covariate_plot.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/fitted.multinethist.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/fitted.nethist.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/hnethist.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/index.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/multinethist.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/nethist-package.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/nethist.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/nethist_control.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/netsummary_plot.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/plot.hnethist.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/plot.multinethist.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/plot.nethist.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/plot3d.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/polblog.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/polblog_edgelist.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/print.nethist.html</loc></url>
 </urlset>
+
