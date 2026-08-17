@@ -20,6 +20,6 @@ bibentry(
     person("Sofia C.", "Olhede")
   ),
   year = "2026",
-  url = {https://arxiv.org/abs/2608.14536},
-	note = {arXiv:2608.14536}
+  url = "https://arxiv.org/abs/2608.14536",
+  note = "arXiv:2608.14536"
 )
