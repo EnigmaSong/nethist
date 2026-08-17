@@ -225,4 +225,4 @@ Maugis, P.-A. G., Priebe, C. E., Olhede, S. C., & Wolfe, P. J. (2017). Topology 
 
 Olhede, S. C. & Wolfe, P. J. (2014). Network histograms and universality of blockmodel approximation. *Proceedings of the National Academy of Sciences*, 111(41), 14722–14727.
 
-Song, Y. & Olhede, S. C. (2026+). Graph limits for sparse multilayer networks. *Preprint*.
+Song, Y. & Olhede, S. C. (2026). Joint Estimation of Sparse Multilayer Networks via Graph Limits. *arXiv:2608.14536*.

@@ -84,7 +84,7 @@ Note that \code{cluster} only shows a partition of vertices, and the index label
 }
 }
 \references{
-Song, Y. & Olhede, S. C. (2026+). Graph Limits for Sparse Multilayer Networks.
+Song, Y. & Olhede, S. C. (2026). Joint Estimation of Sparse Multilayer Networks via Graph Limits. https://arxiv.org/abs/2608.14536
 
 Olhede, S. C. & Wolfe, P. J. (2014). Network Histograms and Universality of Blockmodel Approximation. Proceedings of the National Academy of Sciences, 111(41), 14722-14727. doi:10.1073/pnas.1400374111
 

@@ -2,17 +2,16 @@ Package: nethist
 Type: Package
 Title: Network Histograms
 Version: 1.0.0
-Date: 2026-08-04
+Date: 2026-08-16
 Authors@R: c(person("Youngseok","Song", email="youngseok.song@mail.wvu.edu", role =c("aut", "cre")),
             person("Sofia C.","Olhede", email = "sofia.olhede@epfl.ch", role = "aut"))
 Maintainer: Youngseok Song <youngseok.song@mail.wvu.edu>
 Description: Estimates network histograms, a blockmodel approximation to the
-    graphon underlying a network's connectivity pattern, for single-layer and
-    multilayer networks. Implements the profile-likelihood method of Olhede
-    and Wolfe (2014) and the least-squares method of Gao, Lu, and Zhou
-    (2015) for single-layer networks, and the multilayer extension of Song
-    and Olhede (2026+), plus tools for bandwidth selection, diagnostic
-    plots, and covariate visualization.
+    graphon underlying a network's connectivity pattern, for both single-layer
+    and multilayer networks. Implements graphon estimation methods including
+    the profile-likelihood method of Olhede and Wolfe (2014) and the least-squares
+    method of Gao, Lu, and Zhou (2015) for single-layer networks, as well as the
+    multilayer extension of Song and Olhede (2026).
 SystemRequirements: Fortran compiler (for linking LAPACK/BLAS via
     'RcppArmadillo')
 Suggests:

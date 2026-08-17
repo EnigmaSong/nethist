@@ -21,9 +21,7 @@ knitr::opts_chunk$set(
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
-The goal of *nethist* is to estimate network histograms, a blockmodel approximation to the graphon [@wolfe2013Nonparametric] underlying a network's connectivity pattern, for single-layer and multilayer networks. It implements the profile-likelihood method of @olhede2014Network and the least-squares method of @gao2015Rate for single-layer networks, and the multilayer extension of @song2026Graph, plus tools for bandwidth selection, diagnostic plots, and covariate visualization. Use undirected and simple graphs with no self-loops (either igraph or matrix) as inputs for the functions in this package.
-
-To install the package from source, you need C++ and Fortran compilers.
+**nethist** estimates network histograms, a blockmodel approximation to the graphon [@wolfe2013Nonparametric] underlying a network's connectivity pattern, for single-layer and multilayer networks. It implements the profile-likelihood method of @olhede2014Network and the least-squares method of @gao2015Rate for single-layer networks, as well as the multilayer extension of @song2026Graph. The package also provides tools for bandwidth selection, diagnostic plots, and covariate visualization. Its functions accept undirected simple graphs without self-loops as either `igraph` objects or adjacency matrices.
 
 ## Installation
 
@@ -122,7 +120,7 @@ fitted(hist_indianvil, set1 = 1:10, set2 = 1:10, layer = 1)
 
 ### Network topology summary
 
-If you want to check the network topology summary plot of the data set
+If you want to check the network topology summary plot of the dataset
 [@maugis2017Topology]:
 ```{r example4}
 #User-specified subsample size.

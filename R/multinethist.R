@@ -68,7 +68,7 @@
 ##'    mnethist_Ind_Vil <- multinethist(IndianVil)
 ##' }
 ##' @seealso [plot.multinethist()], [plot.nethist()], [nethist_control()]
-##' @references Song, Y. & Olhede, S. C. (2026+). Graph Limits for Sparse Multilayer Networks.
+##' @references Song, Y. & Olhede, S. C. (2026). Joint Estimation of Sparse Multilayer Networks via Graph Limits. https://arxiv.org/abs/2608.14536
 ##' @references Olhede, S. C. & Wolfe, P. J. (2014). Network Histograms and Universality of Blockmodel Approximation. Proceedings of the National Academy of Sciences, 111(41), 14722-14727. doi:10.1073/pnas.1400374111
 ##' @references Gao, C., Lu, Y., & Zhou, H. H. (2015). Rate-Optimal Graphon Estimation. The Annals of Statistics, 43(6), 2624-2652. doi:10.1214/15-AOS1354
 ##' @import Rcpp

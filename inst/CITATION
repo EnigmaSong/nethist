@@ -1,0 +1,25 @@
+citHeader("To cite nethist in publications use:")
+
+bibentry(
+  bibtype = "Manual",
+  title = "nethist: Network Histograms",
+  author = personList(
+    person("Youngseok", "Song"),
+    person("Sofia C.", "Olhede")
+  ),
+  year = "2026",
+  note = "R package version 1.0.0",
+  url = "https://enigmasong.github.io/nethist/"
+)
+
+bibentry(
+  bibtype = "Misc",
+  title = "nethist: An R Package for Nonparametric Graphon Estimation via Network Histograms",
+  author = personList(
+    person("Youngseok", "Song"),
+    person("Sofia C.", "Olhede")
+  ),
+  year = "2026",
+  url = {https://arxiv.org/abs/2608.14536},
+	note = {arXiv:2608.14536}
+)

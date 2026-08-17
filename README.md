@@ -10,18 +10,15 @@
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
-The goal of *nethist* is to estimate network histograms, a blockmodel
-approximation to the graphon (Wolfe and Olhede 2013) underlying a
-network’s connectivity pattern, for single-layer and multilayer
-networks. It implements the profile-likelihood method of Olhede and
-Wolfe (2014) and the least-squares method of Gao, Lu, and Zhou (2015)
-for single-layer networks, and the multilayer extension of Song and
-Olhede (2026), plus tools for bandwidth selection, diagnostic plots, and
-covariate visualization. Use undirected and simple graphs with no
-self-loops (either igraph or matrix) as inputs for the functions in this
-package.
-
-To install the package from source, you need C++ and Fortran compilers.
+**nethist** estimates network histograms, a blockmodel approximation to
+the graphon (Wolfe and Olhede 2013) underlying a network’s connectivity
+pattern, for single-layer and multilayer networks. It implements the
+profile-likelihood method of Olhede and Wolfe (2014) and the
+least-squares method of Gao et al. (2015) for single-layer networks, as
+well as the multilayer extension of Song and Olhede (2026). The package
+also provides tools for bandwidth selection, diagnostic plots, and
+covariate visualization. Its functions accept undirected simple graphs
+without self-loops as either `igraph` objects or adjacency matrices.
 
 ## Installation
 
@@ -44,12 +41,6 @@ library(nethist)
 ```
 
 We use *polblog* dataset in the package for our examples.
-
-    #> Warning: `as_adj()` was deprecated in igraph 2.1.0.
-    #> ℹ Please use `as_adjacency_matrix()` instead.
-    #> This warning is displayed once per session.
-    #> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-    #> generated.
 
 <img src="man/figures/README-summary-1.png" alt="" width="100%" />
 
@@ -83,6 +74,7 @@ plot(hist_polblog, idx_order = ind)
 <img src="man/figures/README-example2-1.png" alt="" width="100%" />
 
 ``` r
+
 ## Users can specify the color palette
 library(RColorBrewer)
 plot(hist_polblog,  idx_order = ind, col.regions = brewer.pal(9, "Greys"))
@@ -125,34 +117,34 @@ layers.
 
 ``` r
 fitted(hist_indianvil, set1 = 1:10, set2 = 1:10, layer = 1)
-#>           [,1]     [,2]     [,3]     [,4]      [,5]      [,6]      [,7]
-#>  [1,] 8.510526 5.053125 1.155000 0.144375  0.866250  0.866250  0.866250
-#>  [2,] 5.053125 0.000000 1.010625 0.577500  0.000000  0.000000  0.000000
-#>  [3,] 1.155000 1.010625 6.990789 1.732500  3.176250  3.176250  3.176250
-#>  [4,] 0.144375 0.577500 1.732500 6.686842  0.000000  0.000000  0.000000
-#>  [5,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263
-#>  [6,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263
-#>  [7,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263
-#>  [8,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263
-#>  [9,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263
-#> [10,] 0.000000 0.000000 4.331250 0.000000  0.144375  0.144375  0.144375
-#>            [,8]      [,9]    [,10]
-#>  [1,]  0.866250  0.866250 0.000000
-#>  [2,]  0.000000  0.000000 0.000000
-#>  [3,]  3.176250  3.176250 4.331250
-#>  [4,]  0.000000  0.000000 0.000000
-#>  [5,] 10.030263 10.030263 0.144375
-#>  [6,] 10.030263 10.030263 0.144375
-#>  [7,] 10.030263 10.030263 0.144375
-#>  [8,] 10.030263 10.030263 0.144375
-#>  [9,] 10.030263 10.030263 0.144375
-#> [10,]  0.144375  0.144375 0.000000
+#>           [,1]     [,2]     [,3]     [,4]      [,5]      [,6]      [,7]      [,8]
+#>  [1,] 8.510526 5.053125 1.155000 0.144375  0.866250  0.866250  0.866250  0.866250
+#>  [2,] 5.053125 0.000000 1.010625 0.577500  0.000000  0.000000  0.000000  0.000000
+#>  [3,] 1.155000 1.010625 6.990789 1.732500  3.176250  3.176250  3.176250  3.176250
+#>  [4,] 0.144375 0.577500 1.732500 6.686842  0.000000  0.000000  0.000000  0.000000
+#>  [5,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263 10.030263
+#>  [6,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263 10.030263
+#>  [7,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263 10.030263
+#>  [8,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263 10.030263
+#>  [9,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263 10.030263
+#> [10,] 0.000000 0.000000 4.331250 0.000000  0.144375  0.144375  0.144375  0.144375
+#>            [,9]    [,10]
+#>  [1,]  0.866250 0.000000
+#>  [2,]  0.000000 0.000000
+#>  [3,]  3.176250 4.331250
+#>  [4,]  0.000000 0.000000
+#>  [5,] 10.030263 0.144375
+#>  [6,] 10.030263 0.144375
+#>  [7,] 10.030263 0.144375
+#>  [8,] 10.030263 0.144375
+#>  [9,] 10.030263 0.144375
+#> [10,]  0.144375 0.000000
 ```
 
 ### Network topology summary
 
-If you want to check the network topology summary plot of the data set
-(Maugis, Olhede, and Wolfe 2017):
+If you want to check the network topology summary plot of the dataset
+(Maugis et al. 2017):
 
 ``` r
 #User-specified subsample size.
@@ -201,8 +193,9 @@ Academy of Sciences* 111 (41): 14722–27.
 
 <div id="ref-song2026Graph" class="csl-entry">
 
-Song, Youngseok, and Sofia C. Olhede. 2026. “Graph Limits for Sparse
-Multilayer Networks.”
+Song, Youngseok, and Sofia C. Olhede. 2026. *Joint Estimation of Sparse
+Multilayer Networks via Graph Limits*.
+<https://arxiv.org/abs/2608.14536>.
 
 </div>
 

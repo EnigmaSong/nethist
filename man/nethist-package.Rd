@@ -7,7 +7,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Estimates network histograms, a blockmodel approximation to the graphon underlying a network's connectivity pattern, for single-layer and multilayer networks. Implements the profile-likelihood method of Olhede and Wolfe (2014) and the least-squares method of Gao, Lu, and Zhou (2015) for single-layer networks, and the multilayer extension of Song and Olhede (2026+), plus tools for bandwidth selection, diagnostic plots, and covariate visualization.
+Estimates network histograms, a blockmodel approximation to the graphon underlying a network's connectivity pattern, for both single-layer and multilayer networks. Implements graphon estimation methods including the profile-likelihood method of Olhede and Wolfe (2014) and the least-squares method of Gao, Lu, and Zhou (2015) for single-layer networks, as well as the multilayer extension of Song and Olhede (2026).
 }
 \seealso{
 Useful links:
