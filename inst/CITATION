@@ -3,7 +3,7 @@ citHeader("To cite nethist in publications use:")
 bibentry(
   bibtype = "Manual",
   title = "nethist: Network Histograms",
-  author = personList(
+  author = c(
     person("Youngseok", "Song"),
     person("Sofia C.", "Olhede")
   ),
@@ -15,7 +15,7 @@ bibentry(
 bibentry(
   bibtype = "Misc",
   title = "nethist: An R Package for Nonparametric Graphon Estimation via Network Histograms",
-  author = personList(
+  author = c(
     person("Youngseok", "Song"),
     person("Sofia C.", "Olhede")
   ),

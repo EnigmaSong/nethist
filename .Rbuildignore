@@ -4,6 +4,7 @@
 ^docs$
 ^pkgdown$
 ^README\.Rmd$
+^README\.html$
 ^reference\.bib$
 ^\.github$
 ^LICENSE\.md$

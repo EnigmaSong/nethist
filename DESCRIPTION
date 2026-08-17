@@ -25,7 +25,8 @@ Suggests:
     network,
     ergm.multi,
     lifecycle,
-    withr
+    withr,
+    mclust
 Encoding: UTF-8
 Imports:
     lattice,
