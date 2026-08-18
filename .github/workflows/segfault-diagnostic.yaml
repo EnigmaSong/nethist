@@ -13,11 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      R_LIBS_USER: ${{ runner.temp }}/nethist-library
       ASAN_OPTIONS: detect_leaks=0:abort_on_error=1:halt_on_error=1
 
     steps:
       - uses: actions/checkout@v5
+
+      - name: Configure diagnostic library
+        shell: bash
+        run: |
+          echo "R_LIBS_USER=$RUNNER_TEMP/nethist-library" >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/nethist-library"
 
       - uses: r-lib/actions/setup-r@v2
         with:
