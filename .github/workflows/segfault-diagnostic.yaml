@@ -2,7 +2,7 @@ name: Ubuntu segfault diagnostic
 
 on:
   push:
-    branches: [diagnose-ubuntu-segfault]
+    branches: [segfault_fix]
   workflow_dispatch:
 
 permissions:
