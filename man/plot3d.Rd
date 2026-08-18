@@ -34,6 +34,7 @@ Drawing \code{\link[plot3D:hist3D]{plot3D::hist3D()}} using a \code{nethist}, \c
 object with a user-specified order.
 }
 \examples{
+\dontshow{if (requireNamespace("plot3D", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 \donttest{
 set.seed(42)
 data(IndianVil)
@@ -44,4 +45,5 @@ data(polblog)
 fit <- nethist(polblog)
 plot3d(fit)
 }
+\dontshow{\}) # examplesIf}
 }

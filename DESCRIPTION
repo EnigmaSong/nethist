@@ -26,7 +26,8 @@ Suggests:
     ergm.multi,
     lifecycle,
     withr,
-    mclust
+    mclust,
+    plot3D
 Encoding: UTF-8
 Imports:
     lattice,
@@ -39,7 +40,6 @@ Imports:
     graphics,
     reshape2,
     igraph,
-    plot3D,
     rlang
 LinkingTo: Rcpp, RcppArmadillo, testthat
 Depends: 

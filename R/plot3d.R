@@ -10,7 +10,7 @@
 ##'   deprecated alias for `"nethist"`.
 ##' @param ... Other arguments passed to [plot3D::hist3D()].
 ##' @returns Called for its side effects (plotting). Returns `NULL` invisibly.
-##' @examples
+##' @examplesIf requireNamespace("plot3D", quietly = TRUE)
 ##' \donttest{
 ##' set.seed(42)
 ##' data(IndianVil)
@@ -21,7 +21,6 @@
 ##' fit <- nethist(polblog)
 ##' plot3d(fit)
 ##' }
-##' @importFrom plot3D hist3D
 ##' @export
 plot3d <- function(x, idx_order = 1:max(x$cluster),
                    type = "nethist",
@@ -35,6 +34,9 @@ plot3d.nethist <- function(x,
                            idx_order = 1:max(x$cluster),
                            type = "nethist",
                            ...) {
+  if (!requireNamespace("plot3D", quietly = TRUE)) {
+    stop("Package 'plot3D' is required for plot3d().", call. = FALSE)
+  }
   k <- max(x$cluster)
   if (!.is_valid_order(idx_order, 1:k)) {
     warning(paste0("idx_order is invalid. Set idx_order = 1:", k))
@@ -44,7 +46,7 @@ plot3d.nethist <- function(x,
     nethist = x$thetahat[idx_order, idx_order] / x$rho_hat,
     prob    = x$thetahat[idx_order, idx_order],
     stop("type must be one of nethist or prob."))
-  hist3D(z = mat, ...)
+  plot3D::hist3D(z = mat, ...)
   return(invisible(NULL))
 }
 
@@ -63,6 +65,9 @@ plot3d.multinethist <- function(x,
                                 idx_order = 1:max(x$cluster),
                                 type = "nethist",
                                 ...) {
+  if (!requireNamespace("plot3D", quietly = TRUE)) {
+    stop("Package 'plot3D' is required for plot3d().", call. = FALSE)
+  }
   if (type == "MNhist") {
     warning("type = \"MNhist\" is deprecated. Use type = \"nethist\" instead.",
             call. = FALSE)
@@ -80,7 +85,7 @@ plot3d.multinethist <- function(x,
       nethist = x$thetahat[idx_order, idx_order, l] / x$rho_hat[l],
       prob    = x$thetahat[idx_order, idx_order, l],
       stop("type must be one of nethist or prob."))
-    hist3D(z = mat, main = paste("Layer", l), ...)
+    plot3D::hist3D(z = mat, main = paste("Layer", l), ...)
   }
   return(invisible(NULL))
 }
