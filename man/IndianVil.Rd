@@ -22,12 +22,12 @@ Vertices with zero degrees across all layers were removed, reducing the total nu
 
   data(IndianVil)
   
-  IndianVil
+  dim(IndianVil)
 
 }
 \references{
 Banerjee, A., Chandrasekhar, A. G., Duflo, E., & Jackson, M. O. (2013). The diffusion of microfinance. Science, 341(6144), 1236498.
 
-Song, Y. & Olhede, S.C. (2026+). Graph Limits for Sparse Multilayer Networks.
+Song, Y. & Olhede, S. C. (2026). Joint Estimation of Sparse Multilayer Networks via Graph Limits. https://arxiv.org/abs/2608.14536
 }
 \keyword{datasets}

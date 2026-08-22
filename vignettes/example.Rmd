@@ -25,7 +25,7 @@ The **nethist** package estimates *network histograms* for single-layer and mult
 The package implements the methods from:
 
 - **Single-layer**: Olhede & Wolfe (2014). *Network Histograms and Universality of Blockmodel Approximation*. PNAS, 111(41).
-- **Multi-layer**: Song & Olhede (2026+). *Graph Limits for Sparse Multilayer Networks*.
+- **Multi-layer**: Song & Olhede (2026). *Joint Estimation of Sparse Multilayer Networks via Graph Limits*. arXiv:2608.14536.
 
 The package provides:
 
