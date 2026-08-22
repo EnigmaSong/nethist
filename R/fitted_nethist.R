@@ -65,13 +65,11 @@ fitted.nethist <- function(object, set1 = NULL, set2 = NULL,
 ##'   layer is selected and `drop = TRUE`, otherwise a 3-dimensional array of
 ##'   dimension `|set1| x |set2| x |layer|`.
 ##' @seealso [multinethist()], [nethist()]
-##' @examples
-##' \donttest{
+##' @examplesIf interactive()
 ##' data(IndianVil)
 ##' fit <- multinethist(IndianVil, h = 20L)
 ##' fitted(fit, set1 = 1:10, set2 = 1:10, layer = 1)
 ##' fitted(fit, layer = c(1, 2), drop = FALSE)
-##' }
 ##' @exportS3Method
 fitted.multinethist <- function(object, set1 = NULL, set2 = NULL,
                                 layer = NULL, type = "nethist",

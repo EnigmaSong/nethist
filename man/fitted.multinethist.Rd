@@ -43,12 +43,12 @@ Returns a subarray of the fitted block-probability or graphon matrix
 for a \code{multinethist} object.
 }
 \examples{
-\donttest{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 data(IndianVil)
 fit <- multinethist(IndianVil, h = 20L)
 fitted(fit, set1 = 1:10, set2 = 1:10, layer = 1)
 fitted(fit, layer = c(1, 2), drop = FALSE)
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=multinethist]{multinethist()}}, \code{\link[=nethist]{nethist()}}

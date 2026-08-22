@@ -1,0 +1,89 @@
+name: Ubuntu segfault diagnostic
+
+on:
+  push:
+    branches: [segfault_fix]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  address-sanitizer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      ASAN_OPTIONS: detect_leaks=0:abort_on_error=1:halt_on_error=1
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Configure diagnostic library
+        shell: bash
+        run: |
+          echo "R_LIBS_USER=$RUNNER_TEMP/nethist-library" >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/nethist-library"
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::pkgload
+          needs: check
+
+      - name: Configure AddressSanitizer build
+        shell: bash
+        run: |
+          mkdir -p "$HOME/.R" "$R_LIBS_USER"
+          cat > "$HOME/.R/Makevars" <<'EOF'
+          CFLAGS = -g -O1 -fsanitize=address -fno-omit-frame-pointer
+          CXXFLAGS = -g -O1 -fsanitize=address -fno-omit-frame-pointer
+          CXX11FLAGS = -g -O1 -fsanitize=address -fno-omit-frame-pointer
+          CXX14FLAGS = -g -O1 -fsanitize=address -fno-omit-frame-pointer
+          CXX17FLAGS = -g -O1 -fsanitize=address -fno-omit-frame-pointer
+          CXX20FLAGS = -g -O1 -fsanitize=address -fno-omit-frame-pointer
+          LDFLAGS = -fsanitize=address
+          EOF
+
+      - name: Build instrumented package
+        shell: bash
+        run: R CMD INSTALL --preclean --library="$R_LIBS_USER" . 2>&1 | tee install.log
+
+      - name: Repeat seed 68
+        shell: bash
+        run: |
+          export LD_PRELOAD="$(gcc -print-file-name=libasan.so)"
+          Rscript --vanilla -e '
+            library(nethist)
+            data(IndianVil, package = "nethist")
+
+            reference <- NULL
+            for (i in seq_len(50)) {
+              message("trial ", i)
+              set.seed(68)
+              fit <- multinethist(IndianVil, h = 20L)
+
+              if (is.null(reference)) {
+                reference <- fit
+              } else {
+                stopifnot(
+                  identical(fit$cluster, reference$cluster),
+                  identical(fit$thetahat, reference$thetahat),
+                  identical(fit$normalized_LL, reference$normalized_LL)
+                )
+              }
+            }
+            message("PASS: 50 identical runs completed")
+          ' 2>&1 | tee sanitizer.log
+
+      - name: Upload diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ubuntu-segfault-diagnostic
+          path: |
+            install.log
+            sanitizer.log
+          if-no-files-found: ignore

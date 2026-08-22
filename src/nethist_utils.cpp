@@ -28,7 +28,10 @@ arma::uvec select_swap(const Assignment& assignment,
 arma::uword sample_node_by_swap_rule(const int& n_node, const int& swap_rule){
   switch(swap_rule){ 
   case 1: // single_random: one pair drawn uniformly at random
-    return as<arma::uword>(wrap(sample(n_node, 1, false) - 1));
+    {
+      const IntegerVector draw = Rcpp::sample(n_node, 1, false);
+      return static_cast<arma::uword>(draw[0] - 1);
+    }
   }
   return 0;
 }
@@ -97,11 +100,11 @@ double ffct(int n, int k){
 // [[Rcpp::export(.hamming_dist_adj_mat)]]
 arma::mat hamming_dist_adj_mat(const arma::imat &A){
   const arma::uword n = A.n_cols;
-  arma::mat result(n,n);
+  arma::mat result(n, n, arma::fill::zeros);
   
   for(arma::uword j = 0; j < n; j++){
     for(arma::uword i = j+1; i < n; i++){
-      result.at(i,j) += sum(A.col(i)!= A.col(j));
+      result.at(i,j) = sum(A.col(i) != A.col(j));
     }
   }
   result = symmatl(result);
