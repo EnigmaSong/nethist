@@ -120,14 +120,18 @@ test_that("same seed gives identical results", {
 })
 
 ## Edge case: n == h ----
-test_that("n == h (single-bin) returns without error", {
+test_that("n == h (single-bin) warns that only one block is possible", {
   n <- igraph::vcount(G)
-  suppressMessages(expect_no_error(nethist(G, h = n)))
+  suppressMessages(
+    expect_warning(nethist(G, h = n), regexp = "only one block")
+  )
 })
 
 test_that("n == h (single-bin) returns k == 1", {
   n <- igraph::vcount(G)
-  result <- suppressMessages(nethist(G, h = n))
+  suppressMessages(
+    expect_warning(result <- nethist(G, h = n), regexp = "only one block")
+  )
   expect_equal(max(result$cluster), 1L)
 })
 
@@ -139,7 +143,11 @@ test_that("h < 2 triggers warning and is clamped to 2", {
 
 test_that("h > n triggers warning and is clamped to n", {
   n <- nrow(A_dense)
-  expect_warning(nethist(A_dense, h = n + 1), regexp = "adjusted")
+  # Clamping to n leaves h above n/2, so a second warning follows.
+  expect_warning(
+    expect_warning(nethist(A_dense, h = n + 1), regexp = "adjusted"),
+    regexp = "only one block"
+  )
 })
 
 test_that("non-integer h triggers warning", {
@@ -168,7 +176,8 @@ test_that("complete graph runs without error and rho_hat is close to 1", {
   n <- 20
   A_full <- matrix(1L, n, n)
   diag(A_full) <- 0L
-  result_full <- nethist(A_full)
+  # The data-driven bandwidth exceeds n/2 for a complete graph.
+  expect_warning(result_full <- nethist(A_full), regexp = "only one block")
   expect_true(result_full$rho_hat > 0.9)
 })
 
