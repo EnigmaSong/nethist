@@ -243,8 +243,7 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
                    method        = method_char,
                    homogeneous   = common_f,
                    h             = h)
-    result <- structure(result,
-                        class = ifelse(n_layers > 1, "multinethist", "nethist"))
+    result <- structure(result, class = .network_histogram_class(n_layers))
     return(result)
   }
 
@@ -283,8 +282,7 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
                  method        = method_char,
                  homogeneous   = common_f,
                  h             = h)
-  result <- structure(result,
-                      class = ifelse(n_layers > 1, "multinethist", "nethist"))
+  result <- structure(result, class = .network_histogram_class(n_layers))
   return(result)
 }
 
