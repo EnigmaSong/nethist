@@ -56,6 +56,12 @@
 
 ### Documentation
 
+-   `nethist()`, `multinethist()`, and `hnethist()` now state in their help
+    pages that the greedy search is stochastic and converges to a local
+    optimum, and that `set.seed()` should be called immediately before the fit
+    for reproducible results. `hnethist()` additionally notes that its merging
+    step draws `stats::kmeans()` starting centres from the same stream, so the
+    selected number of shapes depends on it.
 -   Removed the leftover prompt boilerplate from the `polblog` and
     `polblog_edgelist` help pages, as requested by the CRAN team.
 -   The `polblog` and `polblog_edgelist` examples now call

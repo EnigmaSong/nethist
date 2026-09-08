@@ -30,6 +30,14 @@
 ##' Among the outputs, the best model is selected based on the BIC criterion.
 ##'
 ##' The original reference provided theoretical guarantees for LSE, but we also allow PLL for the initial nethist fit. The block clustering and model selection steps are performed on the LSE loss regardless of the initial method, as the theoretical results pertain to LSE.
+##'
+##' Both stages are stochastic. The initial [nethist()] fit uses a greedy
+##' search that swaps randomly chosen vertex pairs, and the merging step calls
+##' [stats::kmeans()], which draws its starting centres at random. Neither
+##' stage seeds itself, so both consume the global random number stream and the
+##' selected number of shapes `s` depends on its state. Call [set.seed()]
+##' immediately before the fit to make results reproducible, and expect
+##' different seeds to give somewhat different values of `s`.
 ##' }
 ##' @examples
 ##' \donttest{

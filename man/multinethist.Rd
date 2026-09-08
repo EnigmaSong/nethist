@@ -65,6 +65,13 @@ If the number of layers is 1, multinethist() fits a single-layer network histogr
 \code{method} is only used for single-layer networks. \code{method = "PLL"} is for Olhede and Wolfe (2014), and \code{method = "LSE"} is for Gao et al. (2015).
 
 Note that \code{cluster} only shows a partition of vertices, and the index labels are not ordered. For example, vertices in cluster 1 do not have to be more similar to vertices in cluster 2 than to vertices in cluster 10. Hence, users may specify a custom order in \code{\link[=plot.multinethist]{plot.multinethist()}}.
+
+The greedy search is stochastic. At each iteration it draws a pair of
+vertices uniformly at random and swaps their block labels if the objective
+improves, so it converges to a local optimum that depends on the state of
+the random number stream. Call \code{\link[=set.seed]{set.seed()}} immediately before the fit to
+make results reproducible, and expect different seeds to give somewhat
+different partitions.
 }
 }
 \examples{

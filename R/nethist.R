@@ -35,6 +35,13 @@
 ##' Note that \code{cluster} labels are not ordered: vertices in cluster 1 are
 ##' not necessarily more similar to cluster 2 than to cluster 10. Users may specify
 ##' a custom display order in \code{\link{plot.nethist}}.
+##'
+##' The greedy search is stochastic. At each iteration it draws a pair of
+##' vertices uniformly at random and swaps their block labels if the objective
+##' improves, so it converges to a local optimum that depends on the state of
+##' the random number stream. Call \code{\link[base]{set.seed}} immediately
+##' before the fit to make results reproducible, and expect different seeds to
+##' give somewhat different partitions.
 ##' @examples
 ##' \donttest{
 ##' set.seed(42)
