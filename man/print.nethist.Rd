@@ -6,23 +6,27 @@
 \alias{print.hnethist}
 \title{Print nethist objects}
 \usage{
-\method{print}{nethist}(x, ...)
+\method{print}{nethist}(x, digits = getOption("digits"), ...)
 
-\method{print}{multinethist}(x, ...)
+\method{print}{multinethist}(x, digits = getOption("digits"), ...)
 
-\method{print}{hnethist}(x, ...)
+\method{print}{hnethist}(x, digits = getOption("digits"), ...)
 }
 \arguments{
 \item{x}{a \code{nethist}, \code{multinethist}, or \code{hnethist} object.}
 
-\item{...}{additional arguments passed to \code{\link[=print]{print()}}.}
+\item{digits}{number of significant digits used when printing the loss.}
+
+\item{...}{additional arguments. Currently unused.}
 }
 \value{
 The input object, invisibly.
 }
 \description{
-Prints the estimated probability matrix and model summary for
-\code{nethist}, \code{multinethist}, and \code{hnethist} objects.
+Compact one-screen description of \code{nethist}, \code{multinethist}, and
+\code{hnethist} objects. The estimated probabilities are reported by their
+dimensions only; use \code{\link{summary.network_histogram}} for the model
+fit statistics and \code{object$thetahat} for the values themselves.
 }
 \examples{
 \donttest{
@@ -30,5 +34,9 @@ set.seed(42)
 data(polblog)
 fit <- suppressMessages(nethist(polblog))
 print(fit)
+summary(fit)
 }
+}
+\seealso{
+\code{\link{summary.network_histogram}}
 }

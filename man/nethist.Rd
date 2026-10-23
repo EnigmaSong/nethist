@@ -26,7 +26,8 @@ Governs \code{max_itr}, \code{greedy_swap_rule},
 via \code{control = nethist_control(...)} instead.}
 }
 \value{
-An object of class \code{"nethist"} with the following fields:
+An object of class \code{c("nethist", "network_histogram")} (see
+\link{network_histogram-class}) with the following fields:
 \itemize{
 \item \code{cluster} an integer vector of length \eqn{n} with block
 assignments.
@@ -50,6 +51,13 @@ the indices of partitions.
 Note that \code{cluster} labels are not ordered: vertices in cluster 1 are
 not necessarily more similar to cluster 2 than to cluster 10. Users may specify
 a custom display order in \code{\link{plot.nethist}}.
+
+The greedy search is stochastic. At each iteration it draws a pair of
+vertices uniformly at random and swaps their block labels if the objective
+improves, so it converges to a local optimum that depends on the state of
+the random number stream. Call \code{\link[base]{set.seed}} immediately
+before the fit to make results reproducible, and expect different seeds to
+give somewhat different partitions.
 }
 \examples{
 \donttest{

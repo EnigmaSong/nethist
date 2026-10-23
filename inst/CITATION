@@ -8,7 +8,7 @@ bibentry(
     person("Sofia C.", "Olhede")
   ),
   year = "2026",
-  note = "R package version 1.0.0",
+  note = "R package version 1.1.0",
   url = "https://enigmasong.github.io/nethist/"
 )
 
@@ -20,6 +20,6 @@ bibentry(
     person("Sofia C.", "Olhede")
   ),
   year = "2026",
-  url = "https://arxiv.org/abs/2608.14536",
-  note = "arXiv:2608.14536"
+  url = "https://arxiv.org/abs/2609.01937",
+  note = "arXiv:2609.01937"
 )

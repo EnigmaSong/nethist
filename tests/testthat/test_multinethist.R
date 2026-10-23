@@ -40,9 +40,10 @@ for(l in 1:length(sample_mnet)){
 
 ## Main methods ----
 ### Checking invalid input ----
-# test_that("LSE is not used for multinethist (Temperally)",{
-#     expect_error(multinethist(array_mnet, method = "LSE"))
-# })
+test_that("LSE is not available for multilayer input", {
+  expect_error(multinethist(array_mnet, method = "LSE"),
+               "only for single-layer")
+})
 test_that("non-simple graph input for A (self-loop)", {
   A <- kite
   A[1,1,1] <- 1

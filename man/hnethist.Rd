@@ -20,13 +20,14 @@ and \code{verbose}.}
 \item{...}{Currently unused.}
 }
 \value{
-A list of class \code{c("hnethist", "nethist")} with the following fields:
+A list of class \code{c("hnethist", "nethist", "network_histogram")}
+(see \link{network_histogram-class}) with the following fields:
 
 \itemize{
 \item \code{cluster} an integer vector of length n with vertex-level block assignments from the initial nethist fit.
 \item \code{thetahat} a k-by-k probability matrix of the selected hybrid model, where k is the number of nethist blocks.
 \item \code{rho_hat} estimated sparsity parameter from the initial nethist fit.
-\item \code{normalized_LL} normalized log-likelihood from the initial nethist fit.
+\item \code{normalized_LL} normalized log-likelihood of the selected model, divided by the number of edges.
 \item \code{MSE} mean squared error of the selected model.
 \item \code{method} loss function used (\code{"LSE"} or \code{"PLL"}).
 \item \code{h} bandwidth used for the initial nethist fit.
@@ -45,6 +46,23 @@ Estimating hybrid network histogram for single-layer networks and returning the 
 Among the outputs, the best model is selected based on the BIC criterion.
 
 The original reference provided theoretical guarantees for LSE, but we also allow PLL for the initial nethist fit. The block clustering and model selection steps are performed on the LSE loss regardless of the initial method, as the theoretical results pertain to LSE.
+
+Both stages are stochastic. The initial \code{\link[=nethist]{nethist()}} fit uses a greedy
+search that swaps randomly chosen vertex pairs, and the merging step calls
+\code{\link[stats:kmeans]{stats::kmeans()}}, which draws its starting centres at random. Neither
+stage seeds itself, so both consume the global random number stream and the
+selected number of shapes \code{s} depends on its state. Call \code{\link[=set.seed]{set.seed()}}
+immediately before the fit to make results reproducible, and expect
+different seeds to give somewhat different values of \code{s}.
+}
+}
+\examples{
+\donttest{
+set.seed(42)
+data(polblog)
+hfit <- hnethist(polblog)
+hfit
+plot(hfit)
 }
 }
 \references{

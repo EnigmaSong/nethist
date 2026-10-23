@@ -35,8 +35,9 @@ hnethist_LL <- function(thetahat, cluster_initial, A) {
              (1 - A[upper]) * log(1 - theta_mat[upper])))
 }
 
+# Normalized per edge (sum(A)/2), matching nethist()/multinethist().
 hnethist_normalized_LL <- function(thetahat, cluster_initial, A) {
-  return(hnethist_LL(thetahat, cluster_initial, A) / sum(A))
+  return(hnethist_LL(thetahat, cluster_initial, A) / (sum(A) / 2))
 }
 
 ## BIC

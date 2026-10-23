@@ -1,3 +1,79 @@
+# nethist 1.1.0
+
+### New features
+
+-   `logLik()`: new S3 method for `nethist`, `multinethist`, and `hnethist`
+    objects. Returns the unnormalized Bernoulli log-likelihood as a `logLik`
+    object with `df` and `nobs` attributes, so `AIC()` and `BIC()` work
+    directly on a fit. Use `logLik(fit, normalized = TRUE)` for the per-edge
+    normalized value stored in `fit$normalized_LL`.
+-   `hnethist()`: added examples to the help page.
+-   `summary()`: new S3 method for `nethist`, `multinethist`, and `hnethist`
+    objects. Reports the fit dimensions, the edge density, the log-likelihood
+    with its degrees of freedom, `AIC`, `BIC`, and, for `hnethist`, the shape
+    selection.
+
+### Bug fixes
+
+-   `hnethist()`: `normalized_LL` is now divided by the number of edges
+    `sum(A)/2`, matching `nethist()` and `multinethist()`. Previously it was
+    divided by `sum(A)`, so reported values were half the size of the
+    corresponding `nethist()` values. Model selection and `BIC` are unaffected.
+-   `print()` methods for `nethist`, `multinethist`, and `hnethist` now respect
+    the `digits` argument when printing the normalized likelihood and the mean
+    squared error.
+-   `netsummary_plot()`: the example using the suggested package **network** is
+    now guarded by `requireNamespace()`.
+-   `logLik()` on a `multinethist` fit that collapses to a single block now
+    reports the correct degrees of freedom.
+-   `multinethist()`: `method = "LSE"` with multilayer input now raises an
+    error. Previously it was accepted silently, the fit was computed by
+    profile likelihood, and the returned object was labelled `"LSE"`.
+
+### Class hierarchy
+
+-   All fitted objects now inherit from a common base class,
+    `network_histogram`: `nethist` fits have class
+    `c("nethist", "network_histogram")`, `multinethist` fits
+    `c("multinethist", "network_histogram")`, and `hnethist` fits
+    `c("hnethist", "nethist", "network_histogram")`. Previously `hnethist`
+    inherited from `nethist` while `multinethist` was unrelated to either.
+-   `logLik()` and the `print()` method of the summary objects are defined once
+    on `network_histogram`. `summary.multinethist()` and `summary.hnethist()`
+    extend the base method through `NextMethod()`. Methods whose behaviour
+    depends on the layer dimension, namely `plot()`, `plot3d()`, `fitted()`,
+    and `print()`, remain specific to the subclasses.
+-   See `?"network_histogram-class"` for the documented hierarchy.
+-   Code that tests for an exact class vector, such as
+    `identical(class(fit), c("hnethist", "nethist"))`, needs updating. Use
+    `inherits()` instead.
+
+### User-visible changes
+
+-   The `print()` methods for `nethist`, `multinethist`, and `hnethist` are now
+    compact. They identify the fit and report `thetahat` by its dimensions only,
+    instead of printing the whole probability matrix or array, and the
+    `Available components` listing has been dropped. The detailed output moved
+    to the new `summary()` methods. Use `object$thetahat` or `fitted()` for the
+    estimated probabilities.
+
+### Documentation
+
+-   `nethist()`, `multinethist()`, and `hnethist()` now state in their help
+    pages that the greedy search is stochastic and converges to a local
+    optimum, and that `set.seed()` should be called immediately before the fit
+    for reproducible results. `hnethist()` additionally notes that its merging
+    step draws `stats::kmeans()` starting centres from the same stream, so the
+    selected number of shapes depends on it.
+-   The `@returns` sections of `nethist()`, `multinethist()`, and `hnethist()`
+    now state the full class vector including `network_histogram`, and
+    `multinethist()` lists the `method` field.
+-   Removed the leftover prompt boilerplate from the `polblog` and
+    `polblog_edgelist` help pages, as requested by the CRAN team.
+-   The `polblog` and `polblog_edgelist` examples now call
+    `igraph::delete_vertices()` instead of the deprecated
+    `igraph::delete.vertices()`.
+
 # nethist 1.0.0
 
 update: 2026/08/04

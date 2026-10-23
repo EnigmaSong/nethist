@@ -9,13 +9,14 @@
 ##'   \code{max_itr}, \code{greedy_swap_rule}, \code{greedy_stop_threshold},
 ##'   and \code{verbose}.
 ##' @param ... Currently unused.
-##' @returns A list of class `c("hnethist", "nethist")` with the following fields:
+##' @returns A list of class `c("hnethist", "nethist", "network_histogram")`
+##'   (see \link{network_histogram-class}) with the following fields:
 ##'
 ##' \itemize{
 ##' \item `cluster` an integer vector of length n with vertex-level block assignments from the initial nethist fit.
 ##' \item `thetahat` a k-by-k probability matrix of the selected hybrid model, where k is the number of nethist blocks.
 ##' \item `rho_hat` estimated sparsity parameter from the initial nethist fit.
-##' \item `normalized_LL` normalized log-likelihood from the initial nethist fit.
+##' \item `normalized_LL` normalized log-likelihood of the selected model, divided by the number of edges.
 ##' \item `MSE` mean squared error of the selected model.
 ##' \item `method` loss function used (`"LSE"` or `"PLL"`).
 ##' \item `h` bandwidth used for the initial nethist fit.
@@ -30,6 +31,22 @@
 ##' Among the outputs, the best model is selected based on the BIC criterion.
 ##'
 ##' The original reference provided theoretical guarantees for LSE, but we also allow PLL for the initial nethist fit. The block clustering and model selection steps are performed on the LSE loss regardless of the initial method, as the theoretical results pertain to LSE.
+##'
+##' Both stages are stochastic. The initial [nethist()] fit uses a greedy
+##' search that swaps randomly chosen vertex pairs, and the merging step calls
+##' [stats::kmeans()], which draws its starting centres at random. Neither
+##' stage seeds itself, so both consume the global random number stream and the
+##' selected number of shapes `s` depends on its state. Call [set.seed()]
+##' immediately before the fit to make results reproducible, and expect
+##' different seeds to give somewhat different values of `s`.
+##' }
+##' @examples
+##' \donttest{
+##' set.seed(42)
+##' data(polblog)
+##' hfit <- hnethist(polblog)
+##' hfit
+##' plot(hfit)
 ##' }
 ##' @references Verdeyme, A. & Olhede, S. C. (2024). Hybrid of Node and Link Communities for Graphon Estimation. arXiv:2401.05088
 ##' @rdname hnethist
@@ -74,7 +91,7 @@ hnethist <- function(A, h = NA,
                                          result$initial$cluster, A)
     ll <- hnethist_LL(result$details[[ss]]$thetahat,
                       result$initial$cluster, A)
-    result$details[[ss]]$normalized_LL <- ll / sum(A)
+    result$details[[ss]]$normalized_LL <- ll / (sum(A) / 2)
     result$details[[ss]]$BIC        <- hnethist_BIC(result$details[[ss]], ll)
   }
 
@@ -99,6 +116,6 @@ hnethist <- function(A, h = NA,
       details       = result$details,
       initial       = result$initial
     ),
-    class = c("hnethist", "nethist")
+    class = c("hnethist", "nethist", "network_histogram")
   ))
 }

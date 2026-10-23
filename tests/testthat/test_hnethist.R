@@ -38,8 +38,8 @@ test_that("igraph input runs without error", {
 # -- Output structure --------------------------------------------------------
 result <- suppressMessages(nethist:::hnethist(A, h = h))
 
-test_that("class is c('hnethist', 'nethist')", {
-  expect_equal(class(result), c("hnethist", "nethist"))
+test_that("class is c('hnethist', 'nethist', 'network_histogram')", {
+  expect_equal(class(result), c("hnethist", "nethist", "network_histogram"))
 })
 
 test_that("all required fields exist", {
@@ -115,7 +115,7 @@ test_that("plot(result, at = ...) runs without error", {
 
 # -- print -------------------------------------------------------------------
 test_that("print() dispatches via nethist inheritance without error", {
-  expect_no_error(print(result))
+  expect_no_error(capture.output(print(result)))
 })
 
 # -- Helper: hnethist_BIC ----------------------------------------------------
@@ -172,7 +172,7 @@ test_that("hnethist_normalized_LL is non-positive", {
   expect_lte(nll, 0)
 })
 
-test_that("hnethist_normalized_LL equals Bernoulli LL / sum(A)", {
+test_that("hnethist_normalized_LL equals Bernoulli LL / (sum(A)/2)", {
   n_s  <- 4L
   A_s  <- matrix(c(0, 1, 0, 1,
                    1, 0, 1, 0,
@@ -183,7 +183,8 @@ test_that("hnethist_normalized_LL equals Bernoulli LL / sum(A)", {
   theta_mat <- th_s[cl_s, cl_s]
   upper     <- upper.tri(A_s)
   expected  <- sum(A_s[upper] * log(theta_mat[upper]) +
-                   (1 - A_s[upper]) * log(1 - theta_mat[upper])) / sum(A_s)
+                   (1 - A_s[upper]) * log(1 - theta_mat[upper])) /
+              (sum(A_s) / 2)
   expect_equal(nethist:::hnethist_normalized_LL(th_s, cl_s, A_s), expected)
 })
 

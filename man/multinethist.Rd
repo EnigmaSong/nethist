@@ -42,13 +42,16 @@ and \code{verbose}.}
 \item{...}{Currently unused.}
 }
 \value{
-If the number of layers is greater than 1, it returns an object of class \code{multinethist}:
+If the number of layers is greater than 1, it returns an object of class
+\code{c("multinethist", "network_histogram")} (see
+\link{network_histogram-class}):
 
 \itemize{
 \item \code{cluster} a vector of partition indices.
 \item \code{thetahat} a probability array from multinetwork histogram ordered by group labels.
 \item \code{rho_hat} a vector of estimated sparsity parameters.
 \item \code{normalized_LL} a normalized likelihood from the algorithm.
+\item \code{method} loss function used. Always \code{"PLL"} for multilayer fits.
 \item \code{homogeneous} a logical variable indicating homogeneous multinetwork histogram.
 \item \code{h} bandwidth used for estimation.
 }
@@ -62,9 +65,16 @@ The \eqn{l}th layer's multi-network histogram is defined by thetahat/rho_hat. Th
 
 If the number of layers is 1, multinethist() fits a single-layer network histogram, equivalent to nethist().
 
-\code{method} is only used for single-layer networks. \code{method = "PLL"} is for Olhede and Wolfe (2014), and \code{method = "LSE"} is for Gao et al. (2015).
+\code{method = "PLL"} is for Olhede and Wolfe (2014), and \code{method = "LSE"} is for Gao et al. (2015). \code{method = "LSE"} is implemented only for single-layer networks, and an error is raised for multilayer input.
 
 Note that \code{cluster} only shows a partition of vertices, and the index labels are not ordered. For example, vertices in cluster 1 do not have to be more similar to vertices in cluster 2 than to vertices in cluster 10. Hence, users may specify a custom order in \code{\link[=plot.multinethist]{plot.multinethist()}}.
+
+The greedy search is stochastic. At each iteration it draws a pair of
+vertices uniformly at random and swaps their block labels if the objective
+improves, so it converges to a local optimum that depends on the state of
+the random number stream. Call \code{\link[=set.seed]{set.seed()}} immediately before the fit to
+make results reproducible, and expect different seeds to give somewhat
+different partitions.
 }
 }
 \examples{
@@ -84,7 +94,7 @@ Note that \code{cluster} only shows a partition of vertices, and the index label
 }
 }
 \references{
-Song, Y. & Olhede, S. C. (2026). Joint Estimation of Sparse Multilayer Networks via Graph Limits. https://arxiv.org/abs/2608.14536
+Song, Y. & Olhede, S. C. (2026). Joint Estimation of Sparse Multilayer Networks via Graph Limits. doi:10.1093/comnet/cnag042
 
 Olhede, S. C. & Wolfe, P. J. (2014). Network Histograms and Universality of Blockmodel Approximation. Proceedings of the National Academy of Sciences, 111(41), 14722-14727. doi:10.1073/pnas.1400374111
 

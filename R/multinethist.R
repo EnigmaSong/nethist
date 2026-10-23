@@ -31,13 +31,16 @@
 ##'   and \code{verbose}.
 ##' @param ... Currently unused.
 ##' @returns
-##' If the number of layers is greater than 1, it returns an object of class ``multinethist``:
+##' If the number of layers is greater than 1, it returns an object of class
+##' `c("multinethist", "network_histogram")` (see
+##' \link{network_histogram-class}):
 ##'
 ##' \itemize{
 ##' \item `cluster` a vector of partition indices.
 ##' \item `thetahat` a probability array from multinetwork histogram ordered by group labels.
 ##' \item `rho_hat` a vector of estimated sparsity parameters.
 ##' \item `normalized_LL` a normalized likelihood from the algorithm.
+##' \item `method` loss function used. Always `"PLL"` for multilayer fits.
 ##' \item `homogeneous` a logical variable indicating homogeneous multinetwork histogram.
 ##' \item `h` bandwidth used for estimation.
 ##' }
@@ -48,9 +51,16 @@
 ##'
 ##' If the number of layers is 1, multinethist() fits a single-layer network histogram, equivalent to nethist().
 ##'
-##' `method` is only used for single-layer networks. `method = "PLL"` is for Olhede and Wolfe (2014), and `method = "LSE"` is for Gao et al. (2015).
+##' `method = "PLL"` is for Olhede and Wolfe (2014), and `method = "LSE"` is for Gao et al. (2015). `method = "LSE"` is implemented only for single-layer networks, and an error is raised for multilayer input.
 ##'
 ##' Note that `cluster` only shows a partition of vertices, and the index labels are not ordered. For example, vertices in cluster 1 do not have to be more similar to vertices in cluster 2 than to vertices in cluster 10. Hence, users may specify a custom order in [plot.multinethist()].
+##'
+##' The greedy search is stochastic. At each iteration it draws a pair of
+##' vertices uniformly at random and swaps their block labels if the objective
+##' improves, so it converges to a local optimum that depends on the state of
+##' the random number stream. Call [set.seed()] immediately before the fit to
+##' make results reproducible, and expect different seeds to give somewhat
+##' different partitions.
 ##' }
 ##' @examples
 ##' \donttest{
@@ -68,7 +78,7 @@
 ##'    mnethist_Ind_Vil <- multinethist(IndianVil)
 ##' }
 ##' @seealso [plot.multinethist()], [plot.nethist()], [nethist_control()]
-##' @references Song, Y. & Olhede, S. C. (2026). Joint Estimation of Sparse Multilayer Networks via Graph Limits. https://arxiv.org/abs/2608.14536
+##' @references Song, Y. & Olhede, S. C. (2026). Joint Estimation of Sparse Multilayer Networks via Graph Limits. doi:10.1093/comnet/cnag042
 ##' @references Olhede, S. C. & Wolfe, P. J. (2014). Network Histograms and Universality of Blockmodel Approximation. Proceedings of the National Academy of Sciences, 111(41), 14722-14727. doi:10.1073/pnas.1400374111
 ##' @references Gao, C., Lu, Y., & Zhou, H. H. (2015). Rate-Optimal Graphon Estimation. The Annals of Statistics, 43(6), 2624-2652. doi:10.1214/15-AOS1354
 ##' @import Rcpp
@@ -191,6 +201,10 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
   method_char <- method
   method <- pmatch(method, c("PLL", "LSE")) # PLL = 1, LSE = 2
   if (is.na(method)) stop("method must be one of the followings: PLL, LSE")
+  # The multilayer greedy search optimizes the likelihood only, so an LSE
+  # request would silently return a PLL fit labelled as LSE.
+  if (method == 2 && n_layers > 1)
+    stop("method = \"LSE\" is implemented only for single-layer networks.")
   swap_rule_int <- pmatch(control$greedy_swap_rule, c("single_random"))
   if (is.na(swap_rule_int)) stop("greedy_swap_rule must be one of: single_random")
 
@@ -243,8 +257,7 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
                    method        = method_char,
                    homogeneous   = common_f,
                    h             = h)
-    result <- structure(result,
-                        class = ifelse(n_layers > 1, "multinethist", "nethist"))
+    result <- structure(result, class = .network_histogram_class(n_layers))
     return(result)
   }
 
@@ -283,8 +296,7 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
                  method        = method_char,
                  homogeneous   = common_f,
                  h             = h)
-  result <- structure(result,
-                      class = ifelse(n_layers > 1, "multinethist", "nethist"))
+  result <- structure(result, class = .network_histogram_class(n_layers))
   return(result)
 }
 

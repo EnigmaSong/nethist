@@ -56,8 +56,10 @@
 ##' netsummary_plot(A, alpha = 0.1)
 ##'
 ##' #network object
-##' A3 <- network::as.network(igraph::as_adjacency_matrix(A, sparse = FALSE))
-##' netsummary_plot(A3)
+##' if (requireNamespace("network", quietly = TRUE)) {
+##'   A3 <- network::as.network(igraph::as_adjacency_matrix(A, sparse = FALSE))
+##'   netsummary_plot(A3)
+##' }
 ##'
 ##' #user-specified max_subsample_size
 ##' netsummary_plot(A, max_subsample_size = 100)
