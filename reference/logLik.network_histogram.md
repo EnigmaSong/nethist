@@ -75,12 +75,12 @@ set.seed(42)
 data(polblog)
 fit <- suppressMessages(nethist(polblog))
 logLik(fit)
-#> 'log Lik.' -49642.94 (df=136)
+#> 'log Lik.' -51026.85 (df=136)
 logLik(fit, normalized = TRUE)
-#> [1] -2.969964
+#> [1] -3.052758
 AIC(fit)
-#> [1] 99557.89
+#> [1] 102325.7
 BIC(fit)
-#> [1] 101125.4
+#> [1] 103893.2
 # }
 ```

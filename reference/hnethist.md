@@ -112,9 +112,9 @@ hfit
 #> 
 #> Nodes: 1224   Blocks: 16   Bandwidth: 73
 #> Method: Least Squared Error
-#> Selected shapes: 31 (BIC: 98693.29)
+#> Selected shapes: 17 (BIC: 98687.27)
 #> thetahat: 16 x 16 probability matrix
-#> Mean squared error: 0.01700575
+#> Mean squared error: 0.01704723
 #> 
 #> Use summary() for details.
 plot(hfit)
