@@ -20,7 +20,8 @@ and \code{verbose}.}
 \item{...}{Currently unused.}
 }
 \value{
-A list of class \code{c("hnethist", "nethist")} with the following fields:
+A list of class \code{c("hnethist", "nethist", "network_histogram")}
+(see \link{network_histogram-class}) with the following fields:
 
 \itemize{
 \item \code{cluster} an integer vector of length n with vertex-level block assignments from the initial nethist fit.

@@ -9,7 +9,8 @@
 ##'   \code{max_itr}, \code{greedy_swap_rule}, \code{greedy_stop_threshold},
 ##'   and \code{verbose}.
 ##' @param ... Currently unused.
-##' @returns A list of class `c("hnethist", "nethist")` with the following fields:
+##' @returns A list of class `c("hnethist", "nethist", "network_histogram")`
+##'   (see \link{network_histogram-class}) with the following fields:
 ##'
 ##' \itemize{
 ##' \item `cluster` an integer vector of length n with vertex-level block assignments from the initial nethist fit.

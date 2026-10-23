@@ -16,7 +16,8 @@
 ##' @param ... `r lifecycle::badge("deprecated")` Pass \code{max_itr},
 ##'   \code{greedy_swap_rule}, \code{greedy_stop_threshold}, or \code{verbose}
 ##'   via \code{control = nethist_control(...)} instead.
-##' @returns An object of class \code{"nethist"} with the following fields:
+##' @returns An object of class \code{c("nethist", "network_histogram")} (see
+##'   \link{network_histogram-class}) with the following fields:
 ##' \itemize{
 ##'   \item \code{cluster} an integer vector of length \eqn{n} with block
 ##'     assignments.

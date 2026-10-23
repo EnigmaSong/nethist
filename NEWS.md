@@ -26,6 +26,9 @@
     now guarded by `requireNamespace()`.
 -   `logLik()` on a `multinethist` fit that collapses to a single block now
     reports the correct degrees of freedom.
+-   `multinethist()`: `method = "LSE"` with multilayer input now raises an
+    error. Previously it was accepted silently, the fit was computed by
+    profile likelihood, and the returned object was labelled `"LSE"`.
 
 ### Class hierarchy
 
@@ -62,6 +65,9 @@
     for reproducible results. `hnethist()` additionally notes that its merging
     step draws `stats::kmeans()` starting centres from the same stream, so the
     selected number of shapes depends on it.
+-   The `@returns` sections of `nethist()`, `multinethist()`, and `hnethist()`
+    now state the full class vector including `network_histogram`, and
+    `multinethist()` lists the `method` field.
 -   Removed the leftover prompt boilerplate from the `polblog` and
     `polblog_edgelist` help pages, as requested by the CRAN team.
 -   The `polblog` and `polblog_edgelist` examples now call

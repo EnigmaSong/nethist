@@ -87,7 +87,7 @@ test_that("one print method serves every summary object", {
 
 ## Class-specific behaviour is not shared ----
 test_that("degrees of freedom follow the subclass, not the base class", {
-  k <- length(unique(fit_hn$cluster))
+  k <- length(unique(fit_nh$cluster))
   expect_equal(attr(logLik(fit_nh), "df"), k * (k + 1) / 2)
   expect_equal(attr(logLik(fit_hn), "df"), fit_hn$s)
   k_mn <- length(unique(fit_mn$cluster))

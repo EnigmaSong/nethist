@@ -26,7 +26,8 @@ Governs \code{max_itr}, \code{greedy_swap_rule},
 via \code{control = nethist_control(...)} instead.}
 }
 \value{
-An object of class \code{"nethist"} with the following fields:
+An object of class \code{c("nethist", "network_histogram")} (see
+\link{network_histogram-class}) with the following fields:
 \itemize{
 \item \code{cluster} an integer vector of length \eqn{n} with block
 assignments.
