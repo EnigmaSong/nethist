@@ -33,7 +33,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">nethist</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -174,33 +174,14 @@ solution</li>
 <span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nethist.html">nethist</a></span><span class="op">(</span><span class="va">A_gnp</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; thetahat:</span></span>
-<span><span class="co">#&gt;            [,1]       [,2]       [,3]       [,4]       [,5]       [,6]</span></span>
-<span><span class="co">#&gt; [1,] 0.13230769 0.01331361 0.08875740 0.06213018 0.04142012 0.05621302</span></span>
-<span><span class="co">#&gt; [2,] 0.01331361 0.04923077 0.09615385 0.02366864 0.04289941 0.10798817</span></span>
-<span><span class="co">#&gt; [3,] 0.08875740 0.09615385 0.14461538 0.04733728 0.01775148 0.01479290</span></span>
-<span><span class="co">#&gt; [4,] 0.06213018 0.02366864 0.04733728 0.09846154 0.07840237 0.00000000</span></span>
-<span><span class="co">#&gt; [5,] 0.04142012 0.04289941 0.01775148 0.07840237 0.01538462 0.08431953</span></span>
-<span><span class="co">#&gt; [6,] 0.05621302 0.10798817 0.01479290 0.00000000 0.08431953 0.04307692</span></span>
-<span><span class="co">#&gt; [7,] 0.05856643 0.07867133 0.01398601 0.03234266 0.02010490 0.01048951</span></span>
-<span><span class="co">#&gt;            [,7]</span></span>
-<span><span class="co">#&gt; [1,] 0.05856643</span></span>
-<span><span class="co">#&gt; [2,] 0.07867133</span></span>
-<span><span class="co">#&gt; [3,] 0.01398601</span></span>
-<span><span class="co">#&gt; [4,] 0.03234266</span></span>
-<span><span class="co">#&gt; [5,] 0.02010490</span></span>
-<span><span class="co">#&gt; [6,] 0.01048951</span></span>
-<span><span class="co">#&gt; [7,] 0.07928118</span></span>
+<span><span class="co">#&gt; Network histogram fit (nethist)</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Nodes: 200   Blocks: 7   Bandwidth: 26</span></span>
 <span><span class="co">#&gt; Method: Profile Likelihood</span></span>
+<span><span class="co">#&gt; thetahat: 7 x 7 probability matrix</span></span>
+<span><span class="co">#&gt; Normalized log-likelihood: -3.702484</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; normalized likelihood:</span></span>
-<span><span class="co">#&gt; -3.70248405576056</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Available components:</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [1] "cluster"       "thetahat"      "rho_hat"       "normalized_LL"</span></span>
-<span><span class="co">#&gt; [5] "MSE"           "method"        "h"</span></span></code></pre></div>
+<span><span class="co">#&gt; Use summary() for details.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="visualising-the-histogram">Visualising the histogram<a class="anchor" aria-label="anchor" href="#visualising-the-histogram"></a>
@@ -258,35 +239,15 @@ histogram function is assumed across layers:</p>
 <span><span class="va">mn_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/multinethist.html">multinethist</a></span><span class="op">(</span><span class="va">A_multi</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mn_result</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Theta_hat:</span></span>
-<span><span class="co">#&gt; , , 1</span></span>
+<span><span class="co">#&gt; Multilayer network histogram fit (multinethist)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;            [,1]       [,2]       [,3]       [,4]       [,5]</span></span>
-<span><span class="co">#&gt; [1,] 0.15384615 0.15816327 0.03571429 0.14285714 0.14880952</span></span>
-<span><span class="co">#&gt; [2,] 0.15816327 0.15384615 0.16836735 0.03571429 0.09226190</span></span>
-<span><span class="co">#&gt; [3,] 0.03571429 0.16836735 0.03296703 0.12755102 0.10119048</span></span>
-<span><span class="co">#&gt; [4,] 0.14285714 0.03571429 0.12755102 0.00000000 0.12202381</span></span>
-<span><span class="co">#&gt; [5,] 0.14880952 0.09226190 0.10119048 0.12202381 0.01811594</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; , , 2</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;             [,1]        [,2]       [,3]        [,4]        [,5]</span></span>
-<span><span class="co">#&gt; [1,] 0.021978022 0.122448980 0.08163265 0.025510204 0.005952381</span></span>
-<span><span class="co">#&gt; [2,] 0.122448980 0.109890110 0.00000000 0.005102041 0.029761905</span></span>
-<span><span class="co">#&gt; [3,] 0.081632653 0.000000000 0.02197802 0.056122449 0.077380952</span></span>
-<span><span class="co">#&gt; [4,] 0.025510204 0.005102041 0.05612245 0.098901099 0.065476190</span></span>
-<span><span class="co">#&gt; [5,] 0.005952381 0.029761905 0.07738095 0.065476190 0.050724638</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Nodes: 80   Blocks: 5   Bandwidth: 14   Layers: 2</span></span>
+<span><span class="co">#&gt; Common graphon across layers: FALSE</span></span>
 <span><span class="co">#&gt; Method: Profile Likelihood</span></span>
+<span><span class="co">#&gt; thetahat: 5 x 5 x 2 probability array</span></span>
+<span><span class="co">#&gt; Normalized log-likelihood: -3.252586</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; normalized likelihood:</span></span>
-<span><span class="co">#&gt; -3.25258572523459</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Available components:</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [1] "cluster"       "thetahat"      "rho_hat"       "normalized_LL"</span></span>
-<span><span class="co">#&gt; [5] "MSE"           "method"        "homogeneous"   "h"</span></span></code></pre></div>
+<span><span class="co">#&gt; Use summary() for details.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="d-heatmap">2D heatmap<a class="anchor" aria-label="anchor" href="#d-heatmap"></a>

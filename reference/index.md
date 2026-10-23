@@ -13,6 +13,8 @@
   : Fitted values for a nethist model
 - [`hnethist()`](https://enigmasong.github.io/nethist/reference/hnethist.md)
   : Hybrid Network histogram estimation
+- [`logLik(`*`<network_histogram>`*`)`](https://enigmasong.github.io/nethist/reference/logLik.network_histogram.md)
+  : Log-likelihood of network histogram fits
 - [`multinethist()`](https://enigmasong.github.io/nethist/reference/multinethist.md)
   : Network histogram estimation
 - [`nethist()`](https://enigmasong.github.io/nethist/reference/nethist.md)
@@ -23,6 +25,8 @@
 - [`netsummary_plot()`](https://enigmasong.github.io/nethist/reference/netsummary_plot.md)
   [`violin_netsummary()`](https://enigmasong.github.io/nethist/reference/netsummary_plot.md)
   : Network summary plots
+- [`network_histogram-class`](https://enigmasong.github.io/nethist/reference/network_histogram-class.md)
+  : Network histogram class hierarchy
 - [`plot(`*`<hnethist>`*`)`](https://enigmasong.github.io/nethist/reference/plot.hnethist.md)
   : Plot an hnethist object
 - [`plot(`*`<multinethist>`*`)`](https://enigmasong.github.io/nethist/reference/plot.multinethist.md)
@@ -39,3 +43,8 @@
   [`print(`*`<multinethist>`*`)`](https://enigmasong.github.io/nethist/reference/print.nethist.md)
   [`print(`*`<hnethist>`*`)`](https://enigmasong.github.io/nethist/reference/print.nethist.md)
   : Print nethist objects
+- [`summary(`*`<network_histogram>`*`)`](https://enigmasong.github.io/nethist/reference/summary.network_histogram.md)
+  [`summary(`*`<multinethist>`*`)`](https://enigmasong.github.io/nethist/reference/summary.network_histogram.md)
+  [`summary(`*`<hnethist>`*`)`](https://enigmasong.github.io/nethist/reference/summary.network_histogram.md)
+  [`print(`*`<summary.network_histogram>`*`)`](https://enigmasong.github.io/nethist/reference/summary.network_histogram.md)
+  : Summarize network histogram fits

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">nethist</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,21 +99,29 @@ and <code>verbose</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>If the number of layers is greater than 1, it returns an object of class <code>multinethist</code>:</p>
+    <p>If the number of layers is greater than 1, it returns an object of class
+<code>c("multinethist", "network_histogram")</code> (see
+<a href="network_histogram-class.html">network_histogram-class</a>):</p>
 <ul><li><p><code>cluster</code> a vector of partition indices.</p></li>
 <li><p><code>thetahat</code> a probability array from multinetwork histogram ordered by group labels.</p></li>
 <li><p><code>rho_hat</code> a vector of estimated sparsity parameters.</p></li>
 <li><p><code>normalized_LL</code> a normalized likelihood from the algorithm.</p></li>
+<li><p><code>method</code> loss function used. Always <code>"PLL"</code> for multilayer fits.</p></li>
 <li><p><code>homogeneous</code> a logical variable indicating homogeneous multinetwork histogram.</p></li>
 <li><p><code>h</code> bandwidth used for estimation.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The \(l\)th layer's multi-network histogram is defined by thetahat/rho_hat. The multinetwork histogram can be plotted using <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> and <code><a href="plot3d.html">plot3d()</a></code>.If the number of layers is 1, multinethist() fits a single-layer network histogram, equivalent to nethist().<code>method</code> is only used for single-layer networks. <code>method = "PLL"</code> is for Olhede and Wolfe (2014), and <code>method = "LSE"</code> is for Gao et al. (2015).Note that <code>cluster</code> only shows a partition of vertices, and the index labels are not ordered. For example, vertices in cluster 1 do not have to be more similar to vertices in cluster 2 than to vertices in cluster 10. Hence, users may specify a custom order in <code><a href="plot.multinethist.html">plot.multinethist()</a></code>.</p>
+    <p>The \(l\)th layer's multi-network histogram is defined by thetahat/rho_hat. The multinetwork histogram can be plotted using <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> and <code><a href="plot3d.html">plot3d()</a></code>.If the number of layers is 1, multinethist() fits a single-layer network histogram, equivalent to nethist().<code>method = "PLL"</code> is for Olhede and Wolfe (2014), and <code>method = "LSE"</code> is for Gao et al. (2015). <code>method = "LSE"</code> is implemented only for single-layer networks, and an error is raised for multilayer input.Note that <code>cluster</code> only shows a partition of vertices, and the index labels are not ordered. For example, vertices in cluster 1 do not have to be more similar to vertices in cluster 2 than to vertices in cluster 10. Hence, users may specify a custom order in <code><a href="plot.multinethist.html">plot.multinethist()</a></code>.The greedy search is stochastic. At each iteration it draws a pair of
+vertices uniformly at random and swaps their block labels if the objective
+improves, so it converges to a local optimum that depends on the state of
+the random number stream. Call <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> immediately before the fit to
+make results reproducible, and expect different seeds to give somewhat
+different partitions.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Song, Y. &amp; Olhede, S. C. (2026). Joint Estimation of Sparse Multilayer Networks via Graph Limits. https://arxiv.org/abs/2608.14536</p>
+    <p>Song, Y. &amp; Olhede, S. C. (2026). Joint Estimation of Sparse Multilayer Networks via Graph Limits. doi:10.1093/comnet/cnag042</p>
 <p>Olhede, S. C. &amp; Wolfe, P. J. (2014). Network Histograms and Universality of Blockmodel Approximation. Proceedings of the National Academy of Sciences, 111(41), 14722-14727. doi:10.1073/pnas.1400374111</p>
 <p>Gao, C., Lu, Y., &amp; Zhou, H. H. (2015). Rate-Optimal Graphon Estimation. The Annals of Statistics, 43(6), 2624-2652. doi:10.1214/15-AOS1354</p>
     </div>
@@ -130,85 +138,14 @@ and <code>verbose</code>.</p></dd>
 <span class="r-in"><span>   <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">polblog</span><span class="op">)</span></span></span>
 <span class="r-in"><span>   <span class="fu"><a href="nethist.html">nethist</a></span><span class="op">(</span><span class="va">polblog</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> thetahat:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               [,1]         [,2]         [,3]         [,4]         [,5]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] 0.2640791476 0.2203039970 0.2550197035 0.1131544380 0.1212234941</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 0.2203039970 0.6126331811 0.0108838431 0.2537061362 0.0026271345</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] 0.2550197035 0.0108838431 0.3306697108 0.0022518296 0.1399887409</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 0.1131544380 0.2537061362 0.0022518296 0.0825722983 0.0007506099</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 0.1212234941 0.0026271345 0.1399887409 0.0007506099 0.0814307458</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] 0.1392381310 0.0352786639 0.0568586977 0.0086320135 0.0272096078</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] 0.0653030587 0.0011259148 0.0516044286 0.0000000000 0.0424094577</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 0.1366109964 0.0000000000 0.0658660161 0.0000000000 0.0561080878</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 0.0660536686 0.0964533684 0.0003753049 0.0373428411 0.0007506099</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 0.0572340026 0.0005629574 0.0180146369 0.0009382623 0.0150121974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11,] 0.0182022894 0.0225182961 0.0000000000 0.0151998499 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [12,] 0.0474760743 0.0191405517 0.0015012197 0.0091949709 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13,] 0.0210170764 0.0000000000 0.0088196660 0.0000000000 0.0151998499</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [14,] 0.0009382623 0.0037530494 0.0007506099 0.0071307938 0.0033777444</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15,] 0.0063801839 0.0061925314 0.0000000000 0.0000000000 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16,] 0.0216629500 0.0000000000 0.0025485824 0.0000000000 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               [,6]         [,7]         [,8]         [,9]        [,10]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] 0.1392381310 0.0653030587 0.1366109964 0.0660536686 0.0572340026</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 0.0352786639 0.0011259148 0.0000000000 0.0964533684 0.0005629574</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] 0.0568586977 0.0516044286 0.0658660161 0.0003753049 0.0180146369</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 0.0086320135 0.0000000000 0.0000000000 0.0373428411 0.0009382623</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 0.0272096078 0.0424094577 0.0561080878 0.0007506099 0.0150121974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] 0.0152207002 0.0061925314 0.0000000000 0.0031900919 0.0045036592</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] 0.0061925314 0.0308219178 0.0125727153 0.0000000000 0.0048789642</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 0.0000000000 0.0125727153 0.0019025875 0.0000000000 0.0024394821</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 0.0031900919 0.0000000000 0.0000000000 0.0163622527 0.0001876525</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 0.0045036592 0.0048789642 0.0024394821 0.0001876525 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11,] 0.0050666166 0.0001876525 0.0000000000 0.0030024395 0.0009382623</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [12,] 0.0000000000 0.0000000000 0.0000000000 0.0026271345 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13,] 0.0000000000 0.0067554888 0.0000000000 0.0000000000 0.0024394821</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [14,] 0.0001876525 0.0009382623 0.0000000000 0.0000000000 0.0001876525</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15,] 0.0030024395 0.0001876525 0.0000000000 0.0035653969 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16,] 0.0000000000 0.0000000000 0.0001061909 0.0000000000 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              [,11]        [,12]        [,13]        [,14]        [,15]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] 0.0182022894 0.0474760743 0.0210170764 0.0009382623 0.0063801839</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 0.0225182961 0.0191405517 0.0000000000 0.0037530494 0.0061925314</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] 0.0000000000 0.0015012197 0.0088196660 0.0007506099 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 0.0151998499 0.0091949709 0.0000000000 0.0071307938 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 0.0000000000 0.0000000000 0.0151998499 0.0033777444 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] 0.0050666166 0.0000000000 0.0000000000 0.0001876525 0.0030024395</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] 0.0001876525 0.0000000000 0.0067554888 0.0009382623 0.0001876525</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 0.0030024395 0.0026271345 0.0000000000 0.0000000000 0.0035653969</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 0.0009382623 0.0000000000 0.0024394821 0.0001876525 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11,] 0.0152207002 0.0007506099 0.0000000000 0.0007506099 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [12,] 0.0007506099 0.0003805175 0.0000000000 0.0000000000 0.0031900919</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13,] 0.0000000000 0.0000000000 0.0000000000 0.0009382623 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [14,] 0.0007506099 0.0000000000 0.0009382623 0.0041856925 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15,] 0.0000000000 0.0031900919 0.0000000000 0.0000000000 0.0030441400</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16,] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              [,16]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] 0.0216629500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] 0.0025485824</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 0.0001061909</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11,] 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [12,] 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13,] 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [14,] 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15,] 0.0000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16,] 0.0000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Network histogram fit (nethist)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Nodes: 1224   Blocks: 16   Bandwidth: 73</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Method: Profile Likelihood</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> thetahat: 16 x 16 probability matrix</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Normalized log-likelihood: -2.969964</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> normalized likelihood:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -3.05275785402995</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Available components:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "cluster"       "thetahat"      "rho_hat"       "normalized_LL"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "MSE"           "method"        "h"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Use summary() for details.</span>
 <span class="r-in"><span>   <span class="va">nethist_polblog</span> <span class="op">&lt;-</span> <span class="fu"><a href="nethist.html">nethist</a></span><span class="op">(</span><span class="va">polblog</span><span class="op">)</span></span></span>
 <span class="r-in"><span>   <span class="va">nethist_polblog_with_h</span> <span class="op">&lt;-</span> <span class="fu"><a href="nethist.html">nethist</a></span><span class="op">(</span><span class="va">polblog</span>, h <span class="op">=</span> <span class="fl">72</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>

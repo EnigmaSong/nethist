@@ -19,7 +19,7 @@ and simplified without self-loops.
 
 ## Details
 
-The adjancency matrix from `polblog_edgelist` is sparse, assymetric, so
+The adjacency matrix from `polblog_edgelist` is sparse, asymmetric, so
 it needs to be symmetrized if a method requires a symmetric matrix.
 Nodes with zero degree need to be removed. All edges are considered as
 undirected edges. Then, we get the undirected version of dataset as
@@ -29,7 +29,7 @@ First 586 blogs are liberal; remaining 638 are conservative.
 
 ## Source
 
-http://www-personal.umich.edu/~mejn/netdata/
+https://www-personal.umich.edu/~mejn/netdata/
 
 https://github.com/p-wolfe/network-histogram-code
 
@@ -47,9 +47,7 @@ data(polblog)
 
 #From polblog_edgelist to polblog
 G<- igraph::graph_from_edgelist(as.matrix(polblog_edgelist), directed = FALSE)
-G<- igraph::delete.vertices(G, igraph::degree(G) == 0)
-#> Warning: `delete.vertices()` was deprecated in igraph 2.0.0.
-#> ℹ Please use `delete_vertices()` instead.
+G<- igraph::delete_vertices(G, igraph::degree(G) == 0)
 G<- igraph::simplify(G)
 
 polblog

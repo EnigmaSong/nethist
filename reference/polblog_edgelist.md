@@ -30,7 +30,7 @@ zero degree need to be removed.
 
 ## Source
 
-http://www-personal.umich.edu/~mejn/netdata/
+https://www-personal.umich.edu/~mejn/netdata/
 
 https://github.com/p-wolfe/network-histogram-code
 
@@ -48,7 +48,7 @@ data(polblog)
 
 #From polblog_edgelist to polblog
 G<- igraph::graph_from_edgelist(as.matrix(polblog_edgelist), directed = FALSE)
-G<- igraph::delete.vertices(G, igraph::degree(G) == 0)
+G<- igraph::delete_vertices(G, igraph::degree(G) == 0)
 G<- igraph::simplify(G)
 
 polblog

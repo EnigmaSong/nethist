@@ -40,7 +40,9 @@ hnethist(A, h = NA, method = "LSE", control = nethist_control(), ...)
 
 ## Value
 
-A list of class `c("hnethist", "nethist")` with the following fields:
+A list of class `c("hnethist", "nethist", "network_histogram")` (see
+[network_histogram-class](https://enigmasong.github.io/nethist/reference/network_histogram-class.md))
+with the following fields:
 
 - `cluster` an integer vector of length n with vertex-level block
   assignments from the initial nethist fit.
@@ -50,8 +52,8 @@ A list of class `c("hnethist", "nethist")` with the following fields:
 
 - `rho_hat` estimated sparsity parameter from the initial nethist fit.
 
-- `normalized_LL` normalized log-likelihood from the initial nethist
-  fit.
+- `normalized_LL` normalized log-likelihood of the selected model,
+  divided by the number of edges.
 
 - `MSE` mean squared error of the selected model.
 
@@ -80,9 +82,42 @@ criterion.The original reference provided theoretical guarantees for
 LSE, but we also allow PLL for the initial nethist fit. The block
 clustering and model selection steps are performed on the LSE loss
 regardless of the initial method, as the theoretical results pertain to
-LSE.
+LSE.Both stages are stochastic. The initial
+[`nethist()`](https://enigmasong.github.io/nethist/reference/nethist.md)
+fit uses a greedy search that swaps randomly chosen vertex pairs, and
+the merging step calls
+[`stats::kmeans()`](https://rdrr.io/r/stats/kmeans.html), which draws
+its starting centres at random. Neither stage seeds itself, so both
+consume the global random number stream and the selected number of
+shapes `s` depends on its state. Call
+[`set.seed()`](https://rdrr.io/r/base/Random.html) immediately before
+the fit to make results reproducible, and expect different seeds to give
+somewhat different values of `s`.
 
 ## References
 
 Verdeyme, A. & Olhede, S. C. (2024). Hybrid of Node and Link Communities
 for Graphon Estimation. arXiv:2401.05088
+
+## Examples
+
+``` r
+# \donttest{
+set.seed(42)
+data(polblog)
+hfit <- hnethist(polblog)
+hfit
+#> 
+#> Hybrid network histogram fit (hnethist)
+#> 
+#> Nodes: 1224   Blocks: 16   Bandwidth: 73
+#> Method: Least Squared Error
+#> Selected shapes: 31 (BIC: 98693.29)
+#> thetahat: 16 x 16 probability matrix
+#> Mean squared error: 0.01700575
+#> 
+#> Use summary() for details.
+plot(hfit)
+
+# }
+```

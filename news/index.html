@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">nethist</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,52 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.0.0" id="nethist-100">nethist 1.0.0<a class="anchor" aria-label="anchor" href="#nethist-100"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.1.0" id="nethist-110">nethist 1.1.0<a class="anchor" aria-label="anchor" href="#nethist-110"></a></h2>
+<div class="section level4">
+<h4 id="new-features-1-1-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-1-0"></a></h4>
+<ul><li>
+<code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik()</a></code>: new S3 method for <code>nethist</code>, <code>multinethist</code>, and <code>hnethist</code> objects. Returns the unnormalized Bernoulli log-likelihood as a <code>logLik</code> object with <code>df</code> and <code>nobs</code> attributes, so <code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC()</a></code> and <code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">BIC()</a></code> work directly on a fit. Use <code>logLik(fit, normalized = TRUE)</code> for the per-edge normalized value stored in <code>fit$normalized_LL</code>.</li>
+<li>
+<code><a href="../reference/hnethist.html">hnethist()</a></code>: added examples to the help page.</li>
+<li>
+<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>: new S3 method for <code>nethist</code>, <code>multinethist</code>, and <code>hnethist</code> objects. Reports the fit dimensions, the edge density, the log-likelihood with its degrees of freedom, <code>AIC</code>, <code>BIC</code>, and, for <code>hnethist</code>, the shape selection.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="bug-fixes-1-1-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-1-0"></a></h4>
+<ul><li>
+<code><a href="../reference/hnethist.html">hnethist()</a></code>: <code>normalized_LL</code> is now divided by the number of edges <code>sum(A)/2</code>, matching <code><a href="../reference/nethist.html">nethist()</a></code> and <code><a href="../reference/multinethist.html">multinethist()</a></code>. Previously it was divided by <code>sum(A)</code>, so reported values were half the size of the corresponding <code><a href="../reference/nethist.html">nethist()</a></code> values. Model selection and <code>BIC</code> are unaffected.</li>
+<li>
+<code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> methods for <code>nethist</code>, <code>multinethist</code>, and <code>hnethist</code> now respect the <code>digits</code> argument when printing the normalized likelihood and the mean squared error.</li>
+<li>
+<code><a href="../reference/netsummary_plot.html">netsummary_plot()</a></code>: the example using the suggested package <strong>network</strong> is now guarded by <code><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace()</a></code>.</li>
+<li>
+<code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik()</a></code> on a <code>multinethist</code> fit that collapses to a single block now reports the correct degrees of freedom.</li>
+<li>
+<code><a href="../reference/multinethist.html">multinethist()</a></code>: <code>method = "LSE"</code> with multilayer input now raises an error. Previously it was accepted silently, the fit was computed by profile likelihood, and the returned object was labelled <code>"LSE"</code>.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="class-hierarchy-1-1-0">Class hierarchy<a class="anchor" aria-label="anchor" href="#class-hierarchy-1-1-0"></a></h4>
+<ul><li>All fitted objects now inherit from a common base class, <code>network_histogram</code>: <code>nethist</code> fits have class <code>c("nethist", "network_histogram")</code>, <code>multinethist</code> fits <code>c("multinethist", "network_histogram")</code>, and <code>hnethist</code> fits <code>c("hnethist", "nethist", "network_histogram")</code>. Previously <code>hnethist</code> inherited from <code>nethist</code> while <code>multinethist</code> was unrelated to either.</li>
+<li>
+<code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik()</a></code> and the <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method of the summary objects are defined once on <code>network_histogram</code>. <code><a href="../reference/summary.network_histogram.html">summary.multinethist()</a></code> and <code><a href="../reference/summary.network_histogram.html">summary.hnethist()</a></code> extend the base method through <code><a href="https://rdrr.io/r/base/UseMethod.html" class="external-link">NextMethod()</a></code>. Methods whose behaviour depends on the layer dimension, namely <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>, <code><a href="../reference/plot3d.html">plot3d()</a></code>, <code><a href="https://rdrr.io/r/stats/fitted.values.html" class="external-link">fitted()</a></code>, and <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>, remain specific to the subclasses.</li>
+<li>See <code><a href="../reference/network_histogram-class.html">?"network_histogram-class"</a></code> for the documented hierarchy.</li>
+<li>Code that tests for an exact class vector, such as <code>identical(class(fit), c("hnethist", "nethist"))</code>, needs updating. Use <code><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits()</a></code> instead.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="user-visible-changes-1-1-0">User-visible changes<a class="anchor" aria-label="anchor" href="#user-visible-changes-1-1-0"></a></h4>
+<ul><li>The <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> methods for <code>nethist</code>, <code>multinethist</code>, and <code>hnethist</code> are now compact. They identify the fit and report <code>thetahat</code> by its dimensions only, instead of printing the whole probability matrix or array, and the <code>Available components</code> listing has been dropped. The detailed output moved to the new <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> methods. Use <code>object$thetahat</code> or <code><a href="https://rdrr.io/r/stats/fitted.values.html" class="external-link">fitted()</a></code> for the estimated probabilities.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="documentation-1-1-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-1-0"></a></h4>
+<ul><li>
+<code><a href="../reference/nethist.html">nethist()</a></code>, <code><a href="../reference/multinethist.html">multinethist()</a></code>, and <code><a href="../reference/hnethist.html">hnethist()</a></code> now state in their help pages that the greedy search is stochastic and converges to a local optimum, and that <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> should be called immediately before the fit for reproducible results. <code><a href="../reference/hnethist.html">hnethist()</a></code> additionally notes that its merging step draws <code><a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">stats::kmeans()</a></code> starting centres from the same stream, so the selected number of shapes depends on it.</li>
+<li>The <code>@returns</code> sections of <code><a href="../reference/nethist.html">nethist()</a></code>, <code><a href="../reference/multinethist.html">multinethist()</a></code>, and <code><a href="../reference/hnethist.html">hnethist()</a></code> now state the full class vector including <code>network_histogram</code>, and <code><a href="../reference/multinethist.html">multinethist()</a></code> lists the <code>method</code> field.</li>
+<li>Removed the leftover prompt boilerplate from the <code>polblog</code> and <code>polblog_edgelist</code> help pages, as requested by the CRAN team.</li>
+<li>The <code>polblog</code> and <code>polblog_edgelist</code> examples now call <code><a href="https://r.igraph.org/reference/delete_vertices.html" class="external-link">igraph::delete_vertices()</a></code> instead of the deprecated <code><a href="https://r.igraph.org/reference/delete.vertices.html" class="external-link">igraph::delete.vertices()</a></code>.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.0" id="nethist-100">nethist 1.0.0<a class="anchor" aria-label="anchor" href="#nethist-100"></a></h2><p class="text-muted">CRAN release: 2026-09-02</p>
 <p>update: 2026/08/04</p>
 <div class="section level4">
 <h4 id="new-features-1-0-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-0-0"></a></h4>

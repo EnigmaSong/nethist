@@ -13,11 +13,13 @@
 <url><loc>https://enigmasong.github.io/nethist/reference/fitted.nethist.html</loc></url>
 <url><loc>https://enigmasong.github.io/nethist/reference/hnethist.html</loc></url>
 <url><loc>https://enigmasong.github.io/nethist/reference/index.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/logLik.network_histogram.html</loc></url>
 <url><loc>https://enigmasong.github.io/nethist/reference/multinethist.html</loc></url>
 <url><loc>https://enigmasong.github.io/nethist/reference/nethist-package.html</loc></url>
 <url><loc>https://enigmasong.github.io/nethist/reference/nethist.html</loc></url>
 <url><loc>https://enigmasong.github.io/nethist/reference/nethist_control.html</loc></url>
 <url><loc>https://enigmasong.github.io/nethist/reference/netsummary_plot.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/network_histogram-class.html</loc></url>
 <url><loc>https://enigmasong.github.io/nethist/reference/plot.hnethist.html</loc></url>
 <url><loc>https://enigmasong.github.io/nethist/reference/plot.multinethist.html</loc></url>
 <url><loc>https://enigmasong.github.io/nethist/reference/plot.nethist.html</loc></url>
@@ -25,5 +27,6 @@
 <url><loc>https://enigmasong.github.io/nethist/reference/polblog.html</loc></url>
 <url><loc>https://enigmasong.github.io/nethist/reference/polblog_edgelist.html</loc></url>
 <url><loc>https://enigmasong.github.io/nethist/reference/print.nethist.html</loc></url>
+<url><loc>https://enigmasong.github.io/nethist/reference/summary.network_histogram.html</loc></url>
 </urlset>
 

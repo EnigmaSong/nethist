@@ -66,7 +66,8 @@ multinethist(A, h = NA, common_f = FALSE, method = "PLL",
 ## Value
 
 If the number of layers is greater than 1, it returns an object of class
-`multinethist`:
+`c("multinethist", "network_histogram")` (see
+[network_histogram-class](https://enigmasong.github.io/nethist/reference/network_histogram-class.md)):
 
 - `cluster` a vector of partition indices.
 
@@ -76,6 +77,8 @@ If the number of layers is greater than 1, it returns an object of class
 - `rho_hat` a vector of estimated sparsity parameters.
 
 - `normalized_LL` a normalized likelihood from the algorithm.
+
+- `method` loss function used. Always `"PLL"` for multilayer fits.
 
 - `homogeneous` a logical variable indicating homogeneous multinetwork
   histogram.
@@ -89,19 +92,27 @@ thetahat/rho_hat. The multinetwork histogram can be plotted using
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html) and
 [`plot3d()`](https://enigmasong.github.io/nethist/reference/plot3d.md).If
 the number of layers is 1, multinethist() fits a single-layer network
-histogram, equivalent to nethist().`method` is only used for
-single-layer networks. `method = "PLL"` is for Olhede and Wolfe (2014),
-and `method = "LSE"` is for Gao et al. (2015).Note that `cluster` only
-shows a partition of vertices, and the index labels are not ordered. For
+histogram, equivalent to nethist().`method = "PLL"` is for Olhede and
+Wolfe (2014), and `method = "LSE"` is for Gao et al. (2015).
+`method = "LSE"` is implemented only for single-layer networks, and an
+error is raised for multilayer input.Note that `cluster` only shows a
+partition of vertices, and the index labels are not ordered. For
 example, vertices in cluster 1 do not have to be more similar to
 vertices in cluster 2 than to vertices in cluster 10. Hence, users may
 specify a custom order in
-[`plot.multinethist()`](https://enigmasong.github.io/nethist/reference/plot.multinethist.md).
+[`plot.multinethist()`](https://enigmasong.github.io/nethist/reference/plot.multinethist.md).The
+greedy search is stochastic. At each iteration it draws a pair of
+vertices uniformly at random and swaps their block labels if the
+objective improves, so it converges to a local optimum that depends on
+the state of the random number stream. Call
+[`set.seed()`](https://rdrr.io/r/base/Random.html) immediately before
+the fit to make results reproducible, and expect different seeds to give
+somewhat different partitions.
 
 ## References
 
 Song, Y. & Olhede, S. C. (2026). Joint Estimation of Sparse Multilayer
-Networks via Graph Limits. https://arxiv.org/abs/2608.14536
+Networks via Graph Limits. doi:10.1093/comnet/cnag042
 
 Olhede, S. C. & Wolfe, P. J. (2014). Network Histograms and Universality
 of Blockmodel Approximation. Proceedings of the National Academy of
@@ -125,85 +136,14 @@ The Annals of Statistics, 43(6), 2624-2652. doi:10.1214/15-AOS1354
    data(polblog)
    nethist(polblog)
 #> 
-#> thetahat:
-#>               [,1]         [,2]         [,3]         [,4]         [,5]
-#>  [1,] 0.2640791476 0.2203039970 0.2550197035 0.1131544380 0.1212234941
-#>  [2,] 0.2203039970 0.6126331811 0.0108838431 0.2537061362 0.0026271345
-#>  [3,] 0.2550197035 0.0108838431 0.3306697108 0.0022518296 0.1399887409
-#>  [4,] 0.1131544380 0.2537061362 0.0022518296 0.0825722983 0.0007506099
-#>  [5,] 0.1212234941 0.0026271345 0.1399887409 0.0007506099 0.0814307458
-#>  [6,] 0.1392381310 0.0352786639 0.0568586977 0.0086320135 0.0272096078
-#>  [7,] 0.0653030587 0.0011259148 0.0516044286 0.0000000000 0.0424094577
-#>  [8,] 0.1366109964 0.0000000000 0.0658660161 0.0000000000 0.0561080878
-#>  [9,] 0.0660536686 0.0964533684 0.0003753049 0.0373428411 0.0007506099
-#> [10,] 0.0572340026 0.0005629574 0.0180146369 0.0009382623 0.0150121974
-#> [11,] 0.0182022894 0.0225182961 0.0000000000 0.0151998499 0.0000000000
-#> [12,] 0.0474760743 0.0191405517 0.0015012197 0.0091949709 0.0000000000
-#> [13,] 0.0210170764 0.0000000000 0.0088196660 0.0000000000 0.0151998499
-#> [14,] 0.0009382623 0.0037530494 0.0007506099 0.0071307938 0.0033777444
-#> [15,] 0.0063801839 0.0061925314 0.0000000000 0.0000000000 0.0000000000
-#> [16,] 0.0216629500 0.0000000000 0.0025485824 0.0000000000 0.0000000000
-#>               [,6]         [,7]         [,8]         [,9]        [,10]
-#>  [1,] 0.1392381310 0.0653030587 0.1366109964 0.0660536686 0.0572340026
-#>  [2,] 0.0352786639 0.0011259148 0.0000000000 0.0964533684 0.0005629574
-#>  [3,] 0.0568586977 0.0516044286 0.0658660161 0.0003753049 0.0180146369
-#>  [4,] 0.0086320135 0.0000000000 0.0000000000 0.0373428411 0.0009382623
-#>  [5,] 0.0272096078 0.0424094577 0.0561080878 0.0007506099 0.0150121974
-#>  [6,] 0.0152207002 0.0061925314 0.0000000000 0.0031900919 0.0045036592
-#>  [7,] 0.0061925314 0.0308219178 0.0125727153 0.0000000000 0.0048789642
-#>  [8,] 0.0000000000 0.0125727153 0.0019025875 0.0000000000 0.0024394821
-#>  [9,] 0.0031900919 0.0000000000 0.0000000000 0.0163622527 0.0001876525
-#> [10,] 0.0045036592 0.0048789642 0.0024394821 0.0001876525 0.0000000000
-#> [11,] 0.0050666166 0.0001876525 0.0000000000 0.0030024395 0.0009382623
-#> [12,] 0.0000000000 0.0000000000 0.0000000000 0.0026271345 0.0000000000
-#> [13,] 0.0000000000 0.0067554888 0.0000000000 0.0000000000 0.0024394821
-#> [14,] 0.0001876525 0.0009382623 0.0000000000 0.0000000000 0.0001876525
-#> [15,] 0.0030024395 0.0001876525 0.0000000000 0.0035653969 0.0000000000
-#> [16,] 0.0000000000 0.0000000000 0.0001061909 0.0000000000 0.0000000000
-#>              [,11]        [,12]        [,13]        [,14]        [,15]
-#>  [1,] 0.0182022894 0.0474760743 0.0210170764 0.0009382623 0.0063801839
-#>  [2,] 0.0225182961 0.0191405517 0.0000000000 0.0037530494 0.0061925314
-#>  [3,] 0.0000000000 0.0015012197 0.0088196660 0.0007506099 0.0000000000
-#>  [4,] 0.0151998499 0.0091949709 0.0000000000 0.0071307938 0.0000000000
-#>  [5,] 0.0000000000 0.0000000000 0.0151998499 0.0033777444 0.0000000000
-#>  [6,] 0.0050666166 0.0000000000 0.0000000000 0.0001876525 0.0030024395
-#>  [7,] 0.0001876525 0.0000000000 0.0067554888 0.0009382623 0.0001876525
-#>  [8,] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000
-#>  [9,] 0.0030024395 0.0026271345 0.0000000000 0.0000000000 0.0035653969
-#> [10,] 0.0009382623 0.0000000000 0.0024394821 0.0001876525 0.0000000000
-#> [11,] 0.0152207002 0.0007506099 0.0000000000 0.0007506099 0.0000000000
-#> [12,] 0.0007506099 0.0003805175 0.0000000000 0.0000000000 0.0031900919
-#> [13,] 0.0000000000 0.0000000000 0.0000000000 0.0009382623 0.0000000000
-#> [14,] 0.0007506099 0.0000000000 0.0009382623 0.0041856925 0.0000000000
-#> [15,] 0.0000000000 0.0031900919 0.0000000000 0.0000000000 0.0030441400
-#> [16,] 0.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000
-#>              [,16]
-#>  [1,] 0.0216629500
-#>  [2,] 0.0000000000
-#>  [3,] 0.0025485824
-#>  [4,] 0.0000000000
-#>  [5,] 0.0000000000
-#>  [6,] 0.0000000000
-#>  [7,] 0.0000000000
-#>  [8,] 0.0001061909
-#>  [9,] 0.0000000000
-#> [10,] 0.0000000000
-#> [11,] 0.0000000000
-#> [12,] 0.0000000000
-#> [13,] 0.0000000000
-#> [14,] 0.0000000000
-#> [15,] 0.0000000000
-#> [16,] 0.0000000000
+#> Network histogram fit (nethist)
 #> 
+#> Nodes: 1224   Blocks: 16   Bandwidth: 73
 #> Method: Profile Likelihood
+#> thetahat: 16 x 16 probability matrix
+#> Normalized log-likelihood: -2.969964
 #> 
-#> normalized likelihood:
-#> -3.05275785402995
-#> 
-#> Available components:
-#> 
-#> [1] "cluster"       "thetahat"      "rho_hat"       "normalized_LL"
-#> [5] "MSE"           "method"        "h"            
+#> Use summary() for details.
    nethist_polblog <- nethist(polblog)
    nethist_polblog_with_h <- nethist(polblog, h = 72)
 
