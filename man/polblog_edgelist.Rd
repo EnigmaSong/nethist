@@ -19,7 +19,7 @@ polblog_edgelist is a matrix for the edge list from https://github.com/p-wolfe/n
 First 586 blogs are liberal; remaining 638 are conservative. Nodes with zero degree need to be removed.
 }
 \source{
-http://www-personal.umich.edu/~mejn/netdata/
+https://www-personal.umich.edu/~mejn/netdata/
 
 https://github.com/p-wolfe/network-histogram-code
 }

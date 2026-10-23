@@ -14,12 +14,12 @@ data(polblog)
 \code{polblog} is an igraph object, which is pre-processed data symmetrize and simplified without self-loops.
 }
 \details{
-The adjancency matrix from \code{polblog_edgelist} is sparse, assymetric, so it needs to be symmetrized if a method requires a symmetric matrix. Nodes with zero degree need to be removed. All edges are considered as undirected edges. Then, we get the undirected version of dataset as \code{polblog}.
+The adjacency matrix from \code{polblog_edgelist} is sparse, asymmetric, so it needs to be symmetrized if a method requires a symmetric matrix. Nodes with zero degree need to be removed. All edges are considered as undirected edges. Then, we get the undirected version of dataset as \code{polblog}.
 
 First 586 blogs are liberal; remaining 638 are conservative.
 }
 \source{
-http://www-personal.umich.edu/~mejn/netdata/
+https://www-personal.umich.edu/~mejn/netdata/
 
 https://github.com/p-wolfe/network-histogram-code
 }
