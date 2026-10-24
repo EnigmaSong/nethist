@@ -49,33 +49,41 @@ export(violin_netsummary)
 import(Rcpp)
 importFrom(RSpectra,eigs)
 importFrom(Rcpp,sourceCpp)
-importFrom(ggplot2,aes)
-importFrom(ggplot2,element_blank)
-importFrom(ggplot2,element_rect)
-importFrom(ggplot2,geom_bar)
-importFrom(ggplot2,geom_violin)
-importFrom(ggplot2,ggplot)
-importFrom(ggplot2,ggsave)
-importFrom(ggplot2,ggtitle)
-importFrom(ggplot2,labs)
-importFrom(ggplot2,rel)
-importFrom(ggplot2,scale_x_discrete)
-importFrom(ggplot2,stat_summary)
-importFrom(ggplot2,theme)
-importFrom(ggplot2,xlab)
-importFrom(ggplot2,ylab)
-importFrom(ggplot2,ylim)
+importFrom(ggplot2,
+  aes,
+  element_blank,
+  element_rect,
+  geom_bar,
+  geom_violin,
+  ggplot,
+  ggsave,
+  ggtitle,
+  labs,
+  rel,
+  scale_x_discrete,
+  stat_summary,
+  theme,
+  xlab,
+  ylab,
+  ylim
+)
 importFrom(ggtext,element_markdown)
-importFrom(graphics,abline)
-importFrom(graphics,text)
-importFrom(lattice,levelplot)
-importFrom(lattice,panel.levelplot)
-importFrom(lattice,panel.text)
+importFrom(graphics,
+  abline,
+  text
+)
+importFrom(lattice,
+  levelplot,
+  panel.levelplot,
+  panel.text
+)
 importFrom(methods,is)
 importFrom(rlang,.data)
-importFrom(stats,.lm.fit)
-importFrom(stats,dist)
-importFrom(stats,kmeans)
-importFrom(stats,pnorm)
-importFrom(stats,weighted.mean)
+importFrom(stats,
+  .lm.fit,
+  dist,
+  kmeans,
+  pnorm,
+  weighted.mean
+)
 useDynLib(nethist, .registration = TRUE)

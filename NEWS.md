@@ -1,3 +1,12 @@
+# nethist 1.1.1
+
+### Bug fixes
+
+-   `multinethist()`: fixed a memory error in multilayer fits. With a
+    numeric (double) input array, which is the usual case, the fit could
+    crash or return incorrect estimates on some platforms. Single-layer
+    fits by `nethist()` and `hnethist()` were not affected.
+
 # nethist 1.1.0
 
 ### New features
