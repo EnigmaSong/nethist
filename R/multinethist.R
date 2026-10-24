@@ -198,6 +198,10 @@ multinethist.array <- function(A, h = NA, common_f = FALSE,
     if (any(A_l[A_l != 0] != 1))
       stop(paste0("Layer ", l, ": A is not a simple graph. All non-zero entries must be 1 (binary adjacency matrix)."))
   }
+  # The C++ routines take A as arma::icube, which aliases the memory of an
+  # integer array. A double array would be converted to a temporary that R
+  # may free during the search, so convert here while A is still protected.
+  storage.mode(A) <- "integer"
   method_char <- method
   method <- pmatch(method, c("PLL", "LSE")) # PLL = 1, LSE = 2
   if (is.na(method)) stop("method must be one of the followings: PLL, LSE")
