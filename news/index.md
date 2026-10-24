@@ -1,6 +1,21 @@
 # Changelog
 
+## nethist 1.1.1
+
+#### Bug fixes
+
+- [`multinethist()`](https://enigmasong.github.io/nethist/reference/multinethist.md):
+  fixed a memory error in multilayer fits. With a numeric (double) input
+  array, which is the usual case, the fit could crash or return
+  incorrect estimates on some platforms. Single-layer fits by
+  [`nethist()`](https://enigmasong.github.io/nethist/reference/nethist.md)
+  and
+  [`hnethist()`](https://enigmasong.github.io/nethist/reference/hnethist.md)
+  were not affected.
+
 ## nethist 1.1.0
+
+CRAN release: 2026-10-23
 
 #### New features
 

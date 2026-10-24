@@ -141,7 +141,7 @@ The Annals of Statistics, 43(6), 2624-2652. doi:10.1214/15-AOS1354
 #> Nodes: 1224   Blocks: 16   Bandwidth: 73
 #> Method: Profile Likelihood
 #> thetahat: 16 x 16 probability matrix
-#> Normalized log-likelihood: -3.052758
+#> Normalized log-likelihood: -2.969964
 #> 
 #> Use summary() for details.
    nethist_polblog <- nethist(polblog)

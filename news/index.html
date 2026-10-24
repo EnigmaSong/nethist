@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">nethist</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,15 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1.0" id="nethist-110">nethist 1.1.0<a class="anchor" aria-label="anchor" href="#nethist-110"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.1.1" id="nethist-111">nethist 1.1.1<a class="anchor" aria-label="anchor" href="#nethist-111"></a></h2>
+<div class="section level4">
+<h4 id="bug-fixes-1-1-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-1-1"></a></h4>
+<ul><li>
+<code><a href="../reference/multinethist.html">multinethist()</a></code>: fixed a memory error in multilayer fits. With a numeric (double) input array, which is the usual case, the fit could crash or return incorrect estimates on some platforms. Single-layer fits by <code><a href="../reference/nethist.html">nethist()</a></code> and <code><a href="../reference/hnethist.html">hnethist()</a></code> were not affected.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.0" id="nethist-110">nethist 1.1.0<a class="anchor" aria-label="anchor" href="#nethist-110"></a></h2><p class="text-muted">CRAN release: 2026-10-23</p>
 <div class="section level4">
 <h4 id="new-features-1-1-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-1-0"></a></h4>
 <ul><li>

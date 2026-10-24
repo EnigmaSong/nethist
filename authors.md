@@ -9,13 +9,13 @@
 ## Citation
 
 Song Y, Olhede S (2026). *nethist: Network Histograms*. R package
-version 1.1.0, <https://enigmasong.github.io/nethist/>.
+version 1.1.1, <https://enigmasong.github.io/nethist/>.
 
     @Manual{,
       title = {nethist: Network Histograms},
       author = {Youngseok Song and Sofia C. Olhede},
       year = {2026},
-      note = {R package version 1.1.0},
+      note = {R package version 1.1.1},
       url = {https://enigmasong.github.io/nethist/},
     }
 
