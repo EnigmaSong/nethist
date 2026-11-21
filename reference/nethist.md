@@ -108,7 +108,7 @@ fit
 #> Nodes: 1224   Blocks: 16   Bandwidth: 73
 #> Method: Profile Likelihood
 #> thetahat: 16 x 16 probability matrix
-#> Normalized log-likelihood: -2.969964
+#> Normalized log-likelihood: -3.052758
 #> 
 #> Use summary() for details.
 plot(fit)
