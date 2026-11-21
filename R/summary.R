@@ -82,12 +82,14 @@
 ##' with the number of nodes, the number of blocks, the log-likelihood, the
 ##' degrees of freedom, \code{AIC}, and \code{BIC}. Multilayer fits add
 ##' \code{n_layers}, and \code{hnethist} fits add the selected number of shapes
-##' \code{s} and the number of candidate models \code{n_candidate}. The
-##' \code{print} method returns its input invisibly.
+##' \code{s}, the number of candidate models \code{n_candidate}, and
+##' \code{shapes}, a data frame with the number of blocks and the estimated
+##' probability of each shape. The \code{print} method returns its input
+##' invisibly.
 ##' @details
 ##' The estimated probabilities themselves are not printed, since the matrix
-##' grows with the number of blocks. Use \code{object$thetahat} or
-##' \code{\link[=fitted.nethist]{fitted()}} to obtain them.
+##' grows with the number of blocks. Use \code{\link[=coef.nethist]{coef()}}
+##' or \code{\link[=fitted.nethist]{fitted()}} to obtain them.
 ##' @examples
 ##' \donttest{
 ##' set.seed(42)
@@ -129,6 +131,15 @@ summary.hnethist <- function(object, ...) {
   out <- NextMethod()
   out$s           <- object$s
   out$n_candidate <- length(object$details)
+  # Count each block once, so use the upper triangle including the diagonal.
+  ids  <- shape_id(object)
+  prob <- stats::coef(object, type = "prob")
+  keep <- upper.tri(ids, diag = TRUE)
+  out$shapes <- data.frame(
+    shape       = sort(unique(ids[keep])),
+    n_blocks    = as.vector(table(ids[keep])),
+    probability = as.vector(tapply(prob[keep], ids[keep], mean))
+  )
   return(structure(out, class = c("summary.hnethist",
                                   "summary.network_histogram")))
 }
@@ -162,7 +173,12 @@ print.summary.network_histogram <- function(x, digits = getOption("digits"),
     cat("  Selected shapes: ", x$s, " of ", x$n_candidate,
         " candidates\n", sep = "")
     cat("  BIC of selected model: ", format(object$BIC, digits = digits),
-        "\n\n", sep = "")
+        "\n", sep = "")
+    cat("  Blocks and probability by shape:\n")
+    shapes <- x$shapes
+    shapes$probability <- format(shapes$probability, digits = digits)
+    print(shapes, row.names = FALSE)
+    cat("\n")
   }
 
   cat("Model fit:\n")
@@ -178,6 +194,6 @@ print.summary.network_histogram <- function(x, digits = getOption("digits"),
   }
 
   cat("\nthetahat: ", .nethist_theta_desc(object),
-      " (use fitted() or $thetahat)\n", sep = "")
+      " (use coef() or fitted())\n", sep = "")
   return(invisible(x))
 }

@@ -33,8 +33,10 @@ quantities.}
 with the number of nodes, the number of blocks, the log-likelihood, the
 degrees of freedom, \code{AIC}, and \code{BIC}. Multilayer fits add
 \code{n_layers}, and \code{hnethist} fits add the selected number of shapes
-\code{s} and the number of candidate models \code{n_candidate}. The
-\code{print} method returns its input invisibly.
+\code{s}, the number of candidate models \code{n_candidate}, and
+\code{shapes}, a data frame with the number of blocks and the estimated
+probability of each shape. The \code{print} method returns its input
+invisibly.
 }
 \description{
 Detailed summary of a fitted network histogram. The \code{print} methods of
@@ -49,8 +51,8 @@ otherwise deferred to the base method via \code{NextMethod()}; see
 \link{network_histogram-class}.
 
 The estimated probabilities themselves are not printed, since the matrix
-grows with the number of blocks. Use \code{object$thetahat} or
-\code{\link[=fitted.nethist]{fitted()}} to obtain them.
+grows with the number of blocks. Use \code{\link[=coef.nethist]{coef()}}
+or \code{\link[=fitted.nethist]{fitted()}} to obtain them.
 }
 \examples{
 \donttest{
