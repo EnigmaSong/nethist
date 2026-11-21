@@ -26,7 +26,8 @@ The input object, invisibly.
 Compact one-screen description of \code{nethist}, \code{multinethist}, and
 \code{hnethist} objects. The estimated probabilities are reported by their
 dimensions only; use \code{\link{summary.network_histogram}} for the model
-fit statistics and \code{object$thetahat} for the values themselves.
+fit statistics and \code{\link[=coef.nethist]{coef()}} for the values
+themselves.
 }
 \examples{
 \donttest{

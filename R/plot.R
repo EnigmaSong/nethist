@@ -166,7 +166,7 @@ plot.nethist <- function(x, type = "nethist",
 ##' plot(mnhist_Ind_vil)
 ##' plot(mnhist_Ind_vil, power = 0.5)
 ##' plot(mnhist_Ind_vil, layout = c(3,4))
-##' plot(mnhist_Ind_vil, layer_titles = paste0("Network ", seq_along(mnhist_Ind_vil$rho_hat)))
+##' plot(mnhist_Ind_vil, layer_titles = paste0("Network ", seq_len(dim(IndianVil)[3])))
 ##' }
 ##' @importFrom lattice levelplot panel.levelplot panel.text
 ##' @rdname plot.multinethist
