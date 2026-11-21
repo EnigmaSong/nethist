@@ -23,8 +23,14 @@
 ##' whose behaviour depends on the layer dimension, such as \code{plot()},
 ##' \code{plot3d()}, and \code{fitted()}, remain specific to the subclasses.
 ##'
+##' These fields should be accessed through the accessor functions
+##' \code{\link{block_id}}, \code{\link{bandwidth}}, \code{\link{shape_id}},
+##' and \code{\link[=coef.nethist]{coef()}} rather than through the list
+##' elements, whose structure may change in future versions.
+##'
 ##' @name network_histogram-class
-##' @seealso \code{\link{logLik.network_histogram}},
+##' @seealso \link{network_histogram-accessors},
+##'   \code{\link{logLik.network_histogram}},
 ##'   \code{\link{summary.network_histogram}}, \code{\link{print.nethist}}
 NULL
 

@@ -19,17 +19,26 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![CRAN status](https://www.r-pkg.org/badges/version/nethist)](https://CRAN.R-project.org/package=nethist)
 <!-- badges: end -->
 
 **nethist** estimates network histograms, a blockmodel approximation to the graphon [@wolfe2013Nonparametric] underlying a network's connectivity pattern, for single-layer and multilayer networks. It implements the profile-likelihood method of @olhede2014Network and the least-squares method of @gao2015Rate for single-layer networks, as well as the multilayer extension of @song2026Graph. The package also provides tools for bandwidth selection, diagnostic plots, and covariate visualization. Its functions accept undirected simple graphs without self-loops as either `igraph` objects or adjacency matrices.
 
 ## Installation
 
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/nethist)](https://cran.r-project.org/package=nethist)
+
+You can install the released version of nethist from [CRAN](https://CRAN.R-project.org/package=nethist) with:
+
+``` r
+install.packages("nethist")
+```
+
 You can install the development version of nethist from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("EnigmaSong/nethist")
+# install.packages("pak")
+pak::pak("EnigmaSong/nethist")
 ```
 
 ## Example
@@ -45,7 +54,7 @@ library(nethist)
 We use *polblog* dataset in the package for our examples. 
 
 ```{r summary, echo = FALSE}
-A<- igraph::as_adj(polblog, sparse = FALSE)
+A<- igraph::as_adjacency_matrix(polblog, sparse = FALSE)
 heatmap(A, Rowv = NA, symm=TRUE, col = c("white","red"))
 ```
 
@@ -62,14 +71,15 @@ plot(hist_polblog)
 
 ```{r get_reorder, echo = FALSE}
 #Get ratio for liberal
-ratio_liberal <- table(hist_polblog$cluster, c(rep(1,586),rep(0,638)))
+ratio_liberal <- table(block_id(hist_polblog), c(rep(1,586),rep(0,638)))
 ratio_liberal <- ratio_liberal[,1]/rowSums(ratio_liberal)
 liberal_ind <- which(ratio_liberal>=0.5)
 conserv_ind <- which(ratio_liberal<0.5)
 
 #Order by cross-party connection
-liberal_cp_con <- rowSums(hist_polblog$thetahat[liberal_ind,conserv_ind])
-conserv_cp_con <- colSums(hist_polblog$thetahat[liberal_ind,conserv_ind])
+theta_polblog <- coef(hist_polblog, type = "prob")
+liberal_cp_con <- rowSums(theta_polblog[liberal_ind,conserv_ind])
+conserv_cp_con <- colSums(theta_polblog[liberal_ind,conserv_ind])
 
 ind <- c(rev(liberal_ind[order(liberal_cp_con,decreasing=TRUE)]),
          conserv_ind[order(conserv_cp_con,decreasing=TRUE)],use.names=FALSE);
