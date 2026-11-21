@@ -49,8 +49,9 @@ inheriting from `summary.network_histogram`: a list holding the fitted
 object together with the number of nodes, the number of blocks, the
 log-likelihood, the degrees of freedom, `AIC`, and `BIC`. Multilayer
 fits add `n_layers`, and `hnethist` fits add the selected number of
-shapes `s` and the number of candidate models `n_candidate`. The `print`
-method returns its input invisibly.
+shapes `s`, the number of candidate models `n_candidate`, and `shapes`,
+a data frame with the number of blocks and the estimated probability of
+each shape. The `print` method returns its input invisibly.
 
 ## Details
 
@@ -62,7 +63,9 @@ the base method via
 [network_histogram-class](https://enigmasong.github.io/nethist/reference/network_histogram-class.md).
 
 The estimated probabilities themselves are not printed, since the matrix
-grows with the number of blocks. Use `object$thetahat` or
+grows with the number of blocks. Use
+[`coef()`](https://enigmasong.github.io/nethist/reference/coef.nethist.md)
+or
 [`fitted()`](https://enigmasong.github.io/nethist/reference/fitted.nethist.md)
 to obtain them.
 
@@ -103,6 +106,6 @@ summary(fit)
 #>   AIC: 99557.89   BIC: 101125.4
 #>   Mean squared error: 0.01769046
 #> 
-#> thetahat: 16 x 16 probability matrix (use fitted() or $thetahat)
+#> thetahat: 16 x 16 probability matrix (use coef() or fitted())
 # }
 ```

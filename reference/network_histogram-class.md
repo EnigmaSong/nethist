@@ -30,8 +30,18 @@ dimension, such as
 and [`fitted()`](https://rdrr.io/r/stats/fitted.values.html), remain
 specific to the subclasses.
 
+These fields should be accessed through the accessor functions
+[`block_id`](https://enigmasong.github.io/nethist/reference/network_histogram-accessors.md),
+[`bandwidth`](https://enigmasong.github.io/nethist/reference/network_histogram-accessors.md),
+[`shape_id`](https://enigmasong.github.io/nethist/reference/network_histogram-accessors.md),
+and
+[`coef()`](https://enigmasong.github.io/nethist/reference/coef.nethist.md)
+rather than through the list elements, whose structure may change in
+future versions.
+
 ## See also
 
+[network_histogram-accessors](https://enigmasong.github.io/nethist/reference/network_histogram-accessors.md),
 [`logLik.network_histogram`](https://enigmasong.github.io/nethist/reference/logLik.network_histogram.md),
 [`summary.network_histogram`](https://enigmasong.github.io/nethist/reference/summary.network_histogram.md),
 [`print.nethist`](https://enigmasong.github.io/nethist/reference/print.nethist.md)

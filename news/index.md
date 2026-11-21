@@ -1,6 +1,38 @@
 # Changelog
 
+## nethist 1.2.0
+
+#### New features
+
+- Accessor functions, so that fitted objects can be used without relying
+  on their internal structure.
+  - [`block_id()`](https://enigmasong.github.io/nethist/reference/network_histogram-accessors.md)
+    returns the block label of each vertex.
+  - [`bandwidth()`](https://enigmasong.github.io/nethist/reference/network_histogram-accessors.md)
+    returns the bandwidth of the fit.
+  - [`shape_id()`](https://enigmasong.github.io/nethist/reference/network_histogram-accessors.md)
+    returns, for an `hnethist` fit, the shape of each block as a
+    symmetric matrix. Shapes are numbered in increasing order of their
+    estimated probability.
+- [`coef()`](https://rdrr.io/r/stats/coef.html): new S3 method for
+  `nethist`, `multinethist`, and `hnethist` objects. Returns the
+  estimated block probabilities as a `k x k` matrix, or a `k x k x L`
+  array for multilayer fits. `type = "nethist"` (default) divides by the
+  edge density, matching
+  [`fitted()`](https://rdrr.io/r/stats/fitted.values.html), and
+  `type = "prob"` returns the probabilities.
+- [`summary()`](https://rdrr.io/r/base/summary.html) of an `hnethist`
+  fit now reports the number of blocks and the estimated probability of
+  each shape.
+
+#### Documentation
+
+- The help pages now point to the accessor functions instead of the list
+  elements of fitted objects.
+
 ## nethist 1.1.1
+
+CRAN release: 2026-10-25
 
 #### Bug fixes
 

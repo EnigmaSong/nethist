@@ -4,6 +4,9 @@
 
 - [`IndianVil`](https://enigmasong.github.io/nethist/reference/IndianVil.md)
   : Indian Village socioeconomic networks
+- [`coef(`*`<nethist>`*`)`](https://enigmasong.github.io/nethist/reference/coef.nethist.md)
+  [`coef(`*`<multinethist>`*`)`](https://enigmasong.github.io/nethist/reference/coef.nethist.md)
+  : Estimated block probabilities of a network histogram fit
 - [`covariate_plot()`](https://enigmasong.github.io/nethist/reference/covariate_plot.md)
   [`summary_plot()`](https://enigmasong.github.io/nethist/reference/covariate_plot.md)
   : Bin summary by covariate
@@ -25,6 +28,10 @@
 - [`netsummary_plot()`](https://enigmasong.github.io/nethist/reference/netsummary_plot.md)
   [`violin_netsummary()`](https://enigmasong.github.io/nethist/reference/netsummary_plot.md)
   : Network summary plots
+- [`block_id()`](https://enigmasong.github.io/nethist/reference/network_histogram-accessors.md)
+  [`bandwidth()`](https://enigmasong.github.io/nethist/reference/network_histogram-accessors.md)
+  [`shape_id()`](https://enigmasong.github.io/nethist/reference/network_histogram-accessors.md)
+  : Extract components of a network histogram fit
 - [`network_histogram-class`](https://enigmasong.github.io/nethist/reference/network_histogram-class.md)
   : Network histogram class hierarchy
 - [`plot(`*`<hnethist>`*`)`](https://enigmasong.github.io/nethist/reference/plot.hnethist.md)

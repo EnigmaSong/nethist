@@ -4,8 +4,9 @@ Compact one-screen description of `nethist`, `multinethist`, and
 `hnethist` objects. The estimated probabilities are reported by their
 dimensions only; use
 [`summary.network_histogram`](https://enigmasong.github.io/nethist/reference/summary.network_histogram.md)
-for the model fit statistics and `object$thetahat` for the values
-themselves.
+for the model fit statistics and
+[`coef()`](https://enigmasong.github.io/nethist/reference/coef.nethist.md)
+for the values themselves.
 
 ## Usage
 
@@ -73,6 +74,6 @@ summary(fit)
 #>   AIC: 99557.89   BIC: 101125.4
 #>   Mean squared error: 0.01769046
 #> 
-#> thetahat: 16 x 16 probability matrix (use fitted() or $thetahat)
+#> thetahat: 16 x 16 probability matrix (use coef() or fitted())
 # }
 ```
