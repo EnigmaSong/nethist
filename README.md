@@ -8,6 +8,8 @@
 [![R-CMD-check](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EnigmaSong/nethist/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/nethist)](https://CRAN.R-project.org/package=nethist)
 <!-- badges: end -->
 
 **nethist** estimates network histograms, a blockmodel approximation to
@@ -22,12 +24,22 @@ without self-loops as either `igraph` objects or adjacency matrices.
 
 ## Installation
 
+[![CRAN
+downloads](https://cranlogs.r-pkg.org/badges/nethist)](https://cran.r-project.org/package=nethist)
+
+You can install the released version of nethist from
+[CRAN](https://CRAN.R-project.org/package=nethist) with:
+
+``` r
+install.packages("nethist")
+```
+
 You can install the development version of nethist from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("EnigmaSong/nethist")
+# install.packages("pak")
+pak::pak("EnigmaSong/nethist")
 ```
 
 ## Example
@@ -117,28 +129,28 @@ layers.
 
 ``` r
 fitted(hist_indianvil, set1 = 1:10, set2 = 1:10, layer = 1)
-#>           [,1]     [,2]     [,3]     [,4]      [,5]      [,6]      [,7]      [,8]
-#>  [1,] 8.510526 5.053125 1.155000 0.144375  0.866250  0.866250  0.866250  0.866250
-#>  [2,] 5.053125 0.000000 1.010625 0.577500  0.000000  0.000000  0.000000  0.000000
-#>  [3,] 1.155000 1.010625 6.990789 1.732500  3.176250  3.176250  3.176250  3.176250
-#>  [4,] 0.144375 0.577500 1.732500 6.686842  0.000000  0.000000  0.000000  0.000000
-#>  [5,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263 10.030263
-#>  [6,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263 10.030263
-#>  [7,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263 10.030263
-#>  [8,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263 10.030263
-#>  [9,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263 10.030263
-#> [10,] 0.000000 0.000000 4.331250 0.000000  0.144375  0.144375  0.144375  0.144375
-#>            [,9]    [,10]
-#>  [1,]  0.866250 0.000000
-#>  [2,]  0.000000 0.000000
-#>  [3,]  3.176250 4.331250
-#>  [4,]  0.000000 0.000000
-#>  [5,] 10.030263 0.144375
-#>  [6,] 10.030263 0.144375
-#>  [7,] 10.030263 0.144375
-#>  [8,] 10.030263 0.144375
-#>  [9,] 10.030263 0.144375
-#> [10,]  0.144375 0.000000
+#>           [,1]     [,2]     [,3]     [,4]      [,5]      [,6]      [,7]
+#>  [1,] 8.510526 5.053125 1.155000 0.144375  0.866250  0.866250  0.866250
+#>  [2,] 5.053125 0.000000 1.010625 0.577500  0.000000  0.000000  0.000000
+#>  [3,] 1.155000 1.010625 6.990789 1.732500  3.176250  3.176250  3.176250
+#>  [4,] 0.144375 0.577500 1.732500 6.686842  0.000000  0.000000  0.000000
+#>  [5,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263
+#>  [6,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263
+#>  [7,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263
+#>  [8,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263
+#>  [9,] 0.866250 0.000000 3.176250 0.000000 10.030263 10.030263 10.030263
+#> [10,] 0.000000 0.000000 4.331250 0.000000  0.144375  0.144375  0.144375
+#>            [,8]      [,9]    [,10]
+#>  [1,]  0.866250  0.866250 0.000000
+#>  [2,]  0.000000  0.000000 0.000000
+#>  [3,]  3.176250  3.176250 4.331250
+#>  [4,]  0.000000  0.000000 0.000000
+#>  [5,] 10.030263 10.030263 0.144375
+#>  [6,] 10.030263 10.030263 0.144375
+#>  [7,] 10.030263 10.030263 0.144375
+#>  [8,] 10.030263 10.030263 0.144375
+#>  [9,] 10.030263 10.030263 0.144375
+#> [10,]  0.144375  0.144375 0.000000
 ```
 
 ### Network topology summary
@@ -193,9 +205,9 @@ Academy of Sciences* 111 (41): 14722–27.
 
 <div id="ref-song2026Graph" class="csl-entry">
 
-Song, Youngseok, and Sofia C. Olhede. 2026. *Joint Estimation of Sparse
-Multilayer Networks via Graph Limits*.
-<https://arxiv.org/abs/2608.14536>.
+Song, Youngseok, and Sofia C. Olhede. 2026. “Joint Estimation of Sparse
+Multilayer Networks via Graph Limits.” In *Journal of Complex Networks*.
+<https://doi.org/10.1093/comnet/cnag042>.
 
 </div>
 
